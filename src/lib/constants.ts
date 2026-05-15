@@ -61,9 +61,9 @@ export const MILESTONE_DEFS: {
 
 export const STREAM_OPTIONS = [
   "CEC General",
-  // "CEC STEM",
-  // "CEC Healthcare",
-  // "CEC French",
+  "CEC STEM",
+  "CEC Healthcare",
+  "CEC French",
   "FSW General",
   "PNP",
 ] as const;
