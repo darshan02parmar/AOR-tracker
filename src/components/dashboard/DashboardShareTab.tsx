@@ -28,7 +28,8 @@ export function DashboardShareTab() {
           <div className="sptit">{email.split("@")[0]}&apos;s PR Timeline</div>
           <div className="spsub">
             {profile.stream} · {profile.province} ·{" "}
-            {fmtDate(profile.aorDate) || "—"} AOR · Day {days} of ~{median}
+            {fmtDate(profile.aorDate) || "—"} AOR · Day {days}
+            {median > 0 ? ` of ~${median}` : ""}
           </div>
           <div className="spstats">
             <div>

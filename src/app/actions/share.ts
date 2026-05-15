@@ -137,7 +137,7 @@ export async function getPublicSharePayloadAction(
     province: profile.province,
   });
 
-  const median = cohort.median_days_to_ppr || 184;
+  const median = cohort.median_days_to_ppr;
   const days = aorDate ? daysSinceAor(aorDate) : 0;
   const pct = pctThroughMedian(days, median);
 

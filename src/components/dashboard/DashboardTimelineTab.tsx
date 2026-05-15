@@ -59,7 +59,7 @@ export function DashboardTimelineTab() {
         </div>
         <div className="sc">
           <div className="slbl">Median PPR (cohort)</div>
-          <div className="sval">{median}</div>
+          <div className="sval">{median > 0 ? median : "—"}</div>
           <div className="ssub">days · {profile.stream}</div>
         </div>
         <div className="sc">
@@ -120,11 +120,16 @@ export function DashboardTimelineTab() {
           <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
             <span className="hidden text-[11px] leading-snug text-[var(--t3)] sm:inline">
               Estimates use your <strong className="text-[var(--t2)]">AOR date</strong>{" "}
-              and this cohort&apos;s median PPR ({median}d). Add dates below to
+              and this cohort&apos;s median PPR (
+              {median > 0 ? `${median}d` : "not available yet"}). Add dates below to
               replace estimates.
             </span>
             <span className="text-[10px] leading-snug text-[var(--t3)] sm:hidden">
-              Estimates from cohort median <strong className="text-[var(--t2)]">{median}d</strong> PPR.
+              Estimates from cohort median{" "}
+              <strong className="text-[var(--t2)]">
+                {median > 0 ? `${median}d` : "—"}
+              </strong>{" "}
+              PPR.
             </span>
             <span className="ctag shrink-0">
               {profile.stream} · {profile.type}

@@ -37,6 +37,16 @@ export function estimatePprWindow(
   const p25 = cohort.p25_days;
   const p75 = cohort.p75_days;
 
+  if (!med || med <= 0) {
+    return {
+      windowLabel: "Insufficient cohort data",
+      p50Approx: "—",
+      windowStart: new Date(today),
+      windowEnd: new Date(today),
+      limitedData: true,
+    };
+  }
+
   const daysRemainingP50 = med - daysElapsed;
   const daysRemainingP25 = p25 - daysElapsed;
   const daysRemainingP75 = p75 - daysElapsed;

@@ -236,12 +236,12 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
     if (!profile?.aorDate?.trim()) {
       return [...MILESTONE_DEFS];
     }
-    const med = cohortDisplay?.median_days_to_ppr ?? 184;
+    const med = cohortDisplay?.median_days_to_ppr ?? 0;
     return mergeMilestoneDefsForCohort(profile.aorDate, med);
   }, [profile, cohortDisplay?.median_days_to_ppr]);
 
   const days = profile?.aorDate ? daysSinceAor(profile.aorDate) : 0;
-  const median = cohortDisplay?.median_days_to_ppr ?? 184;
+  const median = cohortDisplay?.median_days_to_ppr ?? 0;
   const pct = pctThroughMedian(days, median);
 
   useEffect(() => {

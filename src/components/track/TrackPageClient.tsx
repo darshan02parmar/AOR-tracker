@@ -241,7 +241,12 @@ export function TrackPageClient() {
     setSubmitting(true);
 
     try {
-      const draft = await createDraftProfileAction(trimmed);
+      const draft = await createDraftProfileAction(trimmed, {
+        aorDate,
+        stream: stream ?? "CEC General",
+        type: appType ?? "Inland",
+        province: province || "Ontario",
+      });
       if (!draft.ok) {
         toast.show("Couldn't create your profile — please try again.");
         setSubmitting(false);

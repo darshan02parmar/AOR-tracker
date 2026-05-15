@@ -67,12 +67,16 @@ export function heroStatsVM(
     Math.round(100 - (aheadCount / totalCount) * 100),
   );
   const atTop = aheadCount === 0;
+  const med = median > 0 ? median : null;
 
   return {
     daysSinceAor: days,
     typicalWait: {
-      value: `${median} days`,
-      note: "Based on real data from people like you",
+      value: med != null ? `${med} days` : "—",
+      note:
+        med != null
+          ? "Based on real data from people like you"
+          : "Cohort median appears once enough eCOPR timelines exist in your group",
     },
     queuePosition: {
       value: atTop ? "Top of the list" : `Top ${rankPct}%`,
@@ -105,7 +109,9 @@ export function infoCardsVM(
       : Math.round((ctx.cohort.weekly_delta ?? 0) * 100);
 
   const journeyExplain =
-    `You've passed ${ctx.pct}% of the typical timeline. Most people in your group finish their journey in about ${ctx.median} days — you're on Day ${ctx.days}.`;
+    ctx.median > 0
+      ? `You've passed ${ctx.pct}% of the typical timeline. Most people in your group finish their journey in about ${ctx.median} days — you're on Day ${ctx.days}.`
+      : `You're on Day ${ctx.days}. A cohort median will appear once enough people in your group have logged eCOPR dates.`;
 
   const cohortExplain =
     cohortPct === 0
@@ -158,7 +164,7 @@ export function journeyProgressVM(
   ctx: Pick<DashboardContextValue, "days" | "median" | "pct" | "profile">,
 ): DnJourneyProgress {
   const { days, median, pct, profile } = ctx;
-  const remaining = Math.max(0, median - days);
+  const remaining = median > 0 ? Math.max(0, median - days) : null;
   const aorLabel = fmtDate(profile.aorDate) || "AOR pending";
 
   return {
@@ -169,7 +175,9 @@ export function journeyProgressVM(
     axisLabels: [
       `Day 0 — You applied (${aorLabel})`,
       `Today — Day ${days}`,
-      `Day ${median} — Typical finish line`,
+      median > 0
+        ? `Day ${median} — Typical finish line`
+        : "Typical finish line — pending cohort data",
     ],
     daysWaited: {
       label: "Days you've already waited",
@@ -177,7 +185,7 @@ export function journeyProgressVM(
     },
     daysRemaining: {
       label: "Estimated days remaining",
-      value: `~${remaining} more days`,
+      value: remaining != null ? `~${remaining} more days` : "—",
     },
   };
 }

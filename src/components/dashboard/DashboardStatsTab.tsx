@@ -22,6 +22,13 @@ export function DashboardStatsTab() {
             <span className="ctag">last 90 days</span>
           </div>
           {(() => {
+            if (!cohort.stream_medians.length) {
+              return (
+                <div className="px-3 py-4 text-sm text-(--t2)">
+                  No cross-stream median snapshot for this cohort yet.
+                </div>
+              );
+            }
             const maxD = Math.max(
               ...cohort.stream_medians.map((s) => s.median),
               1,

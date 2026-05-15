@@ -123,6 +123,7 @@ Environment (minimum):
 | `MONGODB_URI` | MongoDB connection string |
 | `MONGODB_DB` | Optional database name (default: `aor-tracker-dev`) |
 | `CRON_SECRET` | Protects cron routes in production |
+| `DISCORD_WEBHOOK_URL` | Optional — profile/milestone activity plus **ops** alert when a new `cohort_stats` placeholder row is created (run cohort sync to fill medians) |
 
 ```bash
 npm run dev          # Next.js + Socket.io (server.mjs)

@@ -33,11 +33,23 @@ export function mergeMilestoneDefsForCohort(
   aorDate: string,
   medianPpr: number,
 ): MilestoneDefRow[] {
-  const med = Math.max(30, Math.round(medianPpr));
   const aor = new Date(`${aorDate}T12:00:00`);
   if (Number.isNaN(aor.getTime())) {
     return [...MILESTONE_DEFS];
   }
+
+  if (!medianPpr || medianPpr <= 0 || !Number.isFinite(medianPpr)) {
+    return MILESTONE_DEFS.map((def) => ({
+      ...def,
+      est: def.key === "aor" ? fmtDate(aorDate) || "—" : "—",
+      desc:
+        def.key === "aor"
+          ? def.desc
+          : "No cohort median yet — add eCOPR timelines in this group to unlock estimates.",
+    }));
+  }
+
+  const med = Math.max(30, Math.round(medianPpr));
 
   return MILESTONE_DEFS.map((def) => {
     if (def.key === "aor") {
@@ -137,12 +149,15 @@ export type WesRow = Omit<WesTemplateRow, "d" | "n"> & { d: number; n: string };
 /** Scale illustrative WES delays by how fast/slow this cohort’s median PPR is vs baseline (184d). */
 export function buildWesRowsForCohort(cohort: CohortStats): WesRow[] {
   const baseline = 184;
-  const f = Math.max(0.65, Math.min(1.45, cohort.median_days_to_ppr / baseline));
+  const med = cohort.median_days_to_ppr > 0 ? cohort.median_days_to_ppr : baseline;
+  const f = Math.max(0.65, Math.min(1.45, med / baseline));
   return WES_ROW_TEMPLATE.map((r) => ({
     ...r,
     d: Math.max(3, Math.round(r.d * f)),
     n:
       r.n +
-      ` (scaled ~${Math.round(f * 100)}% vs baseline for a ${cohort.median_days_to_ppr}d median cohort).`,
+      (cohort.median_days_to_ppr > 0
+        ? ` (scaled ~${Math.round(f * 100)}% vs baseline for a ${cohort.median_days_to_ppr}d median cohort).`
+        : " (baseline pacing — cohort median not available yet)."),
   }));
 }

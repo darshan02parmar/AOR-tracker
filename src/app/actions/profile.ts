@@ -1,7 +1,13 @@
 "use server";
 
 import { getDb } from "@/lib/db";
-import { buildCohortKey, streamFallbackKey } from "@/lib/cohort";
+import { buildCohortKey, cohortKeyFromProfile, streamFallbackKey } from "@/lib/cohort";
+import { ensureCohortStatsPlaceholder } from "@/lib/ensure-cohort-stats";
+import {
+  milestoneLabelForKey,
+  notifyDiscordNewCohortPlaceholder,
+  notifyDiscordProfileEvent,
+} from "@/lib/discord-webhook";
 import {
   emptyMilestones,
   isValidEmail,
@@ -81,11 +87,64 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
     },
     { upsert: true },
   );
+  const saved = await db.collection("profiles").findOne({ emailNorm: norm });
+  if (saved) {
+    const p = docToProfile(saved as Record<string, unknown>);
+    const cohortKey =
+      (typeof saved.cohortKey === "string" && saved.cohortKey) ||
+      cohortKeyFromProfile(p);
+    let created = false;
+    try {
+      ({ created } = await ensureCohortStatsPlaceholder(db, cohortKey));
+    } catch (e) {
+      console.warn("[ensure-cohort-stats] insert failed", cohortKey, e);
+    }
+    if (created) {
+      await notifyDiscordNewCohortPlaceholder({
+        cohortKey,
+        triggerEmail: norm,
+        stream: p.stream,
+        type: p.type,
+        province: p.province,
+        aorDate: p.aorDate,
+      });
+    }
+    await notifyDiscordProfileEvent({
+      kind: "profile_saved",
+      email: norm,
+      cohortKey,
+      stream: p.stream,
+      type: p.type,
+      province: p.province,
+      aorDate: p.aorDate,
+    });
+  }
   return { ok: true };
+}
+
+/** Optional fields from the track wizard so the draft row matches the user’s choices (not `newProfile()` defaults). */
+export type CreateDraftProfileHints = Partial<
+  Pick<UserProfile, "aorDate" | "stream" | "type" | "province">
+>;
+
+function applyDraftHints(
+  base: UserProfile,
+  hints?: CreateDraftProfileHints,
+): UserProfile {
+  if (!hints) return base;
+  return {
+    ...base,
+    aorDate:
+      hints.aorDate !== undefined ? String(hints.aorDate).trim() : base.aorDate,
+    stream: hints.stream?.trim() || base.stream,
+    type: hints.type?.trim() || base.type,
+    province: hints.province?.trim() || base.province,
+  };
 }
 
 export async function createDraftProfileAction(
   email: string,
+  hints?: CreateDraftProfileHints,
 ): Promise<{ ok: true; profile: UserProfile } | { ok: false; error: string }> {
   if (!isValidEmail(email)) return { ok: false, error: "Invalid email" };
   const db = await getDb();
@@ -94,7 +153,15 @@ export async function createDraftProfileAction(
   if (existing) {
     return { ok: true, profile: docToProfile(existing as Record<string, unknown>) };
   }
-  const profile = newProfile(norm);
+  const profile = applyDraftHints(newProfile(norm), hints);
+  const cohortKey = profile.aorDate
+    ? buildCohortKey({
+        aorDate: profile.aorDate,
+        stream: profile.stream,
+        type: profile.type,
+        province: profile.province,
+      })
+    : streamFallbackKey(profile.stream, profile.province, profile.type);
   await db.collection("profiles").insertOne({
     emailNorm: norm,
     createdAt: new Date(profile.createdAt),
@@ -104,11 +171,7 @@ export async function createDraftProfileAction(
     type: profile.type,
     province: profile.province,
     milestones: profile.milestones,
-    cohortKey: streamFallbackKey(
-      profile.stream,
-      profile.province,
-      profile.type,
-    ),
+    cohortKey,
   });
   return { ok: true, profile };
 }
@@ -131,10 +194,10 @@ export async function updateMilestoneAction(
     update.aorDate = date;
   }
   await db.collection("profiles").updateOne({ emailNorm: norm }, { $set: update });
-  const doc = await db.collection("profiles").findOne({ emailNorm: norm });
+  let doc = await db.collection("profiles").findOne({ emailNorm: norm });
   if (!doc) return { ok: false, error: "not_found" };
-  const profile = docToProfile(doc as Record<string, unknown>);
-  if (profile.aorDate) {
+  let profile = docToProfile(doc as Record<string, unknown>);
+  if (profile.aorDate?.trim()) {
     await db.collection("profiles").updateOne(
       { emailNorm: norm },
       {
@@ -148,7 +211,40 @@ export async function updateMilestoneAction(
         },
       },
     );
+    doc = await db.collection("profiles").findOne({ emailNorm: norm });
+    if (!doc) return { ok: false, error: "not_found" };
+    profile = docToProfile(doc as Record<string, unknown>);
   }
+  const cohortKey =
+    (typeof doc.cohortKey === "string" && doc.cohortKey) ||
+    cohortKeyFromProfile(profile);
+  let created = false;
+  try {
+    ({ created } = await ensureCohortStatsPlaceholder(db, cohortKey));
+  } catch (e) {
+    console.warn("[ensure-cohort-stats] insert failed", cohortKey, e);
+  }
+  if (created) {
+    await notifyDiscordNewCohortPlaceholder({
+      cohortKey,
+      triggerEmail: norm,
+      stream: profile.stream,
+      type: profile.type,
+      province: profile.province,
+      aorDate: profile.aorDate,
+    });
+  }
+  await notifyDiscordProfileEvent({
+    kind: "milestone",
+    email: norm,
+    cohortKey,
+    stream: profile.stream,
+    type: profile.type,
+    province: profile.province,
+    milestoneKey: key,
+    milestoneLabel: milestoneLabelForKey(key),
+    date,
+  });
   return { ok: true, profile };
 }
 

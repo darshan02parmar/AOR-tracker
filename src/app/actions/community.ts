@@ -177,7 +177,7 @@ export async function getCommunitySubmitMilestoneTimelineOptionsAction(
     type: p.type,
     province: p.province,
   });
-  const median = cohort.median_days_to_ppr || 184;
+  const median = cohort.median_days_to_ppr;
   const defs = mergeMilestoneDefsForCohort(
     aorDate || "2000-01-01",
     median,

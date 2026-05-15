@@ -41,7 +41,9 @@ export function DashboardRails({
         </div>
         <div className="rrfoot">
           <div className="rrpct">{pct}% through</div>
-          <div className="rrsub">Based on {median}d median</div>
+          <div className="rrsub">
+            {median > 0 ? `Based on ${median}d median` : "Cohort median not available"}
+          </div>
         </div>
         <div className="ebox">
           <div className="elbl">Estimated PPR window</div>
@@ -76,10 +78,13 @@ export function DashboardRails({
             <div className="min-w-0 text-left">
               <div className="siname">{s.label}</div>
               <div className="simeta">
-                {s.nVerified} applicants · median ~{s.medianDays}d
+                {s.nVerified} applicants · median{" "}
+                {s.medianDays > 0 ? `~${s.medianDays}d` : "—"}
               </div>
             </div>
-            <span className="sidays shrink-0">~{s.medianDays}d</span>
+            <span className="sidays shrink-0">
+              {s.medianDays > 0 ? `~${s.medianDays}d` : "—"}
+            </span>
           </button>
         ))}
       </div>

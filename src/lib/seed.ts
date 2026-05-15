@@ -1,23 +1,32 @@
 import type { Db } from "mongodb";
 import type { CohortStats, CommunityPost } from "./types";
 
-const DEFAULT_DIST = [
-  { range: "< 120d", count: 11, pct: 12, you: false },
-  { range: "120–150d", count: 26, pct: 28, you: false },
-  { range: "150–180d", count: 61, pct: 65, you: false },
-  { range: "180–210d", count: 94, pct: 100, you: true },
-  { range: "210–240d", count: 45, pct: 48, you: false },
-  { range: "> 240d", count: 19, pct: 20, you: false },
+const EMPTY_DIST: CohortStats["dist"] = [
+  { range: "< 120d", count: 0, pct: 0, you: false },
+  { range: "120–150d", count: 0, pct: 0, you: false },
+  { range: "150–180d", count: 0, pct: 0, you: false },
+  { range: "180–210d", count: 0, pct: 0, you: false },
+  { range: "210–240d", count: 0, pct: 0, you: false },
+  { range: "> 240d", count: 0, pct: 0, you: false },
 ];
 
-const DEFAULT_STREAM_MEDIANS = [
-  { name: "CEC — General", median: 184 },
-  { name: "CEC — STEM", median: 165 },
-  { name: "CEC — Healthcare", median: 174 },
-  { name: "CEC — French", median: 148 },
-  { name: "FSW — General", median: 210 },
-  { name: "PNP", median: 248 },
-];
+/** Cohort stats when Mongo has no document — no synthetic medians or histograms. */
+export function emptyCohortStats(cohortKey: string): CohortStats {
+  return {
+    cohortKey,
+    median_days_to_ppr: 0,
+    p25_days: 0,
+    p75_days: 0,
+    n_verified: 0,
+    completion_rate: 0,
+    weekly_delta: 0,
+    per_milestone_n: {},
+    dist: EMPTY_DIST.map((r) => ({ ...r })),
+    pulseWeekly: [],
+    stream_medians: [],
+    last_updated: new Date().toISOString(),
+  };
+}
 
 const SEED_POSTS: Omit<
   CommunityPost,
@@ -116,88 +125,30 @@ const SEED_POSTS: Omit<
   },
 ];
 
-/** Synthetic stats when Mongo has no `cohort_stats` row yet (e.g. before dev seed). */
-export function cohortStatsFallback(cohortKey: string): CohortStats {
-  return {
-    ...baseCohort(cohortKey),
-    last_updated: new Date().toISOString(),
-  };
-}
-
-function baseCohort(key: string): CohortStats {
-  return {
-    cohortKey: key,
-    median_days_to_ppr: 184,
-    p25_days: 150,
-    p75_days: 218,
-    n_verified: 412,
-    completion_rate: 0.23,
-    weekly_delta: 0.04,
-    per_milestone_n: {
-      aor: 412,
-      bil: 389,
-      biometrics: 341,
-      background: 204,
-      medical: 89,
-      p1: 42,
-      p2: 28,
-      ecopr: 94,
-    },
-    dist: DEFAULT_DIST,
-    pulseWeekly: [2, 3, 5, 4, 6, 8, 11, 14, 18, 16],
-    stream_medians: DEFAULT_STREAM_MEDIANS,
-    last_updated: new Date().toISOString(),
-  };
-}
-
 /** Idempotent indexes — invoked from `getDb()` on first use. */
 export async function ensureIndexes(db: Db): Promise<void> {
-  const cohorts = db.collection("cohort_stats");
   const posts = db.collection("community_posts");
   await db.collection("profiles").createIndex({ emailNorm: 1 }, { unique: true });
   await db.collection("profiles").createIndex({ cohortKey: 1 });
   await db
     .collection("profiles")
     .createIndex({ shareToken: 1 }, { unique: true, sparse: true });
-  await cohorts.createIndex({ cohortKey: 1 }, { unique: true });
+  await db.collection("cohort_stats").createIndex({ cohortKey: 1 }, { unique: true });
   await posts.createIndex({ createdAt: -1 });
 }
 
 export type SeedDemoResult = {
-  cohortsInserted: number;
   postsInserted: number;
 };
 
 /**
- * Inserts sample cohorts and community posts only when those collections are empty.
- * Call from the dev seed API — not from every server action.
+ * Inserts sample community posts only when that collection is empty.
+ * Cohort stats are derived from `profiles` via `runCohortStatsSyncJob` (bulk seed or live usage).
  */
 export async function seedDemoDataIfEmpty(db: Db): Promise<SeedDemoResult> {
-  const cohorts = db.collection("cohort_stats");
   const posts = db.collection("community_posts");
 
-  let cohortsInserted = 0;
   let postsInserted = 0;
-
-  const cohortCount = await cohorts.estimatedDocumentCount();
-  if (cohortCount === 0) {
-    const keys = new Set<string>();
-    const samples = [
-      "CEC_GENERAL:2:2025:inland:ON",
-      "CEC_GENERAL:0:2025:inland:ON",
-      "CEC_STEM:2:2025:inland:BC",
-      "FSW_GENERAL:1:2025:outland:ON",
-    ];
-    samples.forEach((k) => keys.add(k));
-    const list = [...keys];
-    await cohorts.insertMany(
-      list.map((cohortKey) => ({
-        ...baseCohort(cohortKey),
-        last_updated: new Date(),
-      })),
-    );
-    cohortsInserted = list.length;
-  }
 
   const postCount = await posts.estimatedDocumentCount();
   if (postCount === 0) {
@@ -213,15 +164,15 @@ export async function seedDemoDataIfEmpty(db: Db): Promise<SeedDemoResult> {
     postsInserted = SEED_POSTS.length;
   }
 
-  return { cohortsInserted, postsInserted };
+  return { postsInserted };
 }
 
 export function serializeCohort(
   doc: Record<string, unknown> | null | undefined,
-  fallbackCohortKey = "CEC_GENERAL:2025",
+  fallbackCohortKey = "CEC_GENERAL:0:2026:inland:ON",
 ): CohortStats {
   if (!doc) {
-    return cohortStatsFallback(fallbackCohortKey);
+    return emptyCohortStats(fallbackCohortKey);
   }
   const c = doc as CohortStats & { last_updated?: Date };
   return {

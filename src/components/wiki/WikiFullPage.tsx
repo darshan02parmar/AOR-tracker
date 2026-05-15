@@ -446,14 +446,17 @@ clearSessionEmail()`}</pre>
           <section className="wiki-section" id="trk-submit-chain">
             <h2>Submit chain (step 3)</h2>
             <p className="wiki-flow">
-              createDraftProfileAction(email) → build UserProfile client-side from form
-              state → getProfileAction (preserve createdAt if doc existed) →
+              createDraftProfileAction(email, demographic hints from the wizard) →
+              build UserProfile client-side from form state → getProfileAction (preserve
+              createdAt if doc existed) →
               saveProfileAction(full profile) → writeSessionEmail → phase success
             </p>
             <ul>
               <li>
                 <code>createDraftProfileAction</code> ensures a minimal MongoDB row
-                exists so the subsequent save can upsert cleanly.
+                exists so the subsequent save can upsert cleanly. Optional hints (AOR,
+                stream, type, province) match the wizard so the draft row is not stuck on{" "}
+                <code>newProfile()</code> defaults.
               </li>
               <li>
                 <code>saveProfileAction</code> persists the full milestone map and

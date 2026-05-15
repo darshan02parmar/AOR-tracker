@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import type { CohortStats, MilestoneKey } from "@/lib/types";
 import { estimatePprWindow } from "@/lib/ppr-estimate";
 import {
-  streamAverage,
   TRACK_MILESTONES,
   type AppType,
   type StreamId,
@@ -49,10 +48,6 @@ const DATE_FMT = new Intl.DateTimeFormat("en-CA", {
   month: "short",
   day: "numeric",
 });
-const MONTH_FMT = new Intl.DateTimeFormat("en-CA", {
-  month: "short",
-  year: "numeric",
-});
 
 function daysBetween(start: string, end: Date): number {
   const s = new Date(`${start}T12:00:00`).getTime();
@@ -86,26 +81,25 @@ export function TrackStep3Review(props: Props) {
   } = props;
 
   const daysElapsed = aorDate ? daysBetween(aorDate, new Date()) : 0;
-  const streamAvgFallback = streamAverage(stream);
-  const medianDisplay =
-    cohortStats?.median_days_to_ppr ?? streamAvgFallback;
 
-  const fallbackWindow = useMemo(() => {
-    const now = new Date();
-    const remaining = Math.max(streamAvgFallback - daysElapsed, 14);
-    const ws = new Date(now.getTime() + remaining * 0.75 * 86400000);
-    const we = new Date(now.getTime() + remaining * 1.25 * 86400000);
-    return `${MONTH_FMT.format(ws)}–${MONTH_FMT.format(we)}`;
-  }, [streamAvgFallback, daysElapsed]);
+  const medianDisplay =
+    cohortStats && cohortStats.median_days_to_ppr > 0
+      ? `${cohortStats.median_days_to_ppr}d`
+      : "—";
 
   const dashboardPprLabel = useMemo(() => {
-    if (!aorDate || !cohortStats) return null;
+    if (
+      !aorDate ||
+      !cohortStats ||
+      !cohortStats.median_days_to_ppr ||
+      cohortStats.median_days_to_ppr <= 0
+    ) {
+      return null;
+    }
     return estimatePprWindow(aorDate, cohortStats).windowLabel;
   }, [aorDate, cohortStats]);
 
-  const pprWindowDisplay = cohortStatsLoading
-    ? "…"
-    : dashboardPprLabel ?? fallbackWindow;
+  const pprWindowDisplay = cohortStatsLoading ? "…" : dashboardPprLabel ?? "—";
 
   const aorLabel = aorDate
     ? DATE_FMT.format(new Date(`${aorDate}T12:00:00`))
