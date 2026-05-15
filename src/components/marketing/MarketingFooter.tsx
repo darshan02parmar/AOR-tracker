@@ -254,6 +254,9 @@ export function MarketingFooter() {
           >
             IRCC news
           </a>
+          <Link href="/sitemap.xml" className="fg-link">
+            Sitemap
+          </Link>
           <a
             href="https://www.getnorthpath.com/privacy"
             target="_blank"
