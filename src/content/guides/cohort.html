@@ -1,0 +1,266 @@
+<style>
+/* Cohort feature page — self-contained (marketing layout: nav + footer) */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FFFCF5;--cream2:#F5F0E6;--cream3:#EDE8DC;
+  --navy:#1A2332;--navy2:#253347;
+  --red:#C8281E;--red2:#a81f17;
+  --green:#2D6A4F;--g4:#4ade80;--gbg:#EAF4EE;
+  --blue:#1E5F8C;--bbg:#E8F2FB;
+  --amber:#B5651D;--abg:#FDF3E3;
+  --purple:#5B21B6;--pbg:#EDE9FE;
+  --border:#D5CFBF;--muted:#7A7060;--muted2:#9A8E7E;
+  --fh:'Fraunces',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
+  --max:720px;--max-wide:1100px;
+}
+.co{font-family:var(--fb);font-size:17px;line-height:1.75;color:var(--navy);background:var(--cream)}
+.co a{color:var(--green);font-weight:600;text-underline-offset:3px}
+.co a:hover{color:var(--red2)}
+
+.ch-hero{background:var(--navy);padding:clamp(40px,6vw,72px) clamp(16px,4vw,40px) clamp(48px,6vw,64px);position:relative;overflow:hidden}
+.ch-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 45% at 80% 15%,rgba(91,33,182,.12),transparent 55%),radial-gradient(ellipse 45% 40% at 15% 85%,rgba(45,106,79,.1),transparent 50%);pointer-events:none}
+.ch-grid{position:absolute;inset:0;opacity:.4;background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,.02) 40px,rgba(255,255,255,.02) 41px);pointer-events:none}
+.ch-inner{max-width:var(--max-wide);margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr minmax(280px,400px);gap:2.5rem;align-items:start}
+.ch-k{font-family:var(--fm);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.75rem}
+.ch-h1{font-family:var(--fh);font-weight:900;font-size:clamp(2rem,4vw,3rem);line-height:1.05;color:#fff;letter-spacing:-.035em;margin-bottom:1rem}
+.ch-h1 em{font-style:italic;color:#c4b5fd}
+.ch-lead{font-size:1.05rem;color:rgba(255,255,255,.55);max-width:36rem;margin-bottom:1.5rem;font-weight:300}
+.ch-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1rem}
+.ch-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;font-weight:700;font-size:.92rem;text-decoration:none;transition:transform .15s,background .15s}
+.ch-btn-p{background:var(--red);color:#fff;border:2px solid var(--red)}
+.ch-btn-p:hover{background:var(--red2);transform:translateY(-2px)}
+.ch-btn-g{color:#fff;border:2px solid rgba(255,255,255,.22);background:transparent}
+.ch-btn-g:hover{border-color:rgba(255,255,255,.45)}
+.ch-meta{font-size:.78rem;color:rgba(255,255,255,.35);display:flex;flex-wrap:wrap;gap:12px 18px}
+
+.ch-card{background:var(--cream);border:2px solid var(--navy2);border-radius:14px;overflow:hidden;box-shadow:0 22px 55px rgba(0,0,0,.38)}
+.ch-card-h{background:linear-gradient(135deg,var(--purple),#4338ca);padding:12px 16px;font-family:var(--fh);font-size:.88rem;font-weight:800;color:#fff}
+.ch-card-b{padding:16px 18px}
+.ch-card-t{font-family:var(--fh);font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:8px}
+.ch-card-d{font-size:.86rem;color:var(--muted);margin-bottom:14px}
+.rank-demo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rank-bar{flex:1;height:10px;background:var(--cream3);border-radius:100px;overflow:hidden;position:relative}
+.rank-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--green),var(--g4));width:72%}
+.rank-dot{position:absolute;top:-5px;left:72%;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.rank-lbl{font-family:var(--fm);font-size:.72rem;font-weight:700;color:var(--navy)}
+.ch-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-top:12px}
+.ch-st{background:var(--cream2);border:1px solid var(--border);border-radius:8px;padding:8px 6px}
+.ch-sv{font-family:var(--fh);font-size:1.1rem;font-weight:900;color:var(--navy)}
+.ch-sl{font-size:.58rem;font-family:var(--fm);text-transform:uppercase;color:var(--muted);letter-spacing:.04em;margin-top:2px}
+
+.sn{background:var(--cream2);border-bottom:2px solid var(--border);padding:22px clamp(16px,4vw,40px)}
+.sn-in{max-width:var(--max);margin:0 auto}
+.sn-l{font-family:var(--fm);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.sn-q{font-family:var(--fh);font-size:1.28rem;font-weight:800;color:var(--navy);margin-bottom:10px;line-height:1.25}
+.sn-a{font-size:1.02rem;color:var(--muted)}
+.sn-a strong{color:var(--navy)}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:clamp(40px,5vw,56px) clamp(16px,4vw,40px)}
+.wrap-w{max-width:var(--max-wide);margin:0 auto;padding:clamp(40px,5vw,56px) clamp(16px,4vw,40px)}
+.sec{border-top:1px solid var(--border);padding-top:2.25rem;margin-top:2.25rem}
+.sec:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.h2{font-family:var(--fh);font-size:clamp(1.45rem,2.8vw,2rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.65rem;color:var(--navy)}
+.h3{font-family:var(--fh);font-size:1.12rem;font-weight:700;margin:1.5rem 0 .5rem;color:var(--navy)}
+.p{color:var(--muted);margin-bottom:1rem}
+.p strong{color:var(--navy)}
+.toc{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:18px 22px;margin:1.25rem 0 2rem}
+.toc-t{font-family:var(--fh);font-weight:800;font-size:.95rem;margin-bottom:10px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:6px;font-size:.88rem}
+.toc a{color:var(--green);font-weight:600;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0;border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.tbl th{background:var(--cream2);font-family:var(--fm);font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tbl tr:last-child td{border-bottom:none}
+.note{font-size:.82rem;color:var(--muted2);font-style:italic;margin-top:.5rem}
+
+.box{display:grid;gap:12px;margin:1.25rem 0}
+.bx{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;border-left:4px solid var(--purple)}
+.bx h4{font-family:var(--fh);font-size:1rem;margin:0 0 .4rem;color:var(--navy)}
+.bx p{font-size:.9rem;color:var(--muted);margin:0}
+
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:1.25rem 0}
+.dual .bx{border-left-color:var(--green)}
+.dual .bx:last-child{border-left-color:var(--blue)}
+
+.faq{border-top:1px solid var(--border);padding:18px 0}
+.faq-q{font-family:var(--fh);font-weight:700;font-size:1.02rem;margin-bottom:8px;color:var(--navy)}
+.faq-a{font-size:.95rem;color:var(--muted)}
+
+.cta{background:var(--navy);padding:clamp(44px,5vw,64px) clamp(16px,4vw,40px);margin-top:2rem}
+.cta-in{max-width:var(--max-wide);margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
+.cta h2{font-family:var(--fh);font-size:clamp(1.35rem,3vw,1.8rem);font-weight:900;color:#fff;max-width:26rem;line-height:1.2}
+.cta .ch-btn-p{background:#fff;color:var(--green);border-color:#fff}
+.cta .ch-btn-p:hover{background:var(--cream2);color:var(--green)}
+
+.dis{font-size:.78rem;color:var(--muted2);padding:28px clamp(16px,4vw,40px) 48px;max-width:var(--max);margin:0 auto;line-height:1.65}
+
+@media(max-width:900px){.ch-inner{grid-template-columns:1fr}}
+@media(max-width:640px){.dual{grid-template-columns:1fr}.ch-stat-row{grid-template-columns:1fr}}
+</style>
+
+<div class="co">
+  <header class="ch-hero">
+    <div class="ch-grid"></div>
+    <div class="ch-inner">
+      <div>
+        <p class="ch-k">Cohort analytics · Express Entry</p>
+        <h1 class="ch-h1">Express Entry cohort analytics — <em>find your rank</em></h1>
+        <p class="ch-lead">AORTrack turns anonymous milestone logs into <strong>cohorts</strong> you can compare against: same AOR month, same stream, same inland/outland profile where possible. This page explains <em>how</em> we calculate percentile rank and why that matters more than a generic IRCC service standard.</p>
+        <div class="ch-actions">
+          <a href="/track" class="ch-btn ch-btn-p">Find my cohort rank — free</a>
+          <a href="#methodology" class="ch-btn ch-btn-g">Read methodology</a>
+        </div>
+        <div class="ch-meta">
+          <span>Open source · auditable</span>
+          <span>MIT license</span>
+          <span>Not affiliated with IRCC</span>
+        </div>
+      </div>
+      <aside class="ch-card" aria-label="Example percentile">
+        <div class="ch-card-h">Illustrative cohort snapshot</div>
+        <div class="ch-card-b">
+          <p class="ch-card-t">You vs Jan 2026 · CEC · Inland</p>
+          <p class="ch-card-d">Static example for education only — your real dashboard updates from live data.</p>
+          <p class="rank-lbl">Percentile rank (faster = lower %)</p>
+          <div class="rank-demo">
+            <div class="rank-bar"><div class="rank-fill"></div><span class="rank-dot" aria-hidden="true"></span></div>
+            <span class="rank-lbl">~28th</span>
+          </div>
+          <p class="ch-card-d" style="margin-bottom:0">Meaning: about <strong>72%</strong> of peers in this illustrative cohort reached PPR/eCOPR after you at the same day count — you moved earlier than most in the snapshot.</p>
+          <div class="ch-stat-row">
+            <div class="ch-st"><div class="ch-sv">184d</div><div class="ch-sl">Median</div></div>
+            <div class="ch-st"><div class="ch-sv">133</div><div class="ch-sl">P25</div></div>
+            <div class="ch-st"><div class="ch-sv">217</div><div class="ch-sl">P75</div></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <div class="sn">
+    <div class="sn-in">
+      <p class="sn-l">Express entry percentile rank — quick definition</p>
+      <p class="sn-q">What is an Express Entry percentile rank in AORTrack?</p>
+      <p class="sn-a"><strong>Your percentile rank</strong> is your position in the ordered list of “days from AOR to milestone X” (or days elapsed today) among everyone in the <em>same cohort bucket</em>. If you are at the 28th percentile for speed toward PPR, you reached that milestone faster than roughly 72% of your cohort — <strong>not</strong> faster than 72% of all Express Entry applicants globally. Cohort scope is everything.</p>
+    </div>
+  </div>
+
+  <article class="wrap">
+    <nav class="toc" aria-label="On this page">
+      <div class="toc-t">On this page</div>
+      <ul>
+        <li><a href="#why-cohort">Why cohort analytics exist</a></li>
+        <li><a href="#methodology">Methodology &amp; data ethics</a></li>
+        <li><a href="#tracker-keywords">Express Entry cohort tracker</a></li>
+        <li><a href="#percentile-deep">How percentile rank is computed</a></li>
+        <li><a href="#histograms">Histograms &amp; P25 / median / P75</a></li>
+        <li><a href="#limitations">Limitations &amp; bias</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+
+    <section class="sec" id="why-cohort">
+      <h2 class="h2">Why “cohort analytics” beats a single national average</h2>
+      <p class="p">IRCC publishes high-level service standards and backlog commentary, but applicants rarely experience “the average Canadian PR case.” You experience <strong>your stream</strong>, <strong>your office routing</strong>, <strong>your document story</strong>, and <strong>your AOR month</strong> — which all shift the realistic window. A <strong>cohort</strong> fixes the comparison set so you are not panicking because someone on Reddit with a different stream posted a number that does not apply to you.</p>
+      <p class="p">AORTrack’s cohort analytics answer a different question than IRCC: <em>“Among people who look like my file on paper, what elapsed time are we seeing in the community right now?”</em> That is the <strong>express entry cohort tracker</strong> problem space: same pool mechanics as Express Entry, but grounded in peer timelines instead of a single published figure.</p>
+    </section>
+
+    <section class="sec" id="methodology">
+      <h2 class="h2">Methodology — how we build cohorts</h2>
+      <p class="p">Our pipeline is intentionally conservative. We would rather under-explain than over-fit noisy data.</p>
+
+      <div class="box">
+        <div class="bx">
+          <h4>1. Cohort keys (who gets grouped together)</h4>
+          <p>Profiles are grouped using a <strong>cohort key</strong> derived from: <strong>AOR month</strong> (year-month), <strong>Express Entry stream label</strong> (e.g. CEC General, FSW General, PNP), <strong>inland vs outland</strong>, and <strong>province of destination</strong> where users supply it. Small cohorts may be merged or suppressed in UI to avoid misleading precision — the dashboard prefers “insufficient data” over a fake percentile.</p>
+        </div>
+        <div class="bx">
+          <h4>2. Milestone normalization</h4>
+          <p>Users log canonical milestones (AOR, biometrics, medicals, background check signals, portal steps, eCOPR). Each milestone has a <strong>day offset from AOR</strong> when dates are present. Missing milestones are treated as unknown, not zero — we never infer a medical completion date from silence.</p>
+        </div>
+        <div class="bx">
+          <h4>3. Aggregation statistics</h4>
+          <p>For each cohort and milestone we compute <strong>count</strong>, <strong>median</strong>, <strong>P25</strong>, and <strong>P75</strong> on the observed day-spans. Histogram buckets count how many applicants fell into each processing-day band. These aggregates are what power the public stream landing pages and your personal “where am I?” charts.</p>
+        </div>
+        <div class="bx">
+          <h4>4. Privacy &amp; retention</h4>
+          <p>AORTrack is built for <strong>minimum necessary data</strong>: we do not need your full life story to plot a cohort curve. Email is used for account continuity; milestone dates are the scientific payload. You should never paste GCMS or UCI into public Discord threads — use structured tracker fields so the community dataset stays high-signal.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="tracker-keywords">
+      <h2 class="h2">Express Entry cohort tracker — what you actually get</h2>
+      <p class="p">When people search for an <strong>express entry cohort tracker</strong>, they usually want three deliverables at once: (1) a <strong>rank</strong> vs peers, (2) a <strong>curve</strong> showing how fast the cohort is moving, and (3) a <strong>forecast feeling</strong> even though no one can promise a date. AORTrack delivers (1) and (2) transparently; for (3) we show historical distributions so you can reason about tail risk instead of trusting a single magic number.</p>
+      <div class="dual">
+        <div class="bx">
+          <h4>Rank view</h4>
+          <p>Places your current day-count on the same axis as others who already reached PPR/eCOPR, so you can see whether you are early, typical, or late relative to historical finishers in the cohort.</p>
+        </div>
+        <div class="bx">
+          <h4>Distribution view</h4>
+          <p>Shows how many people finished near day 160 vs day 240, etc. Heavy tails on PNP and some FSW cohorts are visible immediately — a single median would hide that.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="percentile-deep">
+      <h2 class="h2">Express entry percentile rank — computation in plain English</h2>
+      <p class="p">Suppose 200 applicants in your cohort have recorded “days from AOR to eCOPR.” Sort those 200 numbers ascending. Your rank is where your own elapsed days would insert in that list if you had already finished — for in-progress files, we compare your <strong>current days since AOR</strong> against the distribution of <strong>completed</strong> spans to estimate whether you are ahead or behind the pace that historically finished the cohort.</p>
+      <p class="p"><strong>Ties:</strong> identical day counts share a rank band. <strong>Censoring:</strong> people who withdraw or stop updating are a known source of bias; we document that under limitations. <strong>Stream changes:</strong> if a profile corrects stream mid-life, the cohort assignment updates — we do not double-count the same person across two cohort curves.</p>
+    </section>
+
+    <section class="sec" id="histograms">
+      <h2 class="h2">Histograms, P25, median, and P75 — reading the shape</h2>
+      <p class="p">The <strong>median</strong> is the middle finish time: half the cohort (with known outcomes) finished faster, half slower. <strong>P25</strong> and <strong>P75</strong> bracket the middle 50% — a wide gap means unpredictable processing for that bucket (common for PNP-heavy cohorts). The <strong>histogram</strong> shows whether the distribution is single-peaked (many people near one mode) or flat (no obvious “typical” speed).</p>
+      <table class="tbl" aria-label="Example static cohort summary">
+        <thead><tr><th>Statistic</th><th>Interpretation</th><th>Example (CEC, illustrative)</th></tr></thead>
+        <tbody>
+          <tr><td>P25</td><td>Faster quartile boundary</td><td>~133 days to eCOPR</td></tr>
+          <tr><td>Median</td><td>Typical completion</td><td>~184 days</td></tr>
+          <tr><td>P75</td><td>Slower quartile boundary</td><td>~217 days</td></tr>
+          <tr><td>Histogram peak</td><td>Most common day band</td><td>Often near median for CEC</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Numbers are rounded static examples; open the tracker for live cohort sizes and refreshed medians.</p>
+    </section>
+
+    <section class="sec" id="limitations">
+      <h2 class="h2">Limitations — trustworthy science means honest caveats</h2>
+      <p class="p"><strong>Self-selection bias:</strong> people who find AORTrack skew technical, English-comfortable, and forum-active. That can differ from the global Express Entry population. <strong>Reporting delay:</strong> users update milestones late; the “current” curve lags reality by days to weeks. <strong>Small-n cohorts:</strong> when only a handful of profiles exist, ranks swing wildly — we suppress or widen confidence in UI. <strong>Provincial programs:</strong> PNPs add pre- and post-federal complexity; cohort keys cannot capture every nominee pathway nuance.</p>
+      <p class="p">Despite those limits, cohort analytics remain <strong>more actionable than anecdote</strong> because the methodology is shared, the code is open, and the aggregates update as more honest contributors join.</p>
+    </section>
+
+    <section class="sec" id="faq">
+      <h2 class="h2">Frequently asked questions</h2>
+      <div class="faq">
+        <p class="faq-q">Is my percentile rank an IRCC score?</p>
+        <p class="faq-a">No. It is purely derived from AORTrack user data in your cohort bucket. IRCC does not publish a public percentile for your file.</p>
+      </div>
+      <div class="faq">
+        <p class="faq-q">Can competitors copy this concept?</p>
+        <p class="faq-a">Anyone can describe cohorts — the differentiator is <strong>consistent methodology + open data pipeline + community trust</strong>. Our source code and issue tracker are public so improvements are debated in the open.</p>
+      </div>
+      <div class="faq">
+        <p class="faq-q">Do I need an account?</p>
+        <p class="faq-a">You can start tracking with minimal friction; see <a href="/track">/track</a> for the current onboarding flow. We avoid paywalls so the dataset cannot be held hostage.</p>
+      </div>
+      <div class="faq">
+        <p class="faq-q">Where is the raw database download?</p>
+        <p class="faq-a">We do not publish bulk PII-adjacent exports. The <strong>Dataset</strong> schema on this page describes the conceptual dataset; code and aggregates are open, individual rows are not scraped for resale.</p>
+      </div>
+    </section>
+  </article>
+
+  <div class="cta">
+    <div class="cta-in">
+      <h2>See your cohort — not someone else’s average.</h2>
+      <a href="/track" class="ch-btn ch-btn-p">Open AORTrack</a>
+    </div>
+  </div>
+
+  <p class="dis"><strong>Disclaimer:</strong> AORTrack is not affiliated with IRCC. Cohort analytics are educational and community-sourced. They do not replace legal advice or official instructions. Methodology may evolve — check the <a href="/wiki">wiki</a> and GitHub repository for the latest implementation notes.</p>
+</div>

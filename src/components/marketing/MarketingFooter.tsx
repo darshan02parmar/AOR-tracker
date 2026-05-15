@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { WebsiteLogo } from "@/components/WebsiteLogo";
+import {
+  STREAM_PAGE_SLUGS,
+  streamLabelFromSitemapSlug,
+} from "@/lib/streams-sitemap-slugs";
 import { IconGitHub } from "./landing-icons";
 import {
   FaCheck,
@@ -24,8 +28,17 @@ const SOCIAL = {
   instagram: "https://www.instagram.com/getnorthpath",
 } as const;
 
+/** Short labels for footer; full option name in `title` for accessibility. */
+function streamFooterLabel(slug: string): string {
+  if (slug === "cec") return "CEC";
+  if (slug === "fsw") return "FSW";
+  if (slug === "pnp") return "PNP";
+  return slug.toUpperCase();
+}
+
 export function MarketingFooter() {
   const year = new Date().getFullYear();
+  const streamSlugs = [...STREAM_PAGE_SLUGS].sort((a, b) => a.localeCompare(b));
 
   return (
     <footer className="footer">
@@ -142,9 +155,6 @@ export function MarketingFooter() {
           <Link href="/dashboard" className="fg-link">
             My Dashboard
           </Link>
-          <Link href="/#streams" className="fg-link">
-            All Streams
-          </Link>
           <Link href="/dashboard/stats" className="fg-link">
             Processing Stats
           </Link>
@@ -153,6 +163,26 @@ export function MarketingFooter() {
           </Link>
           <Link href="/community" className="fg-link">
             Community <span className="fg-link-badge lb-new">Hub</span>
+          </Link>
+        </div>
+
+        <div>
+          <div className="fg-col-head">Streams</div>
+          {streamSlugs.map((slug) => {
+            const optionLabel = streamLabelFromSitemapSlug(slug);
+            return (
+              <Link
+                key={slug}
+                href={`/streams/${slug}`}
+                className="fg-link"
+                title={optionLabel ?? undefined}
+              >
+                {streamFooterLabel(slug)}
+              </Link>
+            );
+          })}
+          <Link href="/#streams" className="fg-link">
+            All streams on home
           </Link>
         </div>
 
@@ -187,6 +217,15 @@ export function MarketingFooter() {
           <div className="fg-col-head">Resources</div>
           <Link href="/wiki" className="fg-link">
             Dev wiki<span className="fg-link-badge lb-oss">OSS</span>
+          </Link>
+          <Link href="/aor-to-ppr" className="fg-link">
+            AOR → PPR timeline
+          </Link>
+          <Link href="/cohort" className="fg-link">
+            Cohort analytics
+          </Link>
+          <Link href="/vs-ircc" className="fg-link">
+            Real times vs IRCC
           </Link>
           <a
             href="https://www.getnorthpath.com/blog"

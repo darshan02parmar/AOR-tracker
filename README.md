@@ -122,6 +122,7 @@ Environment (minimum):
 | --- | --- |
 | `MONGODB_URI` | MongoDB connection string |
 | `MONGODB_DB` | Optional database name (default: `aor-tracker-dev`) |
+| `NEXT_PUBLIC_SITE_URL` | Optional — canonical origin for sitemap / metadata (e.g. `https://track.getnorthpath.com`; defaults to production URL or `VERCEL_URL`) |
 | `CRON_SECRET` | Protects cron routes in production |
 | `DISCORD_WEBHOOK_URL` | Optional — profile/milestone activity plus **ops** alert when a new `cohort_stats` placeholder row is created (run cohort sync to fill medians) |
 

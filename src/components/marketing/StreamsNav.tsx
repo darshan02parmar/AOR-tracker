@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { IconArrowRight, IconGitHub } from "./landing-icons";
@@ -11,19 +12,16 @@ const GH = "https://github.com/Get-North-Path/AOR-tracker";
 type NavItem = { href: string; label: string };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/#how", label: "How It Works" },
-  { href: "/#features", label: "Features" },
-  { href: "/#streams", label: "Streams" },
-  { href: "/cohort", label: "Cohort" },
-  { href: "/vs-ircc", label: "vs IRCC" },
-  { href: "/#messaging", label: "Alerts" },
-  { href: "/roadmap", label: "Roadmap" },
-  { href: "/changelog", label: "Changelog" },
-  { href: "/wiki", label: "Wiki" },
+  { href: "/", label: "Home" },
+  { href: "/streams/cec", label: "CEC" },
+  { href: "/streams/fsw", label: "FSW" },
+  { href: "/streams/pnp", label: "PNP" },
   { href: "/community", label: "Community" },
+  { href: "/roadmap", label: "Roadmap" },
 ];
 
-export function MarketingNav() {
+export function StreamsNav() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const btnRef = useRef<HTMLButtonElement | null>(null);
@@ -60,7 +58,7 @@ export function MarketingNav() {
           ref={btnRef}
           className="nav-menu-btn"
           aria-expanded={open}
-          aria-controls="marketing-nav-panel"
+          aria-controls="streams-nav-panel"
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((v) => !v)}
         >
@@ -71,7 +69,11 @@ export function MarketingNav() {
 
       <div className="nav-links">
         {NAV_ITEMS.map((item) => (
-          <Link href={item.href} key={item.href}>
+          <Link
+            href={item.href}
+            key={item.href}
+            data-active={pathname === item.href ? "true" : undefined}
+          >
             {item.label}
           </Link>
         ))}
@@ -91,7 +93,7 @@ export function MarketingNav() {
       </Link>
 
       <div
-        id="marketing-nav-panel"
+        id="streams-nav-panel"
         ref={panelRef}
         className={`nav-mobile-panel${open ? " open" : ""}`}
         role="menu"
@@ -103,6 +105,7 @@ export function MarketingNav() {
             key={item.href}
             role="menuitem"
             onClick={close}
+            data-active={pathname === item.href ? "true" : undefined}
           >
             {item.label}
           </Link>

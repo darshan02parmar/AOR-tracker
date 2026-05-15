@@ -1,0 +1,343 @@
+<style>
+/* AOR → PPR guide — self-contained (marketing layout supplies nav/footer) */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FFFCF5;--cream2:#F5F0E6;--cream3:#EDE8DC;
+  --navy:#1A2332;--navy2:#253347;
+  --red:#C8281E;--red2:#a81f17;
+  --green:#2D6A4F;--g4:#4ade80;--gbg:#EAF4EE;
+  --amber:#B5651D;--abg:#FDF3E3;
+  --blue:#1E5F8C;--bbg:#E8F2FB;
+  --border:#D5CFBF;--muted:#7A7060;--muted2:#9A8E7E;
+  --fh:'Fraunces',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
+  --max:760px;--max-wide:1100px;
+}
+.guide{font-family:var(--fb);font-size:17px;line-height:1.75;color:var(--navy);background:var(--cream)}
+.guide a{color:var(--green);font-weight:600;text-underline-offset:3px}
+.guide a:hover{color:var(--red2)}
+
+/* Hero */
+.gh-hero{background:var(--navy);padding:clamp(40px,6vw,72px) clamp(16px,4vw,40px) clamp(48px,6vw,64px);position:relative;overflow:hidden}
+.gh-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 90% 20%,rgba(45,106,79,.12),transparent 60%),radial-gradient(ellipse 40% 45% at 10% 80%,rgba(200,40,30,.06),transparent 50%);pointer-events:none}
+.gh-grid{position:absolute;inset:0;opacity:.35;background-image:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.02) 48px,rgba(255,255,255,.02) 49px);pointer-events:none}
+.gh-inner{max-width:var(--max-wide);margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr minmax(280px,380px);gap:2.5rem;align-items:start}
+.gh-kicker{font-family:var(--fm);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.75rem}
+.gh-h1{font-family:var(--fh);font-weight:900;font-size:clamp(2rem,4.2vw,3.1rem);line-height:1.06;color:#fff;letter-spacing:-.035em;margin-bottom:1rem}
+.gh-h1 em{font-style:italic;color:var(--g4)}
+.gh-lead{font-size:1.05rem;color:rgba(255,255,255,.58);max-width:36rem;margin-bottom:1.5rem;font-weight:300}
+.gh-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.25rem}
+.gh-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;font-weight:700;font-size:.92rem;text-decoration:none;transition:transform .15s,background .15s}
+.gh-btn-primary{background:var(--red);color:#fff !important;border:2px solid var(--red)}
+.gh-btn-primary:hover{background:var(--red2);transform:translateY(-2px)}
+.gh-btn-ghost{color:#fff !important;border:2px solid rgba(255,255,255,.22);background:transparent}
+.gh-btn-ghost:hover{border-color:rgba(255,255,255,.45)}
+.gh-meta{display:flex;flex-wrap:wrap;gap:12px 20px;font-size:.8rem;color:rgba(255,255,255,.38)}
+.gh-card{background:var(--cream);border:2px solid var(--navy2);border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.gh-card-hd{background:var(--green);padding:12px 16px;font-family:var(--fh);font-size:.85rem;font-weight:800;color:#fff}
+.gh-card-bd{padding:16px 18px}
+.gh-snippet{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.35}
+.gh-snippet-ans{font-size:.88rem;color:var(--muted);margin-bottom:14px}
+.gh-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.gh-mi{background:var(--cream2);border:1px solid var(--border);border-radius:8px;padding:8px 6px}
+.gh-mv{font-family:var(--fh);font-size:1.15rem;font-weight:900;color:var(--navy)}
+.gh-ml{font-size:.58rem;font-family:var(--fm);text-transform:uppercase;color:var(--muted);letter-spacing:.04em;margin-top:3px}
+
+/* Snippet strip */
+.sn-strip{background:var(--cream2);border-bottom:2px solid var(--border);padding:22px clamp(16px,4vw,40px)}
+.sn-inner{max-width:var(--max);margin:0 auto}
+.sn-label{font-family:var(--fm);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.sn-q{font-family:var(--fh);font-size:1.35rem;font-weight:800;color:var(--navy);margin-bottom:10px;line-height:1.25}
+.sn-a{font-size:1.02rem;color:var(--muted)}
+.sn-a strong{color:var(--navy)}
+
+/* Layout */
+.wrap{max-width:var(--max);margin:0 auto;padding:clamp(40px,5vw,56px) clamp(16px,4vw,40px)}
+.wrap-wide{max-width:var(--max-wide);margin:0 auto;padding:clamp(40px,5vw,56px) clamp(16px,4vw,40px)}
+.sec{border-top:1px solid var(--border);padding-top:2.5rem;margin-top:2.5rem}
+.sec:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.h2{font-family:var(--fh);font-size:clamp(1.45rem,2.8vw,2rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.75rem;color:var(--navy)}
+.h3{font-family:var(--fh);font-size:1.15rem;font-weight:700;margin:1.75rem 0 .6rem;color:var(--navy)}
+.p{color:var(--muted);margin-bottom:1rem}
+.p strong{color:var(--navy)}
+.toc{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:18px 22px;margin:1.5rem 0 2rem}
+.toc-t{font-family:var(--fh);font-weight:800;font-size:.95rem;margin-bottom:10px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:6px;font-size:.88rem}
+.toc a{color:var(--green);font-weight:600;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+
+/* Visual timeline */
+.tl-wrap{background:var(--navy);border-radius:14px;padding:22px 16px 28px;margin:2rem 0;overflow-x:auto}
+.tl-title{font-family:var(--fh);font-size:1rem;font-weight:800;color:#fff;margin-bottom:16px;text-align:center}
+.tl-track{display:flex;align-items:flex-start;gap:0;min-width:720px;padding:0 8px}
+.tl-seg{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.tl-seg::after{content:'';position:absolute;top:18px;left:50%;width:100%;height:3px;background:rgba(255,255,255,.12);z-index:0}
+.tl-seg:last-child::after{display:none}
+.tl-dot{width:36px;height:36px;border-radius:50%;background:var(--green);border:3px solid var(--cream);color:#fff;font-family:var(--fm);font-size:.62rem;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:1;flex-shrink:0}
+.tl-dot.muted{background:var(--blue)}
+.tl-dot.final{background:var(--red)}
+.tl-name{font-size:.68rem;font-weight:700;color:rgba(255,255,255,.85);margin-top:10px;text-align:center;max-width:88px;line-height:1.3}
+.tl-days{font-size:.58rem;font-family:var(--fm);color:rgba(255,255,255,.45);margin-top:2px;text-align:center}
+
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;font-size:.86rem;margin:1.25rem 0;border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.tbl th{background:var(--cream2);font-family:var(--fm);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td{font-variant-numeric:tabular-nums}
+.note{font-size:.82rem;color:var(--muted2);font-style:italic;margin-top:.5rem}
+
+/* Step cards */
+.steps{display:grid;gap:14px;margin-top:1.25rem}
+.step{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:18px 20px;border-left:4px solid var(--green)}
+.step h3{font-family:var(--fh);font-size:1.05rem;margin:0 0 .5rem}
+.step .p{margin-bottom:.5rem}
+.step .p:last-child{margin-bottom:0}
+.tag{display:inline-block;font-size:.62rem;font-weight:700;font-family:var(--fm);text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:100px;background:var(--gbg);color:var(--green);margin-bottom:8px}
+
+/* FAQ */
+.faq-item{border-bottom:1px solid var(--border);padding:20px 0}
+.faq-q{font-family:var(--fh);font-weight:700;font-size:1.02rem;margin-bottom:8px;color:var(--navy)}
+.faq-a{font-size:.95rem;color:var(--muted)}
+
+/* CTA */
+.cta{background:var(--green);padding:clamp(44px,5vw,64px) clamp(16px,4vw,40px);margin-top:2rem}
+.cta-in{max-width:var(--max-wide);margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
+.cta h2{font-family:var(--fh);font-size:clamp(1.4rem,3vw,1.85rem);font-weight:900;color:#fff;max-width:28rem;line-height:1.15}
+.cta .gh-btn-primary{color:var(--green);}
+.cta .gh-btn-primary:hover{color:var(--green)}
+
+.disclaimer{font-size:.78rem;color:var(--muted2);padding:28px clamp(16px,4vw,40px) 48px;max-width:var(--max);margin:0 auto;line-height:1.6}
+
+@media(max-width:900px){.gh-inner{grid-template-columns:1fr}}
+@media(max-width:560px){.gh-mini{grid-template-columns:1fr}}
+</style>
+
+<div class="guide">
+  <header class="gh-hero">
+    <div class="gh-grid"></div>
+    <div class="gh-inner">
+      <div>
+        <p class="gh-kicker">Canada PR · Express Entry · 2026</p>
+        <h1 class="gh-h1">AOR to PPR: <em>How long</em> does Express Entry take?</h1>
+        <p class="gh-lead">Authoritative, plain-language guide to the full milestone chain — ITA through CoPR — with <strong>real community averages</strong> from AORTrack applicants (not IRCC processing guarantees). Use it alongside official IRCC tools.</p>
+        <div class="gh-actions">
+          <a href="/track" class="gh-btn gh-btn-primary">Track my timeline — free</a>
+          <a href="#timeline-visual" class="gh-btn gh-btn-ghost">Jump to visual timeline</a>
+        </div>
+        <div class="gh-meta">
+          <span>~15 min read</span>
+          <span>Updated for 2026</span>
+          <span>Open source · MIT</span>
+        </div>
+      </div>
+      <aside class="gh-card" aria-label="Quick summary">
+        <div class="gh-card-hd">At a glance</div>
+        <div class="gh-card-bd">
+          <p class="gh-snippet">Median AOR → eCOPR-style completion (community)</p>
+          <p class="gh-snippet-ans">Figures below are <strong>crowd-sourced medians</strong> from AORTrack cohorts — useful for expectations, not legal advice.</p>
+          <div class="gh-mini">
+            <div class="gh-mi"><div class="gh-mv">184d</div><div class="gh-ml">CEC</div></div>
+            <div class="gh-mi"><div class="gh-mv">267d</div><div class="gh-ml">FSW</div></div>
+            <div class="gh-mi"><div class="gh-mv">312d</div><div class="gh-ml">PNP</div></div>
+          </div>
+          <p class="gh-snippet-ans" style="margin-top:14px;margin-bottom:0">Between AOR and that final milestone you will typically pass through <strong>biometrics, medicals, and background review</strong> — often overlapping rather than strictly sequential.</p>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <div class="sn-strip">
+    <div class="sn-inner">
+      <p class="sn-label">Featured-answer style</p>
+      <p class="sn-q" id="quick-answer">How long is AOR to PPR for Express Entry in 2026?</p>
+      <p class="sn-a"><strong>There is no single number.</strong> Federal-stage processing depends on your stream (CEC, FSW, or PNP-linked), whether you are inland or outland, office workload, and file complexity. On AORTrack’s 2026 community snapshot, <strong>typical medians</strong> from Acknowledgement of Receipt through eCOPR (or equivalent final milestone) cluster around <strong>~184 days for CEC</strong>, <strong>~267 days for FSW</strong>, and <strong>~312 days for PNP</strong> — always compare your own AOR month and province in the tracker rather than relying on a national average.</p>
+    </div>
+  </div>
+
+  <article class="wrap">
+    <nav class="toc" aria-label="On this page">
+      <div class="toc-t">On this page</div>
+      <ul>
+        <li><a href="#definitions">Key terms (AOR, PPR, CoPR)</a></li>
+        <li><a href="#timeline-visual">Visual timeline: ITA → CoPR</a></li>
+        <li><a href="#streams">Median days by stream</a></li>
+        <li><a href="#steps">Full milestone guide</a></li>
+        <li><a href="#community-table">Community avg days per step</a></li>
+        <li><a href="#aortrack">Tracking with AORTrack</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+
+    <section class="sec" id="definitions">
+      <h2 class="h2">Key terms before we go step-by-step</h2>
+      <p class="p"><strong>Invitation to Apply (ITA):</strong> IRCC invites you to submit an electronic Application for Permanent Residence (eAPR) after you meet the Comprehensive Ranking System cut-off in an Express Entry draw. The ITA is not a visa — it is a time-limited window (usually 60 days) to file a complete application.</p>
+      <p class="p"><strong>Acknowledgement of Receipt (AOR):</strong> After you submit, IRCC reviews completeness. When the file is accepted into processing, you receive an AOR letter with a date. That AOR date is what most applicants use as “day zero” when comparing timelines in forums — and what AORTrack uses for cohort charts.</p>
+      <p class="p"><strong>Passport Request (PPR) / Portal invitation:</strong> “PPR” historically referred to a request to submit passports for visa issuance. Many inland applicants now receive a <strong>Permanent Residence Portal</strong> invitation instead of a literal passport letter, but the community still calls this milestone “PPR” colloquially. Either way, it means you are approaching the end of the eligibility review.</p>
+      <p class="p"><strong>Confirmation of Permanent Residence (CoPR / eCOPR):</strong> The formal grant of permanent resident status. Inland applicants often receive <strong>eCOPR</strong> (electronic CoPR) in the portal. After CoPR you can apply for your first PR card; until it arrives, CoPR/eCOPR plus valid ID proves your status in many situations — always read IRCC’s current instructions for travel and work.</p>
+    </section>
+
+    <section class="sec" id="timeline-visual">
+      <h2 class="h2">Visual timeline — ITA to CoPR</h2>
+      <p class="p">The diagram below shows the <em>logical</em> order of milestones. In reality IRCC works many checks in parallel, so your tracker may show medicals before background, or background before biometrics complete — that overlap is normal.</p>
+      <div class="tl-wrap">
+        <div class="tl-title">Express Entry PR — milestone chain</div>
+        <div class="tl-track">
+          <div class="tl-seg"><div class="tl-dot">1</div><div class="tl-name">ITA</div><div class="tl-days">Draw</div></div>
+          <div class="tl-seg"><div class="tl-dot">2</div><div class="tl-name">Submit eAPR</div><div class="tl-days">≤60d</div></div>
+          <div class="tl-seg"><div class="tl-dot">3</div><div class="tl-name">AOR</div><div class="tl-days">Day 0</div></div>
+          <div class="tl-seg"><div class="tl-dot muted">4</div><div class="tl-name">Biometrics</div><div class="tl-days">~2–6 wks</div></div>
+          <div class="tl-seg"><div class="tl-dot muted">5</div><div class="tl-name">Medicals</div><div class="tl-days">varies</div></div>
+          <div class="tl-seg"><div class="tl-dot muted">6</div><div class="tl-name">BGC</div><div class="tl-days">parallel</div></div>
+          <div class="tl-seg"><div class="tl-dot muted">7</div><div class="tl-name">PPR / Portal</div><div class="tl-days">decision</div></div>
+          <div class="tl-seg"><div class="tl-dot final">8</div><div class="tl-name">CoPR</div><div class="tl-days">grant</div></div>
+        </div>
+      </div>
+      <p class="p note">Scroll horizontally on small screens. Times between nodes are illustrative community ranges, not IRCC service standards.</p>
+    </section>
+
+    <section class="sec" id="streams">
+      <h2 class="h2">Median processing snapshot by stream (2026)</h2>
+      <p class="p">These medians come from <strong>self-reported AORTrack profiles</strong> aggregated by stream. They describe what applicants like you have experienced — not what IRCC promises. Provincial programs add another layer before or after federal processing; the PNP column here focuses on the <strong>federal post-AOR</strong> stage where Express Entry-linked nominees still sit in the same IRCC queues with extra verification.</p>
+      <table class="tbl" aria-label="Median days by immigration stream">
+        <thead><tr><th>Stream</th><th>Median AOR → eCOPR</th><th>P25</th><th>P75</th></tr></thead>
+        <tbody>
+          <tr><td>CEC (Canadian Experience Class)</td><td>184 days</td><td>133</td><td>217</td></tr>
+          <tr><td>FSW (Federal Skilled Worker)</td><td>267 days</td><td>192</td><td>315</td></tr>
+          <tr><td>PNP (Express Entry–linked, federal stage)</td><td>312 days</td><td>235</td><td>410</td></tr>
+        </tbody>
+      </table>
+      <p class="p">For stream-specific narrative and histograms, see our dedicated pages: <a href="/streams/cec">CEC processing time</a>, <a href="/streams/fsw">FSW processing time</a>, and <a href="/streams/pnp">PNP processing time</a>.</p>
+    </section>
+
+    <section class="sec" id="steps">
+      <h2 class="h2">Full milestone guide — what happens at each stage</h2>
+      <p class="p">The following sections walk through every major milestone from ITA to CoPR. We cite <strong>community median “days after AOR”</strong> where AORTrack has enough signal for CEC-style cohorts; FSW and PNP follow the same milestones but shifted later on average. Treat numbers as orientation, not prediction.</p>
+
+      <div class="steps">
+        <article class="step" id="step-ita">
+          <span class="tag">Step 1</span>
+          <h3 class="h3">Invitation to Apply (ITA)</h3>
+          <p class="p">You created an Express Entry profile, entered the pool, and ranked above the cut-off in a draw. The ITA locks in the <strong>program</strong> under which you may apply (CEC, FSW, or FST) and the <strong>60-day clock</strong> to upload forms, police certificates, proof of funds (where required), work history, and supporting documents. Missing the deadline means leaving the pool and waiting for a new ITA — so most applicants prioritize completeness over speed at this stage.</p>
+          <p class="p">From an SEO and planning perspective, the ITA is <em>not</em> part of “AOR to PPR” timing — but readers search the whole journey as one block, so we include it here for continuity.</p>
+        </article>
+
+        <article class="step" id="step-submit">
+          <span class="tag">Step 2</span>
+          <h3 class="h3">Electronic submission &amp; completeness check</h3>
+          <p class="p">After you pay fees and sign declarations, IRCC performs an initial machine-and-human triage: biometrics validity, document checklist, and obvious gaps. If something is missing, you may get a <strong>request for additional documents</strong> early — that pause is not counted in community medians the same way across applicants, which is one reason real-world spreads are wide.</p>
+        </article>
+
+        <article class="step" id="step-aor">
+          <span class="tag">Step 3</span>
+          <h3 class="h3">Acknowledgement of Receipt (AOR) — your timeline anchor</h3>
+          <p class="p">The AOR email (or status update) is the moment most trackers start counting. It does <strong>not</strong> mean an officer has assessed eligibility in depth yet; it means the file is in the federal inventory. From here, IRCC may issue automated biometrics instructions, link existing medical exams, or queue you for manual review depending on stream and risk signals.</p>
+          <p class="p"><strong>Why AOR matters for research:</strong> comparing “January 2026 AOR CEC inland Ontario” to “July 2025 AOR FSW outland” is apples-to-oranges. Always anchor comparisons to <strong>cohort</strong> (month + stream + type + province where possible).</p>
+        </article>
+
+        <article class="step" id="step-bio">
+          <span class="tag">Step 4</span>
+          <h3 class="h3">Biometrics instruction letter (BIL) &amp; collection</h3>
+          <p class="p">Most Express Entry applicants need valid biometrics on file. If yours expired or were never taken, IRCC issues a BIL shortly after AOR in many cases. Community data for CEC often clusters a <strong>biometrics instruction in the first ~15–22 days after AOR</strong>, with completion a week or two later — but applicants who renewed early sometimes skip this wait entirely.</p>
+          <p class="p">Delays here are operational (appointment availability, holiday closures) rather than legal “processing,” but they still affect when you <em>feel</em> movement on your file.</p>
+        </article>
+
+        <article class="step" id="step-med">
+          <span class="tag">Step 5</span>
+          <h3 class="h3">Immigration medical examination (IME)</h3>
+          <p class="p">You must use a <strong>panel physician</strong> approved by IRCC. Results upload to IRCC’s system; you do not send them yourself in most cases. Medical admissibility can trigger follow-up exams if findings are unclear. In community timelines, <strong>medical “passed” or “completed”</strong> often appears mid-lifecycle — for CEC medians near the ~100–120 day range after AOR in aggregated AORTrack cohorts (rounded for readability; your dashboard shows exact cohort percentiles).</p>
+        </article>
+
+        <article class="step" id="step-bgc">
+          <span class="tag">Step 6</span>
+          <h3 class="h3">Background check &amp; eligibility review</h3>
+          <p class="p">Security screening (including police certificates you submitted), criminality, and eligibility for the program you applied under are evaluated here. Status lines like “review required” or “we are processing your background check” can persist for months <em>without</em> implying a problem — complex travel history, military service, or certain occupations can add layers.</p>
+          <p class="p">This stage overlaps heavily with medicals and biometrics; <strong>do not assume a strict order</strong> of completion on MyTracker or the IRCC portal.</p>
+        </article>
+
+        <article class="step" id="step-ppr">
+          <span class="tag">Step 7</span>
+          <h3 class="h3">PPR, portal invitation, or “additional documents” near the end</h3>
+          <p class="p">When eligibility and admissibility reviews are positive, IRCC moves to closing steps. Outland applicants may receive a passport request for a counterfoil. Inland applicants are typically invited to the <strong>Permanent Residence Portal</strong> to confirm presence in Canada and upload portrait and address details in two phases (P1 and P2 in AORTrack’s milestone vocabulary).</p>
+          <p class="p">Some files receive a <strong>procedural fairness letter</strong> instead — that is not PPR; seek qualified advice if that happens.</p>
+        </article>
+
+        <article class="step" id="step-copr">
+          <span class="tag">Step 8</span>
+          <h3 class="h3">CoPR / eCOPR — you are a permanent resident</h3>
+          <p class="p">The CoPR document (or eCOPR upload) records the date your permanent residence takes effect. You must meet residency obligations from that date forward. PR card production is a separate logistics pipeline with its own mailing delays.</p>
+          <p class="p">On AORTrack, logging the <strong>eCOPR</strong> milestone helps the next applicant in your cohort see realistic tail-end timing after portal steps.</p>
+        </article>
+      </div>
+    </section>
+  </article>
+
+  <section class="wrap-wide" id="community-table" style="background:var(--cream2);border-top:2px solid var(--border);border-bottom:2px solid var(--border)">
+    <h2 class="h2" style="max-width:var(--max);margin:0 auto .75rem">Community average days <em>after AOR</em> (illustrative CEC cohort)</h2>
+    <p class="p" style="max-width:var(--max);margin:0 auto 1.25rem">These rounded figures mirror the milestone cards on our <a href="/streams/cec">CEC stream page</a>. FSW and PNP cohorts trend later on each row; use the tracker for your stream.</p>
+    <div style="max-width:var(--max);margin:0 auto">
+      <table class="tbl">
+        <thead><tr><th>Milestone</th><th>Typical median (days after AOR)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>AOR received</td><td>0</td><td>Anchor date</td></tr>
+          <tr><td>Biometrics instruction</td><td>~15–22</td><td>Often earlier if already valid</td></tr>
+          <tr><td>Biometrics completed</td><td>~27–38</td><td>Depends on appointment slots</td></tr>
+          <tr><td>Background check in progress</td><td>~58–95</td><td>Overlaps other steps</td></tr>
+          <tr><td>Medical results</td><td>~112–175</td><td>Wide variance by stream</td></tr>
+          <tr><td>Portal P1 / PPR-equivalent</td><td>~155–285</td><td>Inland vs outland paths differ</td></tr>
+          <tr><td>eCOPR issued</td><td>~184 (CEC median)</td><td>FSW ~267 · PNP ~312</td></tr>
+        </tbody>
+      </table>
+      <p class="note">AORTrack computes medians from user-submitted dates; outliers and small-sample cohorts are smoothed in dashboard views. This table is educational only.</p>
+    </div>
+  </section>
+
+  <article class="wrap" id="aortrack">
+    <section class="sec">
+      <h2 class="h2">How to track progress with AORTrack</h2>
+      <p class="p"><strong>1. Enter your real AOR date and stream.</strong> The tracker places you in a cohort with other applicants who share the same month (and, where available, inland/outland and province). That cohort placement is more actionable than comparing yourself to a global “Express Entry average.”</p>
+      <p class="p"><strong>2. Log milestones as they occur.</strong> When biometrics complete, medicals pass, or the portal advances, add the date. Each update sharpens histograms for everyone behind you — open-source community science in practice.</p>
+      <p class="p"><strong>3. Compare to P25 / median / P75, not to individual Reddit outliers.</strong> Slow cases happen; so do extremely fast ones. Percentiles describe the shape of the distribution for <em>your</em> cohort better than any single story.</p>
+      <p class="p"><strong>4. Use /dashboard/stats for macro trends.</strong> Stream-level pages (<a href="/streams/cec">CEC</a>, <a href="/streams/fsw">FSW</a>, <a href="/streams/pnp">PNP</a>) give SEO-friendly static explainers; the live dashboard reflects the database behind them.</p>
+      <p class="p"><strong>5. Remember privacy.</strong> AORTrack is built to minimize personal data — you should never post GCMS notes or UCI publicly in Discord; use the structured tracker fields instead.</p>
+    </section>
+
+    <section class="sec" id="faq">
+      <h2 class="h2">Frequently asked questions</h2>
+
+      <div class="faq-item">
+        <p class="faq-q">Is AOR to PPR the same as “Express Entry processing time”?</p>
+        <p class="faq-a">Colloquially, yes — many blogs use “Express Entry processing time” to mean the federal stage after submission. Technically, Express Entry also includes pool time before ITA and PR card production after CoPR. This guide uses <strong>AOR as day zero</strong> unless stated otherwise.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">How long does Express Entry take overall in 2026?</p>
+        <p class="faq-a">Pool wait varies from days to years depending on CRS. After ITA, federal processing medians on AORTrack cluster around <strong>~184d (CEC)</strong>, <strong>~267d (FSW)</strong>, and <strong>~312d (PNP federal)</strong> for 2026 snapshots — always check your cohort in the app.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">What is the fastest realistic AOR to PPR?</p>
+        <p class="faq-a">Some CEC files complete in well under the median when background and medicals are straightforward and already valid. Those outcomes are <em>not</em> something you can engineer after the fact; focus on accurate forms and timely biometrics/medicals instead of chasing a record.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Does ordering of milestones on GCKey mean anything?</p>
+        <p class="faq-a">Not reliably. IRCC updates different modules on different schedules. A “medicals passed” line appearing before “background” does not automatically mean you are ahead of someone else in the same month.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Can I trust AORTrack instead of IRCC?</p>
+        <p class="faq-a">No — AORTrack is <strong>supplementary</strong>. Always follow IRCC instructions, legal counsel when needed, and official processing tools. AORTrack shows what peers experienced; IRCC decides your case.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Where can I download proof for employers?</p>
+        <p class="faq-a">Use official IRCC correspondence (AOR, portal PDFs, CoPR). AORTrack exports are for personal planning, not government proof.</p>
+      </div>
+    </section>
+  </article>
+
+  <div class="cta">
+    <div class="cta-in">
+      <h2>Ready to see where you sit in your cohort?</h2>
+      <a href="/track" class="gh-btn gh-btn-primary">Open AORTrack — free, no signup wall</a>
+    </div>
+  </div>
+
+  <p class="disclaimer"><strong>Disclaimer:</strong> AORTrack is not affiliated with IRCC. All timelines and averages are derived from voluntary community submissions and may contain sampling bias. Nothing on this page is legal advice. Immigration rules change — verify critical facts on Canada.ca and with a Regulated Canadian Immigration Consultant or lawyer when your case is complex.</p>
+</div>
