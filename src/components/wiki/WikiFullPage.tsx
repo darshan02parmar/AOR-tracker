@@ -109,10 +109,11 @@ clearSessionEmail()`}</pre>
             <p>
               Primary persistence is the <code>profiles</code> collection. Browser
               sessions use normalized <code>emailNorm</code> (
-              <code>normalizeEmail</code> in <code>src/lib/profile.ts</code>). CEC
-              Excel imports also store a unique <code>caseNo</code> (myimmitracker Case
-              #) and <code>seededData: true</code> for team tracking — live{" "}
-              <code>/track</code> saves set <code>seededData: false</code>.
+              <code>normalizeEmail</code> in <code>src/lib/profile.ts</code>). Optional
+              fields on a profile document may include <code>caseNo</code>,{" "}
+              <code>username</code>, and <code>currentStatus</code> when present. Every
+              profile stores a computed <code>cohortKey</code> used for aggregation (
+              <code>buildCohortKey</code> in <code>src/lib/cohort.ts</code>).
             </p>
             <p>
               <strong>Read profile:</strong> <code>getProfileAction(email)</code> in{" "}
@@ -316,9 +317,11 @@ clearSessionEmail()`}</pre>
               <code>components/marketing/community/data.ts</code>. The adapter in{" "}
               <code>adapter.ts</code> maps DB <code>CommunityPost</code> → marketing card
               shape (cohort rows from <code>meta</code>, timeline dots from{" "}
-              <code>tl</code>, safe HTML for user bodies). User content uses{" "}
-              <code>bodyIsHtml: false</code> and escaped plain text; seeded posts may
-              set trusted HTML — documented in the adapter file.
+              <code>tl</code>, safe HTML for user bodies). New posts set{" "}
+              <code>tl</code> via <code>timelineFromProfile</code> in{" "}
+              <code>community.ts</code> (milestones with dates on the author&apos;s
+              profile). User content uses <code>bodyIsHtml: false</code> and escaped
+              plain text.
             </p>
           </section>
 
@@ -335,11 +338,21 @@ clearSessionEmail()`}</pre>
               </li>
               <li>
                 <strong>
+                  getCommunitySubmitMilestoneTimelineOptionsAction(email)
+                </strong>{" "}
+                — returns milestone rows from the same{" "}
+                <code>mergeMilestoneDefsForCohort</code> pipeline as the dashboard
+                timeline (filtered to tags that can appear on posts).
+              </li>
+              <li>
+                <strong>
                   createCommunityPostAction(email, {"{"} body, ms, replyToId? {"}"})
                 </strong>{" "}
                 — validates email and body length, loads profile via{" "}
-                <code>getProfileAction</code> (posting requires a stored profile). Builds{" "}
-                <code>meta</code> / <code>tl</code> from profile milestones. Optional{" "}
+                <code>getProfileAction</code> (posting requires a stored profile). Tags:{" "}
+                <code>ecopr</code>, <code>p1</code>, <code>p2</code>, <code>bil</code>,{" "}
+                <code>bg</code>, <code>med</code>. Builds <code>meta</code> from stream /
+                AOR / type and <code>tl</code> from profile milestone dates. Optional{" "}
                 <code>replyToId</code> must reference an approved parent; stores{" "}
                 <code>replyToPreview</code>. New rows are inserted with{" "}
                 <code>approved: true</code> today (no moderation queue in this path).
@@ -351,6 +364,30 @@ clearSessionEmail()`}</pre>
                 email; idempotent for repeat votes. Broadcasts refresh on success.
               </li>
             </ul>
+          </section>
+
+          <section className="wiki-section" id="comm-submit-milestone">
+            <h2>Submit milestone modal</h2>
+            <p>
+              <code>SubmitMilestoneModal</code> (
+              <code>components/marketing/community/SubmitMilestoneModal.tsx</code>) is
+              opened from the community feed and dashboard community panel. It loads
+              options via <code>getCommunitySubmitMilestoneTimelineOptionsAction</code>{" "}
+              and maps dashboard <code>MilestoneKey</code> values to community{" "}
+              <code>ms</code> tags (<code>bil</code>, <code>bg</code>, <code>med</code>,{" "}
+              <code>p1</code>, <code>p2</code>, <code>ecopr</code>).
+            </p>
+            <p>
+              The client only enables submit when the selected milestone already has a
+              date on the user&apos;s profile (same rule as posting to the feed). If a
+              date is missing, the modal shows an &ldquo;Action needed&rdquo; block with a
+              link to <code>/dashboard#tl-sec</code> to add the date first.
+            </p>
+            <p>
+              <code>CommunityFilterBar</code> search and sort controls are UI-only today
+              (see TODOs in that file); the feed server action sorts by{" "}
+              <code>createdAt: -1</code> only.
+            </p>
           </section>
 
           <section className="wiki-section" id="comm-socket">
@@ -447,9 +484,11 @@ clearSessionEmail()`}</pre>
                 <code>newProfile()</code> defaults.
               </li>
               <li>
-                <code>saveProfileAction</code> persists the full milestone map and
-                demographic fields; sets <code>seededData: false</code>. Same action
-                family the dashboard uses for profile-shaped updates.
+                <code>saveProfileAction</code> persists the full milestone map,
+                demographic fields, and recomputed <code>cohortKey</code>. Same action
+                family the dashboard uses for profile-shaped updates. On success it may
+                fire Discord profile webhooks (see{" "}
+                <a href="#cohort-discord">Discord webhooks</a>).
               </li>
               <li>
                 <code>writeSessionEmail</code> (<code>src/lib/session-client.ts</code>)
@@ -557,29 +596,64 @@ clearSessionEmail()`}</pre>
             </ul>
           </section>
 
+          <section className="wiki-section" id="dash-appbar">
+            <h2>Top bar (<code>DashboardAppBar</code>)</h2>
+            <p>
+              Sticky navy bar on every dashboard route: logo, applicant id, live cohort
+              pill, <strong>Share</strong> (scrolls to <code>#share-sec</code> or{" "}
+              <code>/dashboard/share</code>), and <strong>Log Milestone</strong> (scrolls
+              to <code>#tl-sec</code>). Below it, <code>DashboardAlertStrip</code> shows
+              a dismissible late-biometrics notice when applicable (client state only).
+            </p>
+            <p>
+              <code>syncCohortStats</code> is exposed on <code>DashboardContext</code>{" "}
+              and implemented in <code>DashboardShellV2</code> via{" "}
+              <code>syncCohortStatsFromProfilesAction</code>. The legacy{" "}
+              <code>DashboardShell.tsx</code> layout still renders a visible{" "}
+              <strong>Sync cohorts</strong> button in its top bar; wire the same handler
+              into <code>DashboardAppBar</code> if you want parity on the v2 chrome.
+            </p>
+          </section>
+
           <section className="wiki-section" id="dash-live-vs-static">
             <h2>Cohort stats: v2.0 aggregates vs live fill counts</h2>
             <p>
-              <code>cohort_stats</code> rows are rebuilt by the v2.0 sync job (
-              <code>runCohortStatsSyncJob</code>) — recency-weighted medians, P10–P90,
-              survival imputation for still-waiting files, and histogram buckets. The
-              dashboard reads these for <strong>typical wait</strong>,{" "}
-              <strong>journey %</strong> (days since AOR ÷ median), and the{" "}
-              <strong>expected approval window</strong> (calendar AOR + P25 … AOR + P75).
+              <code>cohort_stats</code> rows are rebuilt by the cohort sync job (
+              <code>runCohortStatsSyncJob</code> in <code>cohort-sync-job.ts</code>) —
+              recency-weighted medians, P10–P90, survival imputation for still-waiting
+              files, and histogram buckets. The dashboard reads these for{" "}
+              <strong>typical wait</strong>, <strong>journey %</strong> (days since AOR ÷
+              median), and the <strong>expected approval window</strong> (calendar AOR +
+              P25 … AOR + P75).
             </p>
             <p>
-              Separately, <code>getLiveCohortAggregateAction</code> counts how many
-              profiles in the cohort have each milestone date filled. When{" "}
-              <code>profileCount &gt;= 2</code>, milestone charts prefer those live
-              counts; otherwise the UI falls back to static <code>per_milestone_n</code>{" "}
-              on the cohort doc.
+              Separately, <code>getLiveCohortAggregateAction</code> (
+              <code>aggregate.ts</code>) runs a Mongo aggregation on{" "}
+              <code>profiles</code> matching the active <code>cohortKey</code>: total
+              count plus how many rows have each milestone date filled.
             </p>
             <p>
-              <code>getQueuePositionAction</code> (in{" "}
-              <code>src/app/actions/aggregate.ts</code>) ranks the viewer among
-              same-cohort peers with an earlier AOR who still lack eCOPR. See{" "}
-              <a href="#cohort-v2">Cohort &amp; statistics (v2.0)</a> for the full
-              pipeline.
+              When <code>liveAggregate.profileCount &gt;= 2</code>,{" "}
+              <code>DashboardShellV2</code> merges live data into display state:
+            </p>
+            <pre className="wiki-code">{`cohortDisplay = {
+  ...cohort,                              // medians, dist, etc. from cohort_stats
+  n_verified: liveAggregate.profileCount, // denominator for "N verified" + bars
+  per_milestone_n: liveAggregate.perMilestoneFilled,
+}`}</pre>
+            <p>
+              <strong>Contributor note:</strong> milestone bar labels like{" "}
+              <code>27 / 25 (108%)</code> happened when <code>per_milestone_n</code> came
+              from live Mongo counts but <code>n_verified</code> still came from stale{" "}
+              <code>cohort_stats</code>. Always update both fields together when merging
+              live aggregates (or re-run sync so <code>cohort_stats.n_verified</code>{" "}
+              matches <code>profiles</code> count).
+            </p>
+            <p>
+              <code>getQueuePositionAction</code> ranks the viewer among same-cohort peers
+              with an earlier AOR who still lack eCOPR. Cohort section UI:{" "}
+              <code>DashboardCohortBars</code> formats <code>n / total</code> via{" "}
+              <code>cohortBarsVM</code> in <code>live-vm.ts</code>.
             </p>
           </section>
 
@@ -717,27 +791,35 @@ clearSessionEmail()`}</pre>
           </p>
 
           <section className="wiki-section" id="cohort-key">
-            <h2>Stats cohort key (no province)</h2>
+            <h2>Stats cohort key (includes province)</h2>
             <p>
-              Each profile stores <code>cohortKey</code> for aggregation. v2.0 uses a
-              four-part stats key (province is <em>not</em> part of the bucket):
+              Each profile stores <code>cohortKey</code> for aggregation. Keys are built
+              by <code>buildCohortKey()</code> in <code>src/lib/cohort.ts</code>:
             </p>
-            <pre className="wiki-code">{`{streamGroup}:{month}:{year}:{inland|outland}
+            <pre className="wiki-code">{`{streamSlug}:{month}:{year}:{inland|outland}:{provinceSlug}
 
-Example: CEC:5:2026:inland
+Example: CEC_GENERAL:4:2026:inland:ONT
 
-CEC General, CEC STEM, CEC Healthcare, CEC French → streamGroup "CEC"
-Built by buildStatsCohortKey() in src/lib/cohort.ts`}</pre>
+streamSlug from stream label (e.g. CEC General → CEC_GENERAL)
+provinceSlug from province label (Ontario → ONT, missing → NA)
+Fallback without AOR: {streamSlug}:0:{year}:{kind}:{provinceSlug}`}</pre>
             <p>
-              Peer comparisons across AOR months use <code>peerCohortKeyPattern</code>.
-              Human-readable labels use <code>humanizeCohortKey</code>.
+              Peer comparisons across AOR months (same stream, type, province) use{" "}
+              <code>peerCohortKeyPattern</code>. Human-readable labels use{" "}
+              <code>humanizeCohortKey</code> (e.g. &ldquo;Apr 2026 · CEC · Inland ·
+              Ontario&rdquo;).
+            </p>
+            <p>
+              <code>runCohortStatsSyncJob</code> calls <code>reconcileProfileCohortKeys</code>{" "}
+              first so stored <code>profiles.cohortKey</code> matches current rules before
+              aggregating into <code>cohort_stats</code>.
             </p>
           </section>
 
           <section className="wiki-section" id="cohort-algorithm">
             <h2>v2.0 sync pipeline</h2>
             <p className="wiki-flow">
-              {`profiles (including seededData: true)
+              {`profiles (match cohortKey in Mongo)
 → reconcileProfileCohortKeys()
 → load stored_median from cohort_calibration (bootstrap 180d first run)
 → dynamic cutoff = today − clamp(1.5 × stored_median, 270, 547) days
@@ -797,7 +879,7 @@ Built by buildStatsCohortKey() in src/lib/cohort.ts`}</pre>
                 </strong>{" "}
                 — <code>aorDate</code>, <code>milestones</code>, <code>cohortKey</code>.
                 Optional: <code>caseNo</code>, <code>username</code>,{" "}
-                <code>seededData</code>, <code>currentStatus</code>.
+                <code>currentStatus</code>, <code>shareToken</code>.
               </li>
               <li>
                 <strong>
@@ -816,17 +898,32 @@ Built by buildStatsCohortKey() in src/lib/cohort.ts`}</pre>
           </section>
 
           <section className="wiki-section" id="cohort-seed">
-            <h2>CEC Excel seed (dev)</h2>
-            <pre className="wiki-code">{`curl "http://localhost:3000/api/dev/seed?cec=1"
-curl "http://localhost:3000/api/dev/seed?cec=1&wipe=1"
-curl "http://localhost:3000/api/dev/seed?cec=1&discord=summary"`}</pre>
+            <h2>Dev bulk seed</h2>
+            <pre className="wiki-code">{`curl "http://localhost:3000/api/dev/seed?bulk=1"
+curl -X POST "http://localhost:3000/api/dev/sync-cohorts"   # rebuild cohort_stats`}</pre>
             <p>
-              <code>src/lib/seed-cec-tracker.ts</code> upserts by <code>caseNo</code>,
-              synthetic email <code>{`{username}{caseNo}@gmail.com`}</code>, maps{" "}
-              <strong>AOR Received</strong> to <code>aorDate</code>, sets{" "}
-              <code>seededData: true</code>. Discord is <strong>off by default</strong>{" "}
-              during bulk import. Requires <code>ALLOW_DEV_SEED=1</code> or development
+              <code>runBulkCohortSeed</code> in <code>src/lib/seed-bulk.ts</code> inserts
+              demo profiles (<code>aortracker.demo.*</code> emails), then runs{" "}
+              <code>runCohortStatsSyncJob</code>. Default <code>/api/dev/seed</code> without{" "}
+              <code>bulk=1</code> calls <code>seedDemoDataIfEmpty</code> for a minimal
+              empty-db bootstrap. Requires <code>ALLOW_DEV_SEED=1</code> or development
               mode.
+            </p>
+          </section>
+
+          <section className="wiki-section" id="cohort-discord">
+            <h2>Discord webhooks</h2>
+            <p>
+              <code>src/lib/discord-webhook.ts</code> posts embeds when{" "}
+              <code>DISCORD_WEBHOOK_URL</code> is set. Profile saves and milestone updates
+              (via <code>notifyDiscordProfileEvent</code>) include cohort key, stream, and
+              milestone details. New placeholder cohort rows trigger{" "}
+              <code>notifyDiscordNewCohortPlaceholder</code>. Demo emails (
+              <code>demo@aortrack.ca</code>, <code>aortracker.demo.*</code>) are skipped.
+            </p>
+            <p>
+              Community post/reply notifications use a separate env var when implemented:{" "}
+              <code>COMMUNITY_DISCORD_WEBHOOK_URL</code>.
             </p>
           </section>
 
@@ -857,11 +954,13 @@ curl "http://localhost:3000/api/dev/seed?cec=1&discord=summary"`}</pre>
           </section>
 
           <div className="wiki-callout">
-            <strong>Public methodology</strong>
+            <strong>Public guides</strong>
             <p>
-              User-facing copy at <code>/cohort</code> (
-              <code>src/content/guides/cohort.html</code>). Keep wiki + guide aligned
-              when the algorithm changes.
+              Marketing HTML guides under <code>src/content/guides/</code> (
+              <code>cohort.html</code>, <code>aor-to-ppr.html</code>,{" "}
+              <code>vs-ircc.html</code>) share styles via{" "}
+              <code>src/styles/guides.css</code> (imported in the marketing layout).
+              Keep wiki + guides aligned when cohort keys or methodology change.
             </p>
           </div>
         </section>
