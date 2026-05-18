@@ -188,6 +188,22 @@
   color: #fff;
   background: rgba(255, 255, 255, 0.08);
 }
+.dashboard-v2-page .dnb-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.dashboard-v2-page .dnb-btn:disabled:hover {
+  background: transparent;
+  color: var(--on-navy-soft);
+}
+.dashboard-v2-page .dnb-btn .dnb-spin {
+  animation: dnb-sync-spin 0.85s linear infinite;
+}
+@keyframes dnb-sync-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .dashboard-v2-page .dnb-btn.red {
   background: var(--red);
   color: #fff;

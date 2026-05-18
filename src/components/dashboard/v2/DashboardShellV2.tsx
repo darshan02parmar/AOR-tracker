@@ -189,6 +189,7 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
     if (!useLive) return cohort;
     return {
       ...cohort,
+      n_verified: liveAggregate.profileCount,
       per_milestone_n: { ...liveAggregate.perMilestoneFilled },
       dist: liveAggregate.histogramDist,
     };
@@ -463,6 +464,8 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
             cohortLabel={dnProfile.cohortLabel}
             shareHref="/dashboard/share"
             timelineHref="/dashboard"
+            onSyncCohorts={() => void syncCohortStats()}
+            syncCohortBusy={syncCohortBusy}
           />
 
           <div className="dlay">

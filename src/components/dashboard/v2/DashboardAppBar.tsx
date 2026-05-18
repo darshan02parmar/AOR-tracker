@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { WebsiteLogo } from "@/components/WebsiteLogo";
 import { DN_PROFILE } from "./data";
-import { IconPlus, IconUpload } from "./dashboard-icons";
+import { IconPlus, IconSync, IconUpload } from "./dashboard-icons";
 
 /**
  * Sticky dark app-bar that sits at the top of the dashboard page.
@@ -21,6 +21,8 @@ export function DashboardAppBar({
   cohortLabel = DN_PROFILE.cohortLabel,
   shareHref,
   timelineHref,
+  onSyncCohorts,
+  syncCohortBusy = false,
 }: {
   applicantId?: string;
   cohortLabel?: string;
@@ -28,6 +30,9 @@ export function DashboardAppBar({
   shareHref?: string;
   /** When provided, the +Log Milestone button navigates here. */
   timelineHref?: string;
+  /** Rebuild `cohort_stats` from all profiles (live dashboard only). */
+  onSyncCohorts?: () => void;
+  syncCohortBusy?: boolean;
 } = {}) {
   const router = useRouter();
 
@@ -54,6 +59,21 @@ export function DashboardAppBar({
           <span className="dnb-dot" aria-hidden />
           {cohortLabel}
         </div>
+        {onSyncCohorts ? (
+          <button
+            type="button"
+            className="dnb-btn"
+            disabled={syncCohortBusy}
+            title="Rebuild cohort_stats from all profiles"
+            onClick={() => onSyncCohorts()}
+          >
+            <IconSync
+              className={syncCohortBusy ? "dnb-spin" : undefined}
+              aria-hidden
+            />
+            {syncCohortBusy ? "Syncing…" : "Sync cohorts"}
+          </button>
+        ) : null}
         <button
           type="button"
           className="dnb-btn"
