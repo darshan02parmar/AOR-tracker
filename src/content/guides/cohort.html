@@ -9,29 +9,23 @@
   --blue:#1E5F8C;--bbg:#E8F2FB;
   --amber:#B5651D;--abg:#FDF3E3;
   --purple:#5B21B6;--pbg:#EDE9FE;
-  --border:#D5CFBF;--muted:#7A7060;--muted2:#9A8E7E;
+  --border:#D5CFBF;--muted:#4a443c;--muted2:#5e564c;
   --fh:'Fraunces',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
   --max:720px;--max-wide:1100px;
 }
-.co{font-family:var(--fb);font-size:17px;line-height:1.75;color:var(--navy);background:var(--cream)}
-.co a{color:var(--green);font-weight:600;text-underline-offset:3px}
-.co a:hover{color:var(--red2)}
+.co{font-family:var(--fb);font-size:17px;line-height:1.75;background:var(--cream)}
 
 .ch-hero{background:var(--navy);padding:clamp(40px,6vw,72px) clamp(16px,4vw,40px) clamp(48px,6vw,64px);position:relative;overflow:hidden}
 .ch-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 45% at 80% 15%,rgba(91,33,182,.12),transparent 55%),radial-gradient(ellipse 45% 40% at 15% 85%,rgba(45,106,79,.1),transparent 50%);pointer-events:none}
 .ch-grid{position:absolute;inset:0;opacity:.4;background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,.02) 40px,rgba(255,255,255,.02) 41px);pointer-events:none}
 .ch-inner{max-width:var(--max-wide);margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr minmax(280px,400px);gap:2.5rem;align-items:start}
-.ch-k{font-family:var(--fm);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.75rem}
+.ch-k{font-family:var(--fm);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.58);margin-bottom:.75rem}
 .ch-h1{font-family:var(--fh);font-weight:900;font-size:clamp(2rem,4vw,3rem);line-height:1.05;color:#fff;letter-spacing:-.035em;margin-bottom:1rem}
 .ch-h1 em{font-style:italic;color:#c4b5fd}
-.ch-lead{font-size:1.05rem;color:rgba(255,255,255,.55);max-width:36rem;margin-bottom:1.5rem;font-weight:300}
+.ch-lead{font-size:1.05rem;color:rgba(255,255,255,.78);max-width:36rem;margin-bottom:1.5rem;font-weight:400}
+.ch-lead strong{color:#fff;font-weight:600}
 .ch-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1rem}
-.ch-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;font-weight:700;font-size:.92rem;text-decoration:none;transition:transform .15s,background .15s}
-.ch-btn-p{background:var(--red);color:#fff;border:2px solid var(--red)}
-.ch-btn-p:hover{background:var(--red2);transform:translateY(-2px)}
-.ch-btn-g{color:#fff;border:2px solid rgba(255,255,255,.22);background:transparent}
-.ch-btn-g:hover{border-color:rgba(255,255,255,.45)}
-.ch-meta{font-size:.78rem;color:rgba(255,255,255,.35);display:flex;flex-wrap:wrap;gap:12px 18px}
+.ch-meta{font-size:.78rem;color:rgba(255,255,255,.52);display:flex;flex-wrap:wrap;gap:12px 18px}
 
 .ch-card{background:var(--cream);border:2px solid var(--navy2);border-radius:14px;overflow:hidden;box-shadow:0 22px 55px rgba(0,0,0,.38)}
 .ch-card-h{background:linear-gradient(135deg,var(--purple),#4338ca);padding:12px 16px;font-family:var(--fh);font-size:.88rem;font-weight:800;color:#fff}
@@ -89,12 +83,6 @@
 .faq-q{font-family:var(--fh);font-weight:700;font-size:1.02rem;margin-bottom:8px;color:var(--navy)}
 .faq-a{font-size:.95rem;color:var(--muted)}
 
-.cta{background:var(--navy);padding:clamp(44px,5vw,64px) clamp(16px,4vw,40px);margin-top:2rem}
-.cta-in{max-width:var(--max-wide);margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
-.cta h2{font-family:var(--fh);font-size:clamp(1.35rem,3vw,1.8rem);font-weight:900;color:#fff;max-width:26rem;line-height:1.2}
-.cta .ch-btn-p{background:#fff;color:var(--green);border-color:#fff}
-.cta .ch-btn-p:hover{background:var(--cream2);color:var(--green)}
-
 .dis{font-size:.78rem;color:var(--muted2);padding:28px clamp(16px,4vw,40px) 48px;max-width:var(--max);margin:0 auto;line-height:1.65}
 
 @media(max-width:900px){.ch-inner{grid-template-columns:1fr}}
@@ -110,8 +98,8 @@
         <h1 class="ch-h1">Express Entry cohort analytics — <em>find your rank</em></h1>
         <p class="ch-lead">AORTrack turns anonymous milestone logs into <strong>cohorts</strong> you can compare against: same AOR month, same stream, same inland/outland profile where possible. This page explains <em>how</em> we calculate percentile rank and why that matters more than a generic IRCC service standard.</p>
         <div class="ch-actions">
-          <a href="/track" class="ch-btn ch-btn-p">Find my cohort rank — free</a>
-          <a href="#methodology" class="ch-btn ch-btn-g">Read methodology</a>
+          <a href="/track" class="g-btn g-btn-primary">Find my cohort rank — free</a>
+          <a href="#methodology" class="g-btn g-btn-secondary">Read methodology</a>
         </div>
         <div class="ch-meta">
           <span>Open source · auditable</span>
@@ -255,10 +243,13 @@
     </section>
   </article>
 
-  <div class="cta">
-    <div class="cta-in">
+  <div class="g-cta">
+    <div class="g-cta-in">
       <h2>See your cohort — not someone else’s average.</h2>
-      <a href="/track" class="ch-btn ch-btn-p">Open AORTrack</a>
+      <div class="g-cta-actions">
+        <a href="/track" class="g-btn g-btn-cta">Open AORTrack</a>
+        <a href="#methodology" class="g-btn g-btn-secondary">Methodology</a>
+      </div>
     </div>
   </div>
 

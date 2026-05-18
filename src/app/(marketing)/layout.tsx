@@ -1,4 +1,5 @@
 import "@/styles/marketing-core.css";
+import "@/styles/guides.css";
 import { MarketingFooter } from "@/components/marketing/MarketingFooter";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 

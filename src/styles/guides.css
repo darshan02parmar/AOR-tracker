@@ -1,0 +1,222 @@
+/**
+ * Shared styles for SEO guide pages (aor-to-ppr, cohort, vs-ircc).
+ * Loaded via marketing layout. Guide HTML fragments use these tokens and
+ * `.g-btn` classes for consistent primary / secondary CTAs.
+ */
+
+.guide,
+.co {
+  --g-text: #1a2332;
+  --g-text-secondary: #4a443c;
+  --g-text-muted: #5e564c;
+  --g-text-subtle: #6b6256;
+  --g-on-dark: rgba(255, 255, 255, 0.82);
+  --g-on-dark-subtle: rgba(255, 255, 255, 0.58);
+  --g-surface: #ffffff;
+  color: var(--g-text);
+}
+
+.guide a:not(.g-btn),
+.co a:not(.g-btn) {
+  color: var(--green);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.guide a:not(.g-btn):hover,
+.co a:not(.g-btn):hover {
+  color: var(--red2);
+}
+
+/* ─── Button system ─── */
+
+.g-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-family: var(--fb);
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  text-decoration: none !important;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.g-btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* Primary — main conversion (red, matches marketing nav CTA) */
+.g-btn-primary {
+  background: var(--red);
+  color: #fff !important;
+  border-color: var(--red);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
+}
+
+.g-btn-primary:hover {
+  background: var(--red2);
+  border-color: var(--red2);
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(200, 40, 30, 0.22);
+}
+
+/* Secondary — outline on dark hero / navy bands */
+.g-btn-secondary {
+  background: transparent;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.g-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* Secondary on light surfaces (cream / white cards) */
+.g-btn-secondary-light {
+  background: var(--g-surface);
+  color: var(--g-text) !important;
+  border-color: var(--border);
+}
+
+.g-btn-secondary-light:hover {
+  background: var(--cream2);
+  border-color: var(--border2);
+  color: var(--g-text) !important;
+}
+
+/* CTA band primary — high contrast on navy or green footer */
+.g-btn-cta {
+  background: #fff;
+  color: var(--navy) !important;
+  border-color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.g-btn-cta:hover {
+  background: var(--cream);
+  border-color: var(--cream);
+  color: var(--navy) !important;
+  transform: translateY(-2px);
+}
+
+.g-btn-cta--on-green:hover {
+  background: var(--gbg);
+  border-color: #fff;
+}
+
+/* ─── Bottom CTA band (shared layout) ─── */
+
+.g-cta {
+  background: var(--navy);
+  padding: clamp(44px, 5vw, 64px) clamp(16px, 4vw, 40px);
+  margin-top: 2rem;
+}
+
+.g-cta--green {
+  background: var(--green);
+}
+
+.g-cta-in {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 1.5rem;
+}
+
+.g-cta h2 {
+  font-family: var(--fh);
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-weight: 900;
+  color: #fff;
+  max-width: 28rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.g-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.g-cta .g-btn-secondary {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.g-cta .g-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Readable body copy helpers (use in guide inline CSS) ─── */
+
+.guide .g-p,
+.co .g-p,
+.guide .p,
+.co .p {
+  color: var(--g-text-secondary);
+}
+
+.guide .g-p strong,
+.co .g-p strong,
+.guide .p strong,
+.co .p strong {
+  color: var(--g-text);
+}
+
+.guide .g-muted,
+.co .g-muted {
+  color: var(--g-text-muted);
+}
+
+.guide .g-subtle,
+.co .g-subtle {
+  color: var(--g-text-subtle);
+}
+
+/* ─── Mobile: full-width CTAs ─── */
+
+@media (max-width: 640px) {
+  .guide .vi-actions,
+  .guide .gh-actions,
+  .co .ch-actions,
+  .g-cta-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .guide .g-btn,
+  .co .g-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .g-cta-in {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .g-cta h2 {
+    max-width: none;
+  }
+}

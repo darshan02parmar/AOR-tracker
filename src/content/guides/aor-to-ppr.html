@@ -8,30 +8,24 @@
   --green:#2D6A4F;--g4:#4ade80;--gbg:#EAF4EE;
   --amber:#B5651D;--abg:#FDF3E3;
   --blue:#1E5F8C;--bbg:#E8F2FB;
-  --border:#D5CFBF;--muted:#7A7060;--muted2:#9A8E7E;
+  --border:#D5CFBF;--muted:#4a443c;--muted2:#5e564c;
   --fh:'Fraunces',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
   --max:760px;--max-wide:1100px;
 }
-.guide{font-family:var(--fb);font-size:17px;line-height:1.75;color:var(--navy);background:var(--cream)}
-.guide a{color:var(--green);font-weight:600;text-underline-offset:3px}
-.guide a:hover{color:var(--red2)}
+.guide{font-family:var(--fb);font-size:17px;line-height:1.75;background:var(--cream)}
 
 /* Hero */
 .gh-hero{background:var(--navy);padding:clamp(40px,6vw,72px) clamp(16px,4vw,40px) clamp(48px,6vw,64px);position:relative;overflow:hidden}
 .gh-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 90% 20%,rgba(45,106,79,.12),transparent 60%),radial-gradient(ellipse 40% 45% at 10% 80%,rgba(200,40,30,.06),transparent 50%);pointer-events:none}
 .gh-grid{position:absolute;inset:0;opacity:.35;background-image:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.02) 48px,rgba(255,255,255,.02) 49px);pointer-events:none}
 .gh-inner{max-width:var(--max-wide);margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr minmax(280px,380px);gap:2.5rem;align-items:start}
-.gh-kicker{font-family:var(--fm);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.75rem}
+.gh-kicker{font-family:var(--fm);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.58);margin-bottom:.75rem}
 .gh-h1{font-family:var(--fh);font-weight:900;font-size:clamp(2rem,4.2vw,3.1rem);line-height:1.06;color:#fff;letter-spacing:-.035em;margin-bottom:1rem}
 .gh-h1 em{font-style:italic;color:var(--g4)}
-.gh-lead{font-size:1.05rem;color:rgba(255,255,255,.58);max-width:36rem;margin-bottom:1.5rem;font-weight:300}
+.gh-lead{font-size:1.05rem;color:rgba(255,255,255,.78);max-width:36rem;margin-bottom:1.5rem;font-weight:400}
+.gh-lead strong{color:#fff;font-weight:600}
 .gh-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.25rem}
-.gh-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;font-weight:700;font-size:.92rem;text-decoration:none;transition:transform .15s,background .15s}
-.gh-btn-primary{background:var(--red);color:#fff !important;border:2px solid var(--red)}
-.gh-btn-primary:hover{background:var(--red2);transform:translateY(-2px)}
-.gh-btn-ghost{color:#fff !important;border:2px solid rgba(255,255,255,.22);background:transparent}
-.gh-btn-ghost:hover{border-color:rgba(255,255,255,.45)}
-.gh-meta{display:flex;flex-wrap:wrap;gap:12px 20px;font-size:.8rem;color:rgba(255,255,255,.38)}
+.gh-meta{display:flex;flex-wrap:wrap;gap:12px 20px;font-size:.8rem;color:rgba(255,255,255,.52)}
 .gh-card{background:var(--cream);border:2px solid var(--navy2);border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
 .gh-card-hd{background:var(--green);padding:12px 16px;font-family:var(--fh);font-size:.85rem;font-weight:800;color:#fff}
 .gh-card-bd{padding:16px 18px}
@@ -77,7 +71,7 @@
 .tl-dot.muted{background:var(--blue)}
 .tl-dot.final{background:var(--red)}
 .tl-name{font-size:.68rem;font-weight:700;color:rgba(255,255,255,.85);margin-top:10px;text-align:center;max-width:88px;line-height:1.3}
-.tl-days{font-size:.58rem;font-family:var(--fm);color:rgba(255,255,255,.45);margin-top:2px;text-align:center}
+.tl-days{font-size:.58rem;font-family:var(--fm);color:rgba(255,255,255,.58);margin-top:2px;text-align:center}
 
 /* Tables */
 .tbl{width:100%;border-collapse:collapse;font-size:.86rem;margin:1.25rem 0;border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
@@ -100,17 +94,44 @@
 .faq-q{font-family:var(--fh);font-weight:700;font-size:1.02rem;margin-bottom:8px;color:var(--navy)}
 .faq-a{font-size:.95rem;color:var(--muted)}
 
-/* CTA */
-.cta{background:var(--green);padding:clamp(44px,5vw,64px) clamp(16px,4vw,40px);margin-top:2rem}
-.cta-in{max-width:var(--max-wide);margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
-.cta h2{font-family:var(--fh);font-size:clamp(1.4rem,3vw,1.85rem);font-weight:900;color:#fff;max-width:28rem;line-height:1.15}
-.cta .gh-btn-primary{color:var(--green);}
-.cta .gh-btn-primary:hover{color:var(--green)}
-
 .disclaimer{font-size:.78rem;color:var(--muted2);padding:28px clamp(16px,4vw,40px) 48px;max-width:var(--max);margin:0 auto;line-height:1.6}
 
 @media(max-width:900px){.gh-inner{grid-template-columns:1fr}}
 @media(max-width:560px){.gh-mini{grid-template-columns:1fr}}
+@media(max-width:640px){
+  .tl-wrap{overflow-x:visible;padding:20px 14px 28px}
+  .tl-track{
+    flex-direction:column;
+    min-width:0;
+    padding:0;
+    gap:0;
+    align-items:center;
+  }
+  .tl-seg{
+    flex:none;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    max-width:200px;
+    margin:0 auto;
+    padding:0 0 22px;
+    position:relative;
+  }
+  .tl-seg::after{display:none}
+  .tl-dot{margin-top:0}
+  .tl-name{
+    text-align:center;
+    max-width:none;
+    margin-top:10px;
+    font-size:.82rem;
+  }
+  .tl-days{
+    text-align:center;
+    font-size:.72rem;
+    margin-top:2px;
+  }
+}
 </style>
 
 <div class="guide">
@@ -122,8 +143,8 @@
         <h1 class="gh-h1">AOR to PPR: <em>How long</em> does Express Entry take?</h1>
         <p class="gh-lead">Authoritative, plain-language guide to the full milestone chain — ITA through CoPR — with <strong>real community averages</strong> from AORTrack applicants (not IRCC processing guarantees). Use it alongside official IRCC tools.</p>
         <div class="gh-actions">
-          <a href="/track" class="gh-btn gh-btn-primary">Track my timeline — free</a>
-          <a href="#timeline-visual" class="gh-btn gh-btn-ghost">Jump to visual timeline</a>
+          <a href="/track" class="g-btn g-btn-primary">Track my timeline — free</a>
+          <a href="#timeline-visual" class="g-btn g-btn-secondary">Jump to visual timeline</a>
         </div>
         <div class="gh-meta">
           <span>~15 min read</span>
@@ -332,10 +353,13 @@
     </section>
   </article>
 
-  <div class="cta">
-    <div class="cta-in">
+  <div class="g-cta g-cta--green">
+    <div class="g-cta-in">
       <h2>Ready to see where you sit in your cohort?</h2>
-      <a href="/track" class="gh-btn gh-btn-primary">Open AORTrack — free, no signup wall</a>
+      <div class="g-cta-actions">
+        <a href="/track" class="g-btn g-btn-cta g-btn-cta--on-green">Open AORTrack — free</a>
+        <a href="/cohort" class="g-btn g-btn-secondary">Cohort analytics</a>
+      </div>
     </div>
   </div>
 
