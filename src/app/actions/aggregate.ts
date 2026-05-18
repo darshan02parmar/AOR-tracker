@@ -13,7 +13,6 @@ export type LiveCohortAggregate = {
 
 const MILESTONE_KEYS: MilestoneKey[] = [
   "aor",
-  "bil",
   "biometrics",
   "background",
   "medical",
@@ -21,6 +20,28 @@ const MILESTONE_KEYS: MilestoneKey[] = [
   "p2",
   "ecopr",
 ];
+
+/** §6.1 — applicants in cohort with earlier AOR still waiting on eCOPR. */
+export async function getQueuePositionAction(
+  cohortKey: string,
+  aorDateIso: string,
+): Promise<{ ahead: number }> {
+  if (!cohortKey?.trim() || !aorDateIso?.trim()) {
+    return { ahead: 0 };
+  }
+  const db = await getDb();
+  const ahead = await db.collection("profiles").countDocuments({
+    cohortKey,
+    aorDate: { $lt: aorDateIso.slice(0, 10) },
+    $expr: {
+      $lte: [
+        { $strLenCP: { $ifNull: ["$milestones.ecopr.date", ""] } },
+        0,
+      ],
+    },
+  });
+  return { ahead };
+}
 
 function filledCond(path: string): Record<string, unknown> {
   return {

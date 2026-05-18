@@ -30,7 +30,7 @@ type Props = {
  * pipeline as the dashboard timeline).
  */
 const KEY_TO_COMMUNITY_MS: Partial<Record<MilestoneKey, CommunityMs>> = {
-  bil: "bil",
+  biometrics: "bil",
   background: "bg",
   medical: "med",
   p1: "p1",

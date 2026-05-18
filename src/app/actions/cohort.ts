@@ -25,7 +25,7 @@ export async function getCohortStatsForProfileAction(
   const primaryKey = cohortKeyFromProfile(profile);
   let doc = await col.findOne({ cohortKey: primaryKey });
   if (!doc) {
-    const fb = streamFallbackKey(profile.stream, profile.province, profile.type);
+    const fb = streamFallbackKey(profile.stream, profile.type);
     doc = await col.findOne({ cohortKey: fb });
   }
   if (!doc) {

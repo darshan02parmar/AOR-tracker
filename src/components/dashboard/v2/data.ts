@@ -191,20 +191,6 @@ export const DN_TIMELINE: DnTimelineRow[] = [
     date: { date: "Feb 20, 2026", day: "Day 0" },
   },
   {
-    key: "bil",
-    state: "done",
-    name: "BIL — Background Initiated Letter",
-    desc: "IRCC has begun background processing on your file.",
-    badge: { kind: "verified", label: "Verified · contributed to cohort stats" },
-    date: { date: "Mar 8, 2026", day: "Day 16" },
-    edit: {
-      label: "Edit",
-      fieldLabel: "BIL Date",
-      initial: "2026-03-08",
-      fromDate: true,
-    },
-  },
-  {
     key: "bio",
     state: "done",
     name: "Biometrics Confirmed",

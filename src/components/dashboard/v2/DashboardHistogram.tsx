@@ -63,7 +63,7 @@ export function DashboardHistogram({
       <div className="sec-head" style={{ marginBottom: 0 }}>
         <div>
           <div className="sec-title" style={{ fontSize: ".92rem" }}>
-            Days-to-PPR Distribution
+            Days-to-eCOPR Distribution
           </div>
           <div className="sec-sub">
             {subtitle ??
@@ -74,8 +74,8 @@ export function DashboardHistogram({
       <div className="hist-area">
         {allBucketsEmpty ? (
           <div className="hist-empty" role="status">
-            No PPR completion days in this cohort yet — bars appear once
-            applicants with PPR dates are verified in your bucket.
+            No eCOPR completion days in this cohort yet — bars appear once
+            applicants with eCOPR dates are logged in your bucket.
           </div>
         ) : (
           bars.map((b, i) => (
@@ -105,7 +105,7 @@ export function DashboardHistogram({
       </div>
       <div className="data-note">
         <IconInfo aria-hidden />
-        Gemini-verified only · Z-score filtered (±2.5σ)
+        Community profiles · v2.0 recency-weighted estimate
       </div>
     </div>
   );

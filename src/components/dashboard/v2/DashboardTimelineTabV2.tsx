@@ -26,6 +26,7 @@ import {
   timelineRowsVM,
 } from "./live-vm";
 import { humanizeCohortKey } from "@/lib/cohort";
+import { applicantIdFromEmail } from "@/lib/share-timeline-vm";
 import type { MilestoneKey } from "@/lib/types";
 
 /**
@@ -94,7 +95,10 @@ export function DashboardTimelineTabV2() {
           bars={hist}
           subtitle={`${ctx.cohort.n_verified} verified completions · your position highlighted`}
         />
-        <DashboardDotMap map={dotMap} applicantId={`#${ctx.email.length}`} />
+        <DashboardDotMap
+          map={dotMap}
+          applicantId={applicantIdFromEmail(ctx.email)}
+        />
         <DashboardStreamCompare rows={streamCompare} />
       </DashboardCohortSection>
 

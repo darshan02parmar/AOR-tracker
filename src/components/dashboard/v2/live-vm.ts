@@ -17,7 +17,7 @@
 
 import type { DashboardContextValue } from "@/components/dashboard/DashboardContext";
 import { fmtDate } from "@/lib/format";
-import { humanizeCohortKey } from "@/lib/cohort";
+import { cohortKeyFromProfile, humanizeCohortKey } from "@/lib/cohort";
 import type { MilestoneDefRow } from "@/lib/cohort-dynamic";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
 import { applicantIdFromEmail, timelineRowsFromProfile } from "@/lib/share-timeline-vm";
@@ -45,9 +45,7 @@ export function profileVM(email: string, profile: UserProfile): DnProfile {
     typeLabel: profile.type || "—",
     province: profile.province || "—",
     aorDateLabel: fmtDate(profile.aorDate) || "Not set",
-    cohortLabel: humanizeCohortKey(
-      `${profile.stream}:${profile.aorDate}:${profile.type}:${profile.province}`,
-    ),
+    cohortLabel: humanizeCohortKey(cohortKeyFromProfile(profile)),
   };
 }
 
@@ -56,17 +54,11 @@ export function profileVM(email: string, profile: UserProfile): DnProfile {
 export function heroStatsVM(
   ctx: Pick<
     DashboardContextValue,
-    "days" | "median" | "cohort" | "cohortDisplay" | "ppr" | "profile"
+    "days" | "median" | "ppr" | "queueAhead"
   >,
 ): DnHeroStats {
-  const { days, median, cohortDisplay, ppr } = ctx;
-  const aheadCount = cohortDisplay.per_milestone_n?.ecopr ?? 0;
-  const totalCount = cohortDisplay.n_verified || 1;
-  const rankPct = Math.max(
-    0,
-    Math.round(100 - (aheadCount / totalCount) * 100),
-  );
-  const atTop = aheadCount === 0;
+  const { days, median, ppr, queueAhead } = ctx;
+  const atTop = queueAhead === 0;
   const med = median > 0 ? median : null;
 
   return {
@@ -75,15 +67,15 @@ export function heroStatsVM(
       value: med != null ? `${med} days` : "—",
       note:
         med != null
-          ? "Based on real data from people like you"
+          ? "v2.0 recency-weighted median (survival bias corrected)"
           : "Cohort median appears once enough eCOPR timelines exist in your group",
     },
     queuePosition: {
-      value: atTop ? "Top of the list" : `Top ${rankPct}%`,
+      value: atTop ? "Top of the list" : `${queueAhead} ahead`,
       note: atTop
-        ? "0 people with the same profile ahead of you"
-        : `${aheadCount} people with the same profile ahead of you`,
-      tone: atTop || rankPct >= 50 ? "good" : "warn",
+        ? "No one in your cohort with an earlier AOR is still waiting on eCOPR"
+        : `${queueAhead} applicant${queueAhead === 1 ? "" : "s"} with an earlier AOR still waiting on eCOPR`,
+      tone: atTop ? "good" : queueAhead <= 5 ? "good" : "warn",
     },
     expectedApproval: {
       value: ppr?.windowLabel ?? "—",
@@ -203,7 +195,6 @@ export function timelineRowsVM(
 
 const BAR_FILL_BY_KEY: Record<MilestoneKey, "g" | "b" | "a" | "r"> = {
   aor: "g",
-  bil: "b",
   biometrics: "b",
   background: "a",
   medical: "a",
@@ -298,17 +289,30 @@ export function streamCompareVM(
 /* ─── ALERTS ────────────────────────────────────────────────────────── */
 
 export function alertsVM(
-  ctx: Pick<DashboardContextValue, "cohortInsights">,
+  ctx: Pick<DashboardContextValue, "cohortInsights" | "lateBiometrics" | "days">,
 ): DnAlertCard[] {
-  return ctx.cohortInsights.slice(0, 4).map((ins) => ({
-    tone: ins.t === "r" || ins.t === "a" ? "amber" : "green",
-    iconKind: ins.t === "r" || ins.t === "a" ? "warn" : "check",
+  const out: DnAlertCard[] = [];
+  if (ctx.lateBiometrics) {
+    out.push({
+      tone: "amber" as const,
+      iconKind: "warn" as const,
+      title: "Late biometrics",
+      desc: `Your biometrics were logged ${ctx.days} days after AOR. Applicants with biometrics ≥60 days after AOR often see longer eCOPR timelines in community data.`,
+      meta: ["Your profile"],
+      linkLabel: "Learn more",
+      href: "/cohort",
+    });
+  }
+  const fromInsights: DnAlertCard[] = ctx.cohortInsights.slice(0, 4).map((ins) => ({
+    tone: (ins.t === "r" || ins.t === "a" ? "amber" : "green") as DnAlertCard["tone"],
+    iconKind: (ins.t === "r" || ins.t === "a" ? "warn" : "check") as DnAlertCard["iconKind"],
     title: stripHtml(ins.txt).split(" — ")[0] ?? "Community update",
     desc: stripHtml(ins.txt),
     meta: ["Community"],
     linkLabel: "View details",
     href: "/community",
   }));
+  return [...out, ...fromInsights].slice(0, 5);
 }
 
 function stripHtml(html: string): string {

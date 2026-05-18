@@ -355,6 +355,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     syncCohortStats,
     syncCohortBusy,
     cohortDataSparse,
+    queueAhead: 0,
+    lateBiometrics: false,
   };
 
   return (

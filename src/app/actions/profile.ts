@@ -1,7 +1,11 @@
 "use server";
 
 import { getDb } from "@/lib/db";
-import { buildCohortKey, cohortKeyFromProfile, streamFallbackKey } from "@/lib/cohort";
+import {
+  buildStatsCohortKey,
+  cohortKeyFromProfile,
+  streamFallbackKey,
+} from "@/lib/cohort";
 import { ensureCohortStatsPlaceholder } from "@/lib/ensure-cohort-stats";
 import {
   milestoneLabelForKey,
@@ -68,17 +72,12 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
         province: profile.province,
         milestones: profile.milestones,
         cohortKey: profile.aorDate
-          ? buildCohortKey({
+          ? buildStatsCohortKey({
               aorDate: profile.aorDate,
               stream: profile.stream,
               type: profile.type,
-              province: profile.province,
             })
-          : streamFallbackKey(
-              profile.stream,
-              profile.province,
-              profile.type,
-            ),
+          : streamFallbackKey(profile.stream, profile.type),
         updatedAt: now,
       },
       $setOnInsert: {
@@ -155,13 +154,12 @@ export async function createDraftProfileAction(
   }
   const profile = applyDraftHints(newProfile(norm), hints);
   const cohortKey = profile.aorDate
-    ? buildCohortKey({
+    ? buildStatsCohortKey({
         aorDate: profile.aorDate,
         stream: profile.stream,
         type: profile.type,
-        province: profile.province,
       })
-    : streamFallbackKey(profile.stream, profile.province, profile.type);
+    : streamFallbackKey(profile.stream, profile.type);
   await db.collection("profiles").insertOne({
     emailNorm: norm,
     createdAt: new Date(profile.createdAt),
@@ -202,11 +200,10 @@ export async function updateMilestoneAction(
       { emailNorm: norm },
       {
         $set: {
-          cohortKey: buildCohortKey({
+          cohortKey: buildStatsCohortKey({
             aorDate: profile.aorDate,
             stream: profile.stream,
             type: profile.type,
-            province: profile.province,
           }),
         },
       },
@@ -256,7 +253,6 @@ export async function ensureDemoProfileAction(): Promise<UserProfile> {
   const now = new Date().toISOString();
   const milestones = emptyMilestones();
   milestones.aor = { date: "2025-02-25", updatedAt: now };
-  milestones.bil = { date: "2025-03-12", updatedAt: now };
   milestones.biometrics = { date: "2025-03-24", updatedAt: now };
   const profile: UserProfile = {
     email: norm,
@@ -278,11 +274,10 @@ export async function ensureDemoProfileAction(): Promise<UserProfile> {
         type: profile.type,
         province: profile.province,
         milestones: profile.milestones,
-        cohortKey: buildCohortKey({
+        cohortKey: buildStatsCohortKey({
           aorDate: profile.aorDate,
           stream: profile.stream,
           type: profile.type,
-          province: profile.province,
         }),
         updatedAt: new Date(),
       },

@@ -27,7 +27,6 @@ type PostAorKey = Exclude<MilestoneKey, "aor">;
 type Phase = "gate" | "onboarding" | "success";
 
 const POST_AOR_KEYS: PostAorKey[] = [
-  "bil",
   "biometrics",
   "background",
   "medical",
@@ -38,7 +37,6 @@ const POST_AOR_KEYS: PostAorKey[] = [
 
 function blankChecked(): Record<PostAorKey, boolean> {
   return {
-    bil: false,
     biometrics: false,
     background: false,
     medical: false,
@@ -49,7 +47,6 @@ function blankChecked(): Record<PostAorKey, boolean> {
 }
 function blankDates(): Record<PostAorKey, string> {
   return {
-    bil: "",
     biometrics: "",
     background: "",
     medical: "",

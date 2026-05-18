@@ -21,48 +21,39 @@ function rangeLabel(a: Date, b: Date): string {
   return `${a.toLocaleDateString("en-CA", { month: "short" })}–${b.toLocaleDateString("en-CA", { month: "short", year: "numeric" })}`;
 }
 
+function addDays(iso: string, days: number): Date {
+  const d = new Date(`${iso}T12:00:00`);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+/** eCOPR window per v2.0 §6.2: AOR + P25 … AOR + P75. */
 export function estimatePprWindow(
   aorDateIso: string,
   cohort: CohortStats,
 ): PprEstimate {
-  const today = new Date();
-  today.setHours(12, 0, 0, 0);
-  const aor = new Date(`${aorDateIso}T12:00:00`);
-  const daysElapsed = Math.max(
-    0,
-    Math.round((today.getTime() - aor.getTime()) / 86_400_000),
-  );
-
+  const aor = aorDateIso?.trim();
   const med = cohort.median_days_to_ppr;
   const p25 = cohort.p25_days;
   const p75 = cohort.p75_days;
 
-  if (!med || med <= 0) {
+  const nEligible = cohort.n_eligible ?? cohort.n_verified;
+  const limitedData = nEligible < 30;
+
+  if (!aor || !med || med <= 0) {
+    const today = new Date();
     return {
       windowLabel: "Insufficient cohort data",
       p50Approx: "—",
-      windowStart: new Date(today),
-      windowEnd: new Date(today),
+      windowStart: today,
+      windowEnd: today,
       limitedData: true,
     };
   }
 
-  const daysRemainingP50 = med - daysElapsed;
-  const daysRemainingP25 = p25 - daysElapsed;
-  const daysRemainingP75 = p75 - daysElapsed;
-
-  const windowStart = new Date(today);
-  windowStart.setDate(
-    windowStart.getDate() + Math.max(daysRemainingP25, 14),
-  );
-
-  const windowEnd = new Date(today);
-  windowEnd.setDate(windowEnd.getDate() + Math.max(daysRemainingP75, 14));
-
-  const p50Date = new Date(today);
-  p50Date.setDate(p50Date.getDate() + Math.max(daysRemainingP50, 0));
-
-  const limitedData = cohort.n_verified < 30;
+  const windowStart = addDays(aor, p25 > 0 ? p25 : med);
+  const windowEnd = addDays(aor, p75 > 0 ? p75 : med);
+  const p50Date = addDays(aor, med);
 
   return {
     windowLabel: rangeLabel(windowStart, windowEnd),
@@ -80,6 +71,7 @@ export function daysSinceAor(aorDateIso: string): number {
   return Math.max(0, Math.round((today.getTime() - aor.getTime()) / 86_400_000));
 }
 
+/** Journey % per v2.0 §6.4: days elapsed / cohort median. */
 export function pctThroughMedian(daysElapsed: number, median: number): number {
   if (!median) return 0;
   return Math.min(99, Math.round((daysElapsed / median) * 100));

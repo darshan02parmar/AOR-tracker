@@ -15,15 +15,25 @@ export function emptyCohortStats(cohortKey: string): CohortStats {
   return {
     cohortKey,
     median_days_to_ppr: 0,
+    p10_days: 0,
     p25_days: 0,
     p75_days: 0,
+    p90_days: 0,
     n_verified: 0,
+    n_eligible: 0,
+    n_completed: 0,
+    n_waiting: 0,
+    n_imputed: 0,
     completion_rate: 0,
     weekly_delta: 0,
     per_milestone_n: {},
     dist: EMPTY_DIST.map((r) => ({ ...r })),
     pulseWeekly: [],
     stream_medians: [],
+    p1_p25_days: 0,
+    p1_p50_days: 0,
+    p1_p75_days: 0,
+    algorithm_version: "v2.0",
     last_updated: new Date().toISOString(),
   };
 }
@@ -134,6 +144,7 @@ export async function ensureIndexes(db: Db): Promise<void> {
     .collection("profiles")
     .createIndex({ shareToken: 1 }, { unique: true, sparse: true });
   await db.collection("cohort_stats").createIndex({ cohortKey: 1 }, { unique: true });
+  await db.collection("cohort_calibration").createIndex({ computed_at: -1 });
   await posts.createIndex({ createdAt: -1 });
 }
 
@@ -169,7 +180,7 @@ export async function seedDemoDataIfEmpty(db: Db): Promise<SeedDemoResult> {
 
 export function serializeCohort(
   doc: Record<string, unknown> | null | undefined,
-  fallbackCohortKey = "CEC_GENERAL:0:2026:inland:ON",
+  fallbackCohortKey = "CEC:0:2026:inland",
 ): CohortStats {
   if (!doc) {
     return emptyCohortStats(fallbackCohortKey);

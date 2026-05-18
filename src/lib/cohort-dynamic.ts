@@ -15,7 +15,6 @@ export type CohortInsight = {
 /** Typical share of median days-to-eCOPR for each milestone (rough inland model). */
 const MEDIAN_DAY_FRAC: Record<MilestoneKey, number> = {
   aor: 0,
-  bil: 0.09,
   biometrics: 0.17,
   background: 0.36,
   medical: 0.63,
@@ -26,12 +25,26 @@ const MEDIAN_DAY_FRAC: Record<MilestoneKey, number> = {
 
 export type MilestoneDefRow = (typeof MILESTONE_DEFS)[number];
 
+function addDaysFromAor(aorDate: string, days: number): string {
+  const target = new Date(`${aorDate}T12:00:00`);
+  target.setDate(target.getDate() + days);
+  return target.toLocaleDateString("en-CA", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 /**
  * Merge static milestone labels with dates estimated from AOR + cohort median (to eCOPR).
  */
 export function mergeMilestoneDefsForCohort(
   aorDate: string,
   medianPpr: number,
+  cohort?: Pick<
+    CohortStats,
+    "p1_p25_days" | "p1_p50_days" | "p1_p75_days"
+  >,
 ): MilestoneDefRow[] {
   const aor = new Date(`${aorDate}T12:00:00`);
   if (Number.isNaN(aor.getTime())) {
@@ -50,6 +63,7 @@ export function mergeMilestoneDefsForCohort(
   }
 
   const med = Math.max(30, Math.round(medianPpr));
+  const p1p50 = cohort?.p1_p50_days ?? 0;
 
   return MILESTONE_DEFS.map((def) => {
     if (def.key === "aor") {
@@ -59,14 +73,24 @@ export function mergeMilestoneDefsForCohort(
         desc: def.desc,
       };
     }
+    if (def.key === "p1" && p1p50 > 0) {
+      const est = addDaysFromAor(aorDate, p1p50);
+      return {
+        ...def,
+        est: `~${est}`,
+        desc: `Typical ~${p1p50}d after AOR (2026 P1 cohort data).`,
+      };
+    }
+    if (def.key === "p2" && cohort?.p1_p75_days && cohort.p1_p75_days > 0) {
+      const est = addDaysFromAor(aorDate, cohort.p1_p75_days);
+      return {
+        ...def,
+        est: `~${est}`,
+        desc: `Typical ~${cohort.p1_p75_days}d after AOR (P1–P2 spread from cohort).`,
+      };
+    }
     const daysAfter = Math.max(1, Math.round(MEDIAN_DAY_FRAC[def.key] * med));
-    const target = new Date(aor);
-    target.setDate(target.getDate() + daysAfter);
-    const est = `~${target.toLocaleDateString("en-CA", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    })}`;
+    const est = `~${addDaysFromAor(aorDate, daysAfter)}`;
     return {
       ...def,
       est,
@@ -93,50 +117,34 @@ export function buildCohortInsights(
     });
   }
 
-  const pw = cohort.pulseWeekly ?? [];
-  if (pw.length >= 2) {
-    const last = pw[pw.length - 1] ?? 0;
-    const prev = pw[pw.length - 2] ?? 0;
-    if (last !== prev) {
-      out.push({
-        t: last > prev ? "g" : "a",
-        txt:
-          last > prev
-            ? `<strong>Approval pulse up</strong> — model shows <strong>${last}</strong> in the latest week vs <strong>${prev}</strong> the week before.`
-            : `<strong>Approval pulse eased</strong> — <strong>${last}</strong> vs <strong>${prev}</strong> prior week (cohort trend).`,
-      });
-    }
-  }
-
-  const n = cohort.n_verified;
+  const n = cohort.n_eligible ?? cohort.n_verified;
   if (n < 30) {
     out.push({
       t: "a",
-      txt: `<strong>Sample size</strong> — cohort curve uses <strong>${n}</strong> verified timelines; confidence grows as more data is added.`,
+      txt: `<strong>Sample size</strong> — cohort curve uses <strong>${n}</strong> eligible timelines (v2.0); confidence grows as more data is added.`,
+    });
+  }
+
+  if (cohort.algorithm_version === "v2.0") {
+    out.push({
+      t: "b",
+      txt: `<strong>v2.0 estimate</strong> — recency-weighted median with survival bias correction${cohort.n_imputed ? `; <strong>${cohort.n_imputed}</strong> still-waiting profiles imputed` : ""}.`,
     });
   }
 
   const cr = Math.round((cohort.completion_rate ?? 0) * 100);
   out.push({
     t: "b",
-    txt: `<strong>Modeled completion rate</strong> — about <strong>${cr}%</strong> with eCOPR logged on this cohort's historical curve.`,
+    txt: `<strong>Completion rate</strong> — about <strong>${cr}%</strong> with eCOPR logged in this cohort (eligible window).`,
   });
 
-  const wd = Math.round((cohort.weekly_delta ?? 0) * 100);
-  if (wd !== 0) {
-    out.push({
-      t: wd > 0 ? "g" : "r",
-      txt: `<strong>Week-over-week</strong> — dashboard shows <strong>${wd > 0 ? "+" : ""}${wd}%</strong> change vs prior week (model).`,
-    });
-  }
-
   const per = cohort.per_milestone_n;
-  const bil = per.bil ?? 0;
+  const bio = per.biometrics ?? 0;
   const bg = per.background ?? 0;
-  if (n > 0 && (bil > 0 || bg > 0)) {
+  if (n > 0 && (bio > 0 || bg > 0)) {
     out.push({
       t: "b",
-      txt: `<strong>Milestone spread</strong> — in this cohort model, <strong>${bil}</strong> past BIL · <strong>${bg}</strong> past background check (of <strong>${n}</strong>).`,
+      txt: `<strong>Milestone spread</strong> — <strong>${bio}</strong> past biometrics · <strong>${bg}</strong> past background check (of <strong>${n}</strong>).`,
     });
   }
 
@@ -146,7 +154,7 @@ export function buildCohortInsights(
 type WesTemplateRow = (typeof WES_ROW_TEMPLATE)[number];
 export type WesRow = Omit<WesTemplateRow, "d" | "n"> & { d: number; n: string };
 
-/** Scale illustrative WES delays by how fast/slow this cohort’s median PPR is vs baseline (184d). */
+/** Scale illustrative WES delays by how fast/slow this cohort’s median is vs baseline (184d). */
 export function buildWesRowsForCohort(cohort: CohortStats): WesRow[] {
   const baseline = 184;
   const med = cohort.median_days_to_ppr > 0 ? cohort.median_days_to_ppr : baseline;

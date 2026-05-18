@@ -13,16 +13,10 @@ export const MILESTONE_DEFS: {
     desc: "Acknowledgement of receipt confirmed by IRCC",
   },
   {
-    key: "bil",
-    label: "Biometrics instruction letter",
-    est: "~15d after AOR",
-    desc: "Avg. 15 days after AOR in your cohort",
-  },
-  {
     key: "biometrics",
     label: "Biometrics completed",
     est: "~27d after AOR",
-    desc: "Tracker may lag 3–5 days after completion",
+    desc: "When IRCC confirmed your biometrics in the portal",
   },
   {
     key: "background",
