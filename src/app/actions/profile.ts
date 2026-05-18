@@ -78,7 +78,6 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
               type: profile.type,
             })
           : streamFallbackKey(profile.stream, profile.type),
-        seededData: false,
         updatedAt: now,
       },
       $setOnInsert: {
@@ -295,7 +294,6 @@ export async function ensureDemoProfileAction(): Promise<UserProfile> {
           stream: profile.stream,
           type: profile.type,
         }),
-        seededData: false,
         updatedAt: new Date(),
       },
       $setOnInsert: { createdAt: new Date(), seededData: false },
