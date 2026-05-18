@@ -13,10 +13,12 @@ import {
 } from "react";
 import {
   getLiveCohortAggregateAction,
+  getQueuePositionAction,
   listRelatedCohortSummariesAction,
   type CohortSummaryRow,
   type LiveCohortAggregate,
 } from "@/app/actions/aggregate";
+import { isLateBiometrics } from "@/lib/cohort-algorithm-v2";
 import { getCohortStatsByKeyAction } from "@/app/actions/cohort";
 import { syncCohortStatsFromProfilesAction } from "@/app/actions/cohort-sync";
 import {
@@ -45,7 +47,6 @@ import {
 import { clearSessionEmail, readSessionEmail } from "@/lib/session-client";
 import type { CohortStats, MilestoneKey, UserProfile } from "@/lib/types";
 
-import { DashboardAlertStrip } from "./DashboardAlertStrip";
 import { DashboardAppBar } from "./DashboardAppBar";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardToaster } from "./DashboardToaster";
@@ -97,6 +98,7 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
     token: string | null;
     error: string | null;
   } | null>(null);
+  const [queueAhead, setQueueAhead] = useState(0);
 
   const hydrateCohortView = useCallback(
     async (viewKey: string, peerRootKey: string) => {
@@ -187,8 +189,8 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
     if (!useLive) return cohort;
     return {
       ...cohort,
-      n_verified: liveAggregate.profileCount,
       per_milestone_n: { ...liveAggregate.perMilestoneFilled },
+      dist: liveAggregate.histogramDist,
     };
   }, [cohort, liveAggregate]);
 
@@ -237,8 +239,8 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
       return [...MILESTONE_DEFS];
     }
     const med = cohortDisplay?.median_days_to_ppr ?? 0;
-    return mergeMilestoneDefsForCohort(profile.aorDate, med);
-  }, [profile, cohortDisplay?.median_days_to_ppr]);
+    return mergeMilestoneDefsForCohort(profile.aorDate, med, cohortDisplay ?? undefined);
+  }, [profile, cohortDisplay]);
 
   const days = profile?.aorDate ? daysSinceAor(profile.aorDate) : 0;
   const median = cohortDisplay?.median_days_to_ppr ?? 0;
@@ -250,6 +252,27 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
   }, [pct]);
 
   const ringOffset = 207 - (207 * ringPct) / 100;
+
+  const lateBiometrics = useMemo(() => {
+    if (!profile?.aorDate?.trim()) return false;
+    const bio = profile.milestones.biometrics?.date?.trim();
+    if (!bio) return false;
+    return isLateBiometrics(profile.aorDate, bio);
+  }, [profile]);
+
+  useEffect(() => {
+    if (!profile?.aorDate?.trim() || !activeCohortKey) {
+      setQueueAhead(0);
+      return;
+    }
+    let cancelled = false;
+    getQueuePositionAction(activeCohortKey, profile.aorDate).then((r) => {
+      if (!cancelled) setQueueAhead(r.ahead);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [profile?.aorDate, activeCohortKey, profile?.updatedAt]);
 
   const selectCohort = useCallback(
     async (key: string) => {
@@ -427,6 +450,8 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
     syncCohortStats,
     syncCohortBusy,
     cohortDataSparse,
+    queueAhead,
+    lateBiometrics,
   };
 
   return (
@@ -439,8 +464,6 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
             shareHref="/dashboard/share"
             timelineHref="/dashboard"
           />
-
-          <DashboardAlertStrip />
 
           <div className="dlay">
             <DashboardSidebar

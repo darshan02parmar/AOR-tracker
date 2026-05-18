@@ -172,6 +172,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       ...cohort,
       n_verified: liveAggregate.profileCount,
       per_milestone_n: { ...liveAggregate.perMilestoneFilled },
+      dist: liveAggregate.histogramDist,
     };
   }, [cohort, liveAggregate]);
 
@@ -355,6 +356,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     syncCohortStats,
     syncCohortBusy,
     cohortDataSparse,
+    queueAhead: 0,
+    lateBiometrics: false,
   };
 
   return (

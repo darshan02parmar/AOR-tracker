@@ -2,18 +2,23 @@
 
 import { getDb } from "@/lib/db";
 import { humanizeCohortKey, peerCohortKeyPattern } from "@/lib/cohort";
-import type { MilestoneKey } from "@/lib/types";
+import {
+  buildHistogramFromDays,
+  collectEcoprDays,
+} from "@/lib/cohort-histogram";
+import type { CohortStats, MilestoneKey } from "@/lib/types";
 
 export type LiveCohortAggregate = {
   cohortKey: string;
   profileCount: number;
   /** Count of profiles with a non-empty date for each milestone */
   perMilestoneFilled: Record<MilestoneKey, number>;
+  /** Live days-to-eCOPR buckets (same shape as `cohort_stats.dist`) */
+  histogramDist: CohortStats["dist"];
 };
 
 const MILESTONE_KEYS: MilestoneKey[] = [
   "aor",
-  "bil",
   "biometrics",
   "background",
   "medical",
@@ -21,6 +26,28 @@ const MILESTONE_KEYS: MilestoneKey[] = [
   "p2",
   "ecopr",
 ];
+
+/** §6.1 — applicants in cohort with earlier AOR still waiting on eCOPR. */
+export async function getQueuePositionAction(
+  cohortKey: string,
+  aorDateIso: string,
+): Promise<{ ahead: number }> {
+  if (!cohortKey?.trim() || !aorDateIso?.trim()) {
+    return { ahead: 0 };
+  }
+  const db = await getDb();
+  const ahead = await db.collection("profiles").countDocuments({
+    cohortKey,
+    aorDate: { $lt: aorDateIso.slice(0, 10) },
+    $expr: {
+      $lte: [
+        { $strLenCP: { $ifNull: ["$milestones.ecopr.date", ""] } },
+        0,
+      ],
+    },
+  });
+  return { ahead };
+}
 
 function filledCond(path: string): Record<string, unknown> {
   return {
@@ -70,7 +97,26 @@ export async function getLiveCohortAggregateAction(
     perMilestoneFilled[k] = typeof n === "number" ? n : 0;
   }
 
-  return { cohortKey, profileCount, perMilestoneFilled };
+  const profileDocs = await db
+    .collection("profiles")
+    .find(
+      { cohortKey },
+      { projection: { aorDate: 1, milestones: 1 } },
+    )
+    .toArray();
+
+  const histogramDist = buildHistogramFromDays(
+    collectEcoprDays(
+      profileDocs.map((doc) => ({
+        aorDate: doc.aorDate as string | undefined,
+        milestones: doc.milestones as
+          | Record<string, { date?: string | null }>
+          | undefined,
+      })),
+    ),
+  );
+
+  return { cohortKey, profileCount, perMilestoneFilled, histogramDist };
 }
 
 export type CohortSummaryRow = {

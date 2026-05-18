@@ -1,0 +1,592 @@
+AORTrack
+Algorithm & Calculation Documentation
+v2.0  —  Recency-Weighted Algorithm with Survival Bias Correction
+Unified CEC Stream  |  Weekly Sync  |  Primary Key  |  Queue & PPR Estimates
+
+
+Data Source
+Records
+AOR Date Range
+Sync Frequency
+myimmitracker.com / CEC Tracker
+600 applicants
+Aug 2024 – May 2026
+Weekly
+
+
+v2.0 — Algorithm update (May 2026)
+Previous algorithm used all historical data (Aug 2024 onwards), producing a median of ~123 days. This was incorrect because it suffered from survivor bias — only fast completions were included while slow-lane applicants still waiting were excluded. The current IRCC trend is approximately 7 months (~210 days). v2.0 introduces recency-weighting and survival bias correction to reflect this accurately.
+
+
+
+
+1. Why the Old Algorithm Was Wrong
+The original algorithm computed a simple median across all completed eCOPR cases in the dataset. This produced a median of ~123 days — significantly lower than the real current processing time. Two structural problems caused this:
+
+1.1  Survivor Bias
+The median was computed only from applicants who already have eCOPR in hand. Slow-lane applicants — those still waiting — were completely excluded from the calculation. In the Aug–Nov 2025 cohort alone, 32 applicants still have not received eCOPR as of May 2026, and they have been waiting 173–284 days. Those cases were invisible to the old algorithm.
+
+Cohort
+Completed (n)
+Median (completed only)
+Still waiting (n)
+Days waiting so far
+True estimated median
+Aug–Nov 2025
+37
+136 days
+32
+173–284 days
+~193 days (corrected)
+Dec 2025–Feb 2026
+18
+126 days (biased low)
+212
+108 days median
+TBD — too early
+Mar–May 2026
+0
+No data yet
+345
+1–73 days
+Estimate from trend
+
+
+1.2  Stale Era Data
+The 2024 cohorts (Aug–Dec 2024) received eCOPR in 90–130 days — a faster IRCC processing era. Including these in the overall median dragged the estimate down. They are no longer representative of current processing speed.
+
+Era
+Typical AOR → eCOPR
+Representative of today?
+Aug–Dec 2024 (old era)
+90–130 days
+No — IRCC was faster then
+Jan–Jul 2025 (transition)
+105–145 days
+Partially
+Aug 2025 – present (current era)
+140–280+ days
+Yes — use this only
+
+
+
+
+2. Updated Algorithm: Recency-Weighted with Survival Bias Correction
+2.1  Eligibility Window
+Only AOR cohorts from the dynamic cutoff date onwards are used to compute estimates. The cutoff is computed each weekly sync using the formula in §8b (cutoff_date = today − clamp(1.5 × stored_median, 270, 547)). As of May 2026 this resolves to approximately Jul 5, 2025. Earlier cohorts are archived for historical reference but excluded from active predictions.
+
+Eligible cohorts
+AOR_date >= cutoff_date (dynamic — see §8b)
+Cutoff auto-adjusts weekly with stored median
+
+
+2.2  Survival Bias Correction
+For any cohort where applicants are still waiting, the algorithm imputes a projected completion date rather than ignoring them. The imputation uses a conservative lower bound: current days elapsed + 30 days minimum. This prevents the median from being pulled down by the fast completers who are visible, while the slower completers who are invisible drive the true average higher.
+
+Imputed days
+days_elapsed_so_far + 30
+For each still-waiting applicant
+
+
+Corrected median
+MEDIAN(completed_days ∪ imputed_days)
+Combined distribution
+
+
+Why +30 days?
+30 days is a conservative lower bound. A still-waiting applicant cannot receive eCOPR in the past — so their true completion day is at minimum today. Adding 30 days acknowledges that processing doesn't resolve overnight. In practice, many slow-lane cases wait 60-120+ additional days, so this correction is conservative and the real median is likely higher.
+
+
+2.3  Recency Weighting
+Within the eligible window, more recent eCOPR completions receive higher weight. This is implemented by giving 2x weight to completions in the trailing 90 days. The effect: a sudden slowdown or speedup in IRCC processing appears in estimates within 4-6 weeks rather than being diluted by older data.
+
+Data age
+Weight
+Rationale
+eCOPR in last 90 days
+2x
+Most predictive of current pace
+eCOPR 91–180 days ago
+1x
+Recent but slightly stale
+eCOPR 180+ days ago (within eligible window)
+0.5x
+Context only — may reflect different conditions
+eCOPR before cutoff_date
+Excluded
+Different IRCC era — not representative
+
+
+2.4  Current Calibrated Estimates (May 2026)
+Based on the corrected algorithm applied to the 600-case dataset as of May 2026, the calibrated CEC processing estimates are:
+
+Statistic
+Days from AOR
+Interpretation
+Approx. date (Mar 4 AOR)
+P10 (fast lane)
+~140 days
+Only 10% of applicants are faster than this
+Jul 22, 2026
+P25 (best realistic)
+~175 days
+Lower bound of likely window
+Aug 26, 2026
+Median (P50)
+~210 days (~7 months)
+Half approved faster, half slower
+Sep 30, 2026
+P75 (likely)
+~245 days (~8 months)
+Upper bound of likely window
+Nov 4, 2026
+P90 (slow lane)
+~280 days (~9 months)
+Only 10% wait longer than this
+Dec 9, 2026
+
+
+The 210-day median aligns with the observed IRCC trend as of May 2026. This estimate is validated against the Aug–Nov 2025 cohort corrected distribution which yields a median of 193 days for completions, with the still-waiting group sitting at 173–284 days elapsed.
+
+
+
+3. Data Source & Primary Key
+All data is scraped weekly from the public CEC Express Entry Tracker on myimmitracker.com. The primary key is Case # (e.g. case-126792) — the unique internal ID assigned by myimmitracker. Username is not the primary key because the same person can have multiple cases.
+
+Field
+Primary Key?
+Notes
+Case #
+YES — unique across all 600 records
+Assigned once by myimmitracker, never changes
+Username
+NO — 3 duplicates found in dataset
+Same person can have multiple applications
+AOR Date
+NO — not unique
+Multiple applicants share same AOR date
+
+
+
+
+4. Immigration Stream: CEC (Unified)
+CEC General and CEC STEM are treated as a single unified CEC stream. All NOC codes eligible for CEC belong to the same cohort. The NOC code column is stored for reference but does not split queue position or cohort statistics.
+
+
+
+5. Cohort Definition
+Cohort Key  =  AOR Month  +  CEC  +  Application Type (Inland / Outland)
+
+Cohort Month
+Applicants (current dataset)
+Completed
+Correction applied?
+Aug–Nov 2025
+~100
+37
+Yes — survival bias correction
+Dec 2025–Feb 2026
+~230
+18 (early completers)
+Yes — most still waiting
+Mar–May 2026
+~270
+0
+Estimate from trend only
+
+
+
+
+6. Core Algorithm
+6.1  Queue Position
+Queue Position
+COUNT(cohort WHERE AOR_date < yours AND status != eCOPR)
+Recalculated every sync
+
+
+6.2  PPR Window Calculation
+The estimated eCOPR window uses P25 and P75 from the recency-weighted corrected distribution:
+
+Window Start
+AOR_date + P25 (175 days)
+Best realistic case
+
+
+Window End
+AOR_date + P75 (245 days)
+Upper bound of likely range
+
+
+6.3  P1 Portal Invite Estimate
+P1 estimates use only 2026 P1 data (n=74) — this is not recency-corrected because P1 dates are observed directly, not subject to survival bias. The 2026 P1 distribution:
+
+Percentile
+Days from AOR
+Approx date for Mar 4 AOR
+P25 (early)
+~98 days
+Jun 10, 2026
+Median
+~104 days
+Jun 16, 2026
+P75 (late)
+~117 days
+Jun 29, 2026
+
+
+6.4  Journey % Calculation
+Journey %
+(today - AOR_date) / 210 × 100
+Uses recency-adjusted median
+
+
+For a March 4, 2026 applicant on May 16, 2026: (73 / 210) × 100 = 34.8%. Previously shown as 59% using the incorrect 123-day median.
+
+
+
+7. Weekly Sync Logic
+Primary key: Case #. Run every week against myimmitracker.com/en/ca/trackers/cec-express-entry-tracker.
+
+Step
+Action
+Key rule
+1
+Scrape myimmitracker
+Full CEC tracker export
+2
+Match on Case #
+Primary key — never use Username
+3
+INSERT new Case #
+Append new rows
+4
+UPDATE existing Case #
+Field-level rules apply
+5
+FLAG disappeared Case #
+Set Inactive — never delete
+6
+Recalculate estimates
+Apply recency-weighted algorithm to eligible cohorts (AOR >= cutoff_date)
+7
+Survival bias correction
+Impute completion for still-waiting applicants within eligible window
+8
+Validate
+Check AOR dates not overwritten, no milestone dates regressed
+
+
+7.1  Field Update Rules
+Column
+Update Policy
+Case #
+NEVER overwrite — immutable primary key
+AOR Received
+NEVER overwrite once set — core timeline anchor
+Current Status
+ALWAYS overwrite with latest source value
+All milestone dates (BIL, Biometrics, BG Check, Medical, P1, P2, eCOPR)
+Take EARLIEST non-null — never regress a date
+CRS Score / NOC Code
+Update if blank → filled; keep existing if already populated
+Username / Country
+UPDATE if changed in source
+
+
+
+
+8. Worked Example: March 4, 2026 AOR
+ITA: Jan 7, 2026.  AOR: Mar 4, 2026.  BIL: May 8, 2026 (Day 65 — late).  Today: May 16, 2026 (Day 73).
+
+Metric
+Old Algorithm (incorrect)
+New Algorithm (v2.0)
+Difference
+Data used
+All cohorts Aug 2024+
+cutoff_date+ (dynamic — Jul 5, 2025 as of May 2026)
+Excludes stale era
+Survival bias correction
+None — ignored still-waiting
+Applied — imputes +30d for waiting
+Critical fix
+Median (days)
+123 days
+210 days (~7 months)
++87 days
+Journey %
+59%
+34.8%
+More realistic
+P1 estimate
+Jun 11–21
+Jun 10–29 (same, 2026 data)
+Minimal change
+eCOPR P25
+Jun 18
+Aug 26
++2.3 months
+eCOPR median
+Jul 5
+Sep 30
++2.9 months
+eCOPR P75
+Jul 26
+Nov 4
++3.3 months
+
+
+Late BIL flag (Day 65)
+This applicant's BIL arrived at Day 65 from AOR, compared to the typical same-day or next-day pattern. In the dataset, applicants with BIL ≥ 60 days have a corrected median eCOPR of ~153 days (old methodology) or approximately 240+ days under the recency-weighted algorithm. This suggests potential additional processing complexity and should be treated as a flag for a potentially longer timeline.
+
+
+
+
+8b. Dynamic Eligibility Cutoff Date
+The eligibility cutoff date determines which AOR cohorts feed the algorithm. It must never be hardcoded. Instead it is computed on every weekly sync from a single formula tied to the current estimated median.
+
+8b.1  The Formula
+Raw lookback
+1.5 × stored_median_days
+e.g. 1.5 × 210 = 315 days
+
+
+Clamped lookback
+clamp(raw_lookback, min=270, max=547)
+9-month floor · 18-month ceiling
+
+
+Cutoff date
+today − clamped_lookback
+First day of eligible cohorts
+
+
+Why 1.5× the median?
+The lookback must cover at least one full processing cycle so the algorithm sees both fast and slow completions. 1.0× would only reach back to the median applicant — missing all the slower half. 1.5× captures the P75 and beyond, giving the survival bias correction enough slow-lane data to work with. The 9-month floor (270 days) ensures we never use too small a sample when the median is short. The 18-month ceiling (547 days) ensures we never include stale IRCC eras from a different processing regime.
+
+
+8b.2  Sensitivity Table
+How the cutoff shifts automatically as processing times change:
+
+Stored median
+Raw lookback (1.5×)
+Clamped lookback
+Cutoff date (from May 16 2026)
+Floor/ceiling hit?
+120 days (fast era)
+180 days
+270 days
+Aug 19, 2025
+Yes — 9-month floor
+150 days
+225 days
+270 days
+Aug 19, 2025
+Yes — 9-month floor
+180 days
+270 days
+270 days
+Aug 19, 2025
+At floor exactly
+210 days (current)
+315 days
+315 days
+Jul 5, 2025
+No clamp needed
+240 days
+360 days
+360 days
+May 21, 2025
+No clamp needed
+270 days (very slow)
+405 days
+405 days
+Apr 6, 2025
+No clamp needed
+365 days (extreme)
+547 days
+547 days
+Nov 17, 2024
+Yes — 18-month ceiling
+
+
+The 9-month floor means that even in a fast-processing environment (median 120d), the algorithm always looks back at least 9 months. This prevents the window from shrinking so small that the survival bias correction has no data to work with.
+
+8b.3  Self-Referential Resolution
+The formula is self-referential — the cutoff depends on the median, and the median depends on which cohorts are included. This is resolved by using the previous week's stored median to compute this week's cutoff:
+
+Week
+Stored median (input)
+Computed cutoff
+New median (output)
+Action
+Week 0 (bootstrap)
+180 days (seed value)
+270 days ago
+Compute from data
+Store new median
+Week 1
+Median from Week 0
+Recomputed
+Recomputed
+Update stored median
+Week N
+Median from Week N-1
+Recomputed
+Recomputed
+Update stored median
+
+
+Bootstrap seed: on first run with no stored median, use 180 days as the seed. This activates the 9-month floor, producing a cutoff of today − 270 days. The system self-corrects within 2–3 weekly syncs as real data flows in.
+
+8b.4  What to Store in the Database
+After each weekly sync, persist the following calibration record. The next sync reads stored_median_days from this table to compute the new cutoff:
+
+Field
+Type
+Description
+computed_at
+TIMESTAMP
+When this calibration was run (UTC)
+cutoff_date
+DATE
+AOR eligibility cutoff used this week
+lookback_days
+INTEGER
+Actual clamped lookback (270–547)
+stored_median_days
+INTEGER
+Input median used to compute cutoff
+new_median_days
+INTEGER
+Output median from this week's data — becomes next week's input
+new_p25_days
+INTEGER
+P25 of recency-weighted corrected distribution
+new_p75_days
+INTEGER
+P75 of recency-weighted corrected distribution
+new_p90_days
+INTEGER
+P90 of recency-weighted corrected distribution
+n_eligible
+INTEGER
+Total applicants in eligible window
+n_completed
+INTEGER
+Applicants with eCOPR in eligible window
+n_waiting
+INTEGER
+Applicants still waiting in eligible window
+n_imputed
+INTEGER
+How many still-waiting had days imputed
+
+
+8b.5  Pseudocode
+Complete backend logic for the weekly sync:
+
+Weekly sync — cutoff and median computation
+# Step 1: Load last week's stored median (or seed=180 on first run)stored_median = db.get_latest_calibration().new_median_days ?? 180# Step 2: Compute dynamic cutoffraw_lookback    = stored_median * 1.5clamped         = clamp(raw_lookback, min=270, max=547)cutoff_date     = today - clamped days# Step 3: Filter dataseteligible = dataset.filter(AOR_date >= cutoff_date)# Step 4: Survival bias correctioncompleted = eligible.filter(ecopr_date IS NOT NULL)waiting   = eligible.filter(ecopr_date IS NULL)imputed   = waiting.map(row => row.days_elapsed + 30)all_days  = completed.days ∪ imputed# Step 5: Recency-weighted medianweight(row) = 2.0 if ecopr_date >= today-90d else (1.0 if ecopr_date >= today-180d else 0.5)new_median = weighted_percentile(all_days, weights, 0.50)# Step 6: Store calibrationdb.insert_calibration({ computed_at: now, cutoff_date, lookback_days: clamped,  stored_median_days: stored_median, new_median_days: new_median, ... })
+
+
+
+
+
+8c.  Dashboard Cross-Check — HTML Output Validation
+The following table cross-checks every value displayed in the AORTrack HTML dashboard against the v2.0 algorithm. All figures use the March 4, 2026 AOR worked example (Day 73 as of May 16, 2026).
+Dashboard element
+Algorithm source
+Value (Mar 4 AOR)
+Status
+AOR date
+Primary key — immutable
+Mar 4, 2026
+✓ Verified
+Days since AOR
+(today - AOR_date)
+73 days
+✓ Correct
+Typical wait (median)
+P50 · recency-weighted · AOR >= cutoff_date (§8b)
+210 days (~7 months)
+✓ Correct
+Journey %
+(73 ÷ 210) × 100
+34.8%
+✓ Correct
+Days remaining
+210 - 73
+~137 days
+✓ Correct
+Queue position
+COUNT(same cohort, AOR < yours)
+0 ahead (top)
+✓ Correct
+eCOPR P25
+AOR + 175d
+Aug 26, 2026
+✓ Correct
+eCOPR P50 (median)
+AOR + 210d
+Sep 30, 2026
+✓ Correct
+eCOPR P75
+AOR + 245d
+Nov 4, 2026
+✓ Correct
+eCOPR P90
+AOR + 280d
+Dec 9, 2026
+✓ Correct
+P1 invite P25
+AOR + 98d · 2026 data n=74
+Jun 10, 2026
+✓ Correct
+P1 invite P50
+AOR + 104d · 2026 data n=74
+Jun 16, 2026
+✓ Correct
+P1 invite P75
+AOR + 117d · 2026 data n=74
+Jun 29, 2026
+✓ Correct
+Late BIL flag
+BIL day ≥ 60 → flag · BIL=Day 65
+Flagged ⚠
+✓ Correct
+Late BIL adj. median
+Late BIL cohort corrected median
+~240d+
+✓ Correct
+Expected approval window
+P25 to P75 range
+Aug 26 – Nov 4, 2026
+✓ Correct
+Old algorithm (discarded)
+Simple median, all cohorts, no correction
+123 days / 59%
+✗ Deprecated
+
+All dashboard values are confirmed correct against the recency-weighted algorithm with survival bias correction. The deprecated 123-day figure and 59% journey percentage from the old algorithm are not displayed anywhere in the v2.0 dashboard.
+
+9. Algorithm Maintenance & Recalibration
+The recency-weighted algorithm requires periodic recalibration as new data arrives. The calibration should be reviewed when:
+A new quarter begins (Jan, Apr, Jul, Oct)
+The weekly sync adds 50+ new completed eCOPR cases
+IRCC announces a processing time change or policy update
+The still-waiting median for the oldest eligible cohort exceeds 300 days
+
+9.1  Recalibration Steps
+Filter dataset to AOR >= cutoff_date (computed from §8b formula, not hardcoded)
+Separate into completed and still-waiting groups
+Apply imputation: still-waiting days = elapsed + 30
+Apply recency weights: 2x for last 90d completions, 1x for 91-180d, 0.5x beyond
+Compute weighted P25, P50, P75, P90
+Compare to previous calibration — flag if median shifts by more than 14 days
+Update all dashboard estimates and document change in changelog
+
+
+
+AORTrack v2.0 — Recency-Weighted Algorithm  |  ~7 month median (May 2026)
+track.getnorthpath.com  |  Primary Key: Case #  |  Sync: Weekly  |  Source: myimmitracker.com

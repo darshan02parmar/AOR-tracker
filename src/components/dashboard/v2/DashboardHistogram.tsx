@@ -4,6 +4,22 @@ import { useEffect, useMemo, useState } from "react";
 import { DN_HIST, type DnHistBar } from "./data";
 import { IconInfo } from "./dashboard-icons";
 
+/**
+ * Vertical mini-histogram: days from AOR to eCOPR per cohort bucket.
+ *
+ * **Data contract**
+ * - `bars[].value` — applicant count in that day range (from `cohort.dist`, live
+ *   aggregate when >=2 profiles in cohort).
+ * - `bars[].type` — `n` cohort (navy), `h` your P25-P75 window (red),
+ *   `y` your bucket when you have an eCOPR date (green).
+ * - Default `DN_HIST` is for the static `dashboard-new` preview only.
+ *
+ * **Rendering**
+ * Bar height is set in pixels (not %) so columns stay visible inside the
+ * flex layout — percentage heights collapse when the parent has no explicit height.
+ */
+const PLOT_HEIGHT_PX = 76;
+
 function HistBar({
   bar,
   delaySec,
@@ -15,29 +31,26 @@ function HistBar({
   animateOn: boolean;
   max: number;
 }) {
-  const target = Math.round((bar.value / max) * 85);
+  const heightPx =
+    animateOn && max > 0 && bar.value > 0
+      ? Math.max(2, Math.round((bar.value / max) * PLOT_HEIGHT_PX))
+      : 0;
+
   return (
     <div className="hb-wrap">
       <div
         className={`hb ${bar.type}`}
-        title={`${bar.label}: ${bar.value} applicants`}
+        title={`${bar.label}: ${bar.value} applicant${bar.value === 1 ? "" : "s"}`}
         style={{
-          height: animateOn ? `${target}%` : "0%",
+          height: `${heightPx}px`,
           transition: `height .7s ease ${delaySec}s`,
         }}
       />
-      <div className={`hb-lbl${bar.type === "y" ? " y" : ""}`}>
-        {bar.label}
-      </div>
+      <div className={`hb-lbl${bar.type === "y" ? " y" : ""}`}>{bar.label}</div>
     </div>
   );
 }
 
-/**
- * Days-to-PPR distribution mini-histogram.
- *
- * Sample reference: `.hist-card` block in `aortrack-dashboard.html`.
- */
 export function DashboardHistogram({
   bars = DN_HIST,
   subtitle,
@@ -46,24 +59,27 @@ export function DashboardHistogram({
   subtitle?: string;
 } = {}) {
   const [animateOn, setAnimateOn] = useState(false);
+
   const max = useMemo(
     () => Math.max(...bars.map((b) => b.value), 1),
     [bars],
   );
-  const allBucketsEmpty =
-    bars.length > 0 && bars.every((b) => (b.value ?? 0) === 0);
+
+  const isEmpty =
+    bars.length === 0 || bars.every((b) => (b.value ?? 0) === 0);
 
   useEffect(() => {
-    const id = window.setTimeout(() => setAnimateOn(true), 700);
+    setAnimateOn(false);
+    const id = window.setTimeout(() => setAnimateOn(true), 80);
     return () => window.clearTimeout(id);
-  }, []);
+  }, [bars]);
 
   return (
     <div className="hist-card">
       <div className="sec-head" style={{ marginBottom: 0 }}>
         <div>
           <div className="sec-title" style={{ fontSize: ".92rem" }}>
-            Days-to-PPR Distribution
+            Days-to-eCOPR Distribution
           </div>
           <div className="sec-sub">
             {subtitle ??
@@ -72,10 +88,10 @@ export function DashboardHistogram({
         </div>
       </div>
       <div className="hist-area">
-        {allBucketsEmpty ? (
+        {isEmpty ? (
           <div className="hist-empty" role="status">
-            No PPR completion days in this cohort yet — bars appear once
-            applicants with PPR dates are verified in your bucket.
+            No eCOPR completion days in this cohort yet — bars appear once
+            applicants with eCOPR dates are logged in your bucket.
           </div>
         ) : (
           bars.map((b, i) => (
@@ -105,7 +121,7 @@ export function DashboardHistogram({
       </div>
       <div className="data-note">
         <IconInfo aria-hidden />
-        Gemini-verified only · Z-score filtered (±2.5σ)
+        Community profiles · v2.0 recency-weighted estimate
       </div>
     </div>
   );

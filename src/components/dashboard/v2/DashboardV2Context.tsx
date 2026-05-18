@@ -14,7 +14,6 @@ import {
  *
  * Concerns:
  *   - which inline edit panel (timeline row) is currently open
- *   - whether the top alert strip is visible
  *   - a single transient toast message
  *
  * TODO(dashboard-new): hook real save flows in `saveMilestoneEdit` to
@@ -26,9 +25,6 @@ export type DashboardV2UiValue = {
   toggleEdit: (key: string) => void;
   closeEdit: () => void;
 
-  alertStripVisible: boolean;
-  dismissAlertStrip: () => void;
-
   toastMessage: string | null;
   showToast: (msg: string) => void;
 };
@@ -37,18 +33,12 @@ const Ctx = createContext<DashboardV2UiValue | null>(null);
 
 export function DashboardV2UiProvider({ children }: { children: ReactNode }) {
   const [openEditKey, setOpenEditKey] = useState<string | null>(null);
-  const [alertStripVisible, setAlertStripVisible] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const toggleEdit = useCallback((key: string) => {
     setOpenEditKey((cur) => (cur === key ? null : key));
   }, []);
   const closeEdit = useCallback(() => setOpenEditKey(null), []);
-
-  const dismissAlertStrip = useCallback(
-    () => setAlertStripVisible(false),
-    [],
-  );
 
   const showToast = useCallback((msg: string) => {
     setToastMessage(msg);
@@ -60,20 +50,10 @@ export function DashboardV2UiProvider({ children }: { children: ReactNode }) {
       openEditKey,
       toggleEdit,
       closeEdit,
-      alertStripVisible,
-      dismissAlertStrip,
       toastMessage,
       showToast,
     }),
-    [
-      openEditKey,
-      toggleEdit,
-      closeEdit,
-      alertStripVisible,
-      dismissAlertStrip,
-      toastMessage,
-      showToast,
-    ],
+    [openEditKey, toggleEdit, closeEdit, toastMessage, showToast],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

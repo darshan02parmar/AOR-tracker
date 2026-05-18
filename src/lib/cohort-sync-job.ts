@@ -1,58 +1,28 @@
 import type { Db } from "mongodb";
 import { cohortKeyFromProfile } from "@/lib/cohort";
+import {
+  getLatestStoredMedian,
+  insertCalibration,
+  resolveCutoffForSync,
+} from "@/lib/cohort-calibration";
+import {
+  ALGORITHM_VERSION,
+  computeCohortDistribution,
+  computeGlobalDistribution,
+  computeP1Percentiles,
+  milestoneDate,
+  STATS_MILESTONE_KEYS,
+  type ProfileForStats,
+} from "@/lib/cohort-algorithm-v2";
+import { buildHistogramFromDays } from "@/lib/cohort-histogram";
 import { emptyCohortStats } from "@/lib/seed";
-import type { MilestoneKey } from "@/lib/types";
+import type { CohortStats, MilestoneKey } from "@/lib/types";
 
-const MILESTONE_KEYS: MilestoneKey[] = [
-  "aor",
-  "bil",
-  "biometrics",
-  "background",
-  "medical",
-  "p1",
-  "p2",
-  "ecopr",
-];
-
-const DIST_BUCKETS: { range: string; lo: number; hi: number }[] = [
-  { range: "< 120d", lo: 0, hi: 120 },
-  { range: "120–150d", lo: 120, hi: 150 },
-  { range: "150–180d", lo: 150, hi: 180 },
-  { range: "180–210d", lo: 180, hi: 210 },
-  { range: "210–240d", lo: 210, hi: 240 },
-  { range: "> 240d", lo: 240, hi: 1_000_000 },
-];
-
-function daysBetweenAorEcopr(aorIso: string, ecoprIso: string): number {
-  const a = new Date(`${aorIso}T12:00:00`).getTime();
-  const b = new Date(`${ecoprIso}T12:00:00`).getTime();
-  if (Number.isNaN(a) || Number.isNaN(b)) return NaN;
-  return Math.max(0, Math.round((b - a) / 86_400_000));
-}
-
-function percentile(sorted: number[], p: number): number {
-  if (sorted.length === 0) return 0;
-  const idx = (sorted.length - 1) * p;
-  const lo = Math.floor(idx);
-  const hi = Math.ceil(idx);
-  if (lo === hi) return sorted[lo]!;
-  return Math.round(sorted[lo]! + (sorted[hi]! - sorted[lo]!) * (idx - lo));
-}
-
-function milestoneDate(
-  milestones: Record<string, { date?: string | null }> | undefined,
-  key: string,
-): string {
-  const d = milestones?.[key]?.date;
-  return typeof d === "string" ? d.trim() : "";
-}
-
-function profileFieldsFromDoc(doc: Record<string, unknown>): {
-  aorDate: string;
+function profileFieldsFromDoc(doc: Record<string, unknown>): ProfileForStats & {
   stream: string;
   type: string;
   province: string;
-  milestones: Record<string, { date?: string | null }>;
+  cohortKey?: string;
 } {
   const m = doc.milestones as Record<string, { date?: string | null }> | undefined;
   return {
@@ -61,7 +31,14 @@ function profileFieldsFromDoc(doc: Record<string, unknown>): {
     type: (doc.type as string) ?? "Inland",
     province: (doc.province as string) ?? "Other",
     milestones: m ?? {},
+    cohortKey: doc.cohortKey as string | undefined,
   };
+}
+
+function toProfileForStats(
+  p: ProfileForStats & { stream: string; type: string },
+): ProfileForStats {
+  return { aorDate: p.aorDate, milestones: p.milestones };
 }
 
 export async function reconcileProfileCohortKeys(db: Db): Promise<number> {
@@ -92,94 +69,88 @@ export async function reconcileProfileCohortKeys(db: Db): Promise<number> {
   return updated;
 }
 
-function hashString(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) {
-    h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
-  }
-  return h;
-}
-
-/** Deterministic pseudo-weekly counts for charts (no randomness in sync job). */
-function pulseWeeklyForCohort(
-  cohortKey: string,
-  n: number,
-  pprCount: number,
-): number[] {
-  const out: number[] = [];
-  let seed = hashString(cohortKey) ^ n * 0x9e3779b9;
-  const base = Math.max(0, Math.round((pprCount / Math.max(n, 1)) * 1.8));
-  for (let w = 0; w < 10; w++) {
-    seed = (Math.imul(seed, 1103515245) + 12345) | 0;
-    const jitter = (Math.abs(seed) % 5) - 2;
-    out.push(Math.max(0, base + jitter));
-  }
-  return out;
-}
-
 function aggregateOneCohort(
   cohortKey: string,
-  profs: Record<string, unknown>[],
+  cohortProfiles: (ProfileForStats & { stream: string; type: string })[],
+  cutoffIso: string,
+  p1Global: ReturnType<typeof computeP1Percentiles>,
 ): Record<string, unknown> {
   const empty = emptyCohortStats(cohortKey);
-  const n = profs.length;
-  if (n === 0) {
-    return { ...empty, last_updated: new Date() };
-  }
+  const distResult = computeCohortDistribution(
+    cohortProfiles.map(toProfileForStats),
+    cutoffIso,
+  );
 
   const perMilestone: Partial<Record<MilestoneKey, number>> = {};
-  for (const k of MILESTONE_KEYS) perMilestone[k] = 0;
+  for (const k of STATS_MILESTONE_KEYS) perMilestone[k] = 0;
 
-  const daysToPpr: number[] = [];
-
-  for (const raw of profs) {
-    const p = profileFieldsFromDoc(raw);
-    const aor = p.aorDate || milestoneDate(p.milestones, "aor");
-    const ecoprDate = milestoneDate(p.milestones, "ecopr");
-    for (const k of MILESTONE_KEYS) {
+  for (const p of cohortProfiles) {
+    for (const k of STATS_MILESTONE_KEYS) {
       if (milestoneDate(p.milestones, k)) {
         perMilestone[k] = (perMilestone[k] ?? 0) + 1;
       }
     }
-    if (aor && ecoprDate) {
-      const d = daysBetweenAorEcopr(aor, ecoprDate);
-      if (!Number.isNaN(d)) daysToPpr.push(d);
-    }
   }
 
-  const sorted = [...daysToPpr].sort((a, b) => a - b);
-  const median = sorted.length ? percentile(sorted, 0.5) : 0;
-  const p25 = sorted.length ? percentile(sorted, 0.25) : 0;
-  const p75 = sorted.length ? percentile(sorted, 0.75) : 0;
-  const pprCount = sorted.length;
-  const completion_rate = n > 0 ? pprCount / n : 0;
-
-  let dist = empty.dist;
-  if (pprCount > 0) {
-    dist = DIST_BUCKETS.map((b) => {
-      const count = sorted.filter((d) => d >= b.lo && d < b.hi).length;
-      const pct = Math.max(1, Math.round((count / pprCount) * 100));
-      return { range: b.range, count, pct, you: false };
-    });
-  }
-
-  const pulseWeekly =
-    n > 0 ? pulseWeeklyForCohort(cohortKey, n, pprCount) : [];
+  const n = cohortProfiles.length;
+  const completion_rate =
+    distResult.nEligible > 0
+      ? distResult.nCompleted / distResult.nEligible
+      : 0;
 
   return {
     cohortKey,
-    median_days_to_ppr: median,
-    p25_days: p25,
-    p75_days: p75,
+    median_days_to_ppr: distResult.p50,
+    p10_days: distResult.p10,
+    p25_days: distResult.p25,
+    p75_days: distResult.p75,
+    p90_days: distResult.p90,
     n_verified: n,
+    n_eligible: distResult.nEligible,
+    n_completed: distResult.nCompleted,
+    n_waiting: distResult.nWaiting,
+    n_imputed: distResult.nImputed,
     completion_rate,
     weekly_delta: 0,
     per_milestone_n: perMilestone,
-    dist,
-    pulseWeekly,
+    dist: buildHistogramFromDays(distResult.histogramDays),
+    pulseWeekly: [],
     stream_medians: [],
+    p1_p25_days: p1Global.n >= 5 ? p1Global.p25 : 0,
+    p1_p50_days: p1Global.n >= 5 ? p1Global.p50 : 0,
+    p1_p75_days: p1Global.n >= 5 ? p1Global.p75 : 0,
+    algorithm_version: ALGORITHM_VERSION,
     last_updated: new Date(),
   };
+}
+
+function buildStreamMedians(
+  cohortPayloads: { cohortKey: string; median: number }[],
+): Map<string, { name: string; median: number }[]> {
+  const byGroup = new Map<string, number[]>();
+  for (const { cohortKey, median } of cohortPayloads) {
+    if (median <= 0) continue;
+    const group = cohortKey.split(":")[0] ?? "";
+    if (!group) continue;
+    const arr = byGroup.get(group) ?? [];
+    arr.push(median);
+    byGroup.set(group, arr);
+  }
+  const out = new Map<string, { name: string; median: number }[]>();
+  for (const [group, medians] of byGroup) {
+    const sorted = [...medians].sort((a, b) => a - b);
+    const mid = sorted[Math.floor(sorted.length / 2)] ?? 0;
+    const label =
+      group === "CEC"
+        ? "CEC — Canadian Experience Class"
+        : group === "FSW"
+          ? "FSW — Federal Skilled Worker"
+          : group === "PNP"
+            ? "PNP — Provincial Nominee"
+            : group;
+    out.set(group, [{ name: label, median: mid }]);
+  }
+  return out;
 }
 
 export async function runCohortStatsSyncJob(db: Db): Promise<{
@@ -190,17 +161,67 @@ export async function runCohortStatsSyncJob(db: Db): Promise<{
   const profCol = db.collection("profiles");
   const statsCol = db.collection("cohort_stats");
 
-  const keys = (await profCol.distinct("cohortKey", {
-    cohortKey: { $exists: true, $nin: [null, ""] },
-  })) as string[];
+  const storedMedian = await getLatestStoredMedian(db);
+  const { cutoffIso, lookbackDays } = resolveCutoffForSync(storedMedian);
 
+  const allDocs = await profCol
+    .find(
+      {},
+      {
+        projection: {
+          cohortKey: 1,
+          milestones: 1,
+          aorDate: 1,
+          stream: 1,
+          type: 1,
+        },
+      },
+    )
+    .toArray();
+
+  const allProfiles = allDocs.map((d) => profileFieldsFromDoc(d as Record<string, unknown>));
+  const globalDist = computeGlobalDistribution(
+    allProfiles.map(toProfileForStats),
+    cutoffIso,
+  );
+
+  await insertCalibration(
+    db,
+    storedMedian,
+    lookbackDays,
+    cutoffIso,
+    globalDist,
+  );
+
+  const p1Global = computeP1Percentiles(allProfiles.map(toProfileForStats));
+
+  const byCohort = new Map<
+    string,
+    (ProfileForStats & { stream: string; type: string })[]
+  >();
+  for (const p of allProfiles) {
+    const key =
+      p.cohortKey ??
+      cohortKeyFromProfile({
+        aorDate: p.aorDate,
+        stream: p.stream,
+        type: p.type,
+        province: p.province,
+      });
+    const list = byCohort.get(key) ?? [];
+    list.push(p);
+    byCohort.set(key, list);
+  }
+
+  const medianRows: { cohortKey: string; median: number }[] = [];
   let cohortsUpserted = 0;
-  for (const cohortKey of keys) {
-    const profs = await profCol.find({ cohortKey }).toArray();
-    const payload = aggregateOneCohort(
+
+  for (const [cohortKey, profs] of byCohort) {
+    const payload = aggregateOneCohort(cohortKey, profs, cutoffIso, p1Global);
+    medianRows.push({
       cohortKey,
-      profs as Record<string, unknown>[],
-    );
+      median: payload.median_days_to_ppr as number,
+    });
     await statsCol.updateOne(
       { cohortKey },
       { $set: payload },
@@ -208,6 +229,20 @@ export async function runCohortStatsSyncJob(db: Db): Promise<{
     );
     cohortsUpserted++;
   }
+
+  const streamMedians = buildStreamMedians(medianRows);
+  for (const [cohortKey] of byCohort) {
+    const group = cohortKey.split(":")[0] ?? "";
+    const medians = streamMedians.get(group);
+    if (medians?.length) {
+      await statsCol.updateOne(
+        { cohortKey },
+        { $set: { stream_medians: medians } },
+      );
+    }
+  }
+
+  await db.collection("cohort_calibration").createIndex({ computed_at: -1 });
 
   return { profilesCohortKeyUpdates, cohortsUpserted };
 }

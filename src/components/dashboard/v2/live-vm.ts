@@ -17,12 +17,13 @@
 
 import type { DashboardContextValue } from "@/components/dashboard/DashboardContext";
 import { fmtDate } from "@/lib/format";
-import { humanizeCohortKey } from "@/lib/cohort";
+import { cohortKeyFromProfile, humanizeCohortKey } from "@/lib/cohort";
+import { classifyHistBarTone } from "@/lib/cohort-histogram";
+import { daysBetween, milestoneDate } from "@/lib/cohort-algorithm-v2";
 import type { MilestoneDefRow } from "@/lib/cohort-dynamic";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
 import { applicantIdFromEmail, timelineRowsFromProfile } from "@/lib/share-timeline-vm";
 import type {
-  DnAlertCard,
   DnCohortBar,
   DnDotMap,
   DnHeroStats,
@@ -45,9 +46,7 @@ export function profileVM(email: string, profile: UserProfile): DnProfile {
     typeLabel: profile.type || "—",
     province: profile.province || "—",
     aorDateLabel: fmtDate(profile.aorDate) || "Not set",
-    cohortLabel: humanizeCohortKey(
-      `${profile.stream}:${profile.aorDate}:${profile.type}:${profile.province}`,
-    ),
+    cohortLabel: humanizeCohortKey(cohortKeyFromProfile(profile)),
   };
 }
 
@@ -56,17 +55,11 @@ export function profileVM(email: string, profile: UserProfile): DnProfile {
 export function heroStatsVM(
   ctx: Pick<
     DashboardContextValue,
-    "days" | "median" | "cohort" | "cohortDisplay" | "ppr" | "profile"
+    "days" | "median" | "ppr" | "queueAhead"
   >,
 ): DnHeroStats {
-  const { days, median, cohortDisplay, ppr } = ctx;
-  const aheadCount = cohortDisplay.per_milestone_n?.ecopr ?? 0;
-  const totalCount = cohortDisplay.n_verified || 1;
-  const rankPct = Math.max(
-    0,
-    Math.round(100 - (aheadCount / totalCount) * 100),
-  );
-  const atTop = aheadCount === 0;
+  const { days, median, ppr, queueAhead } = ctx;
+  const atTop = queueAhead === 0;
   const med = median > 0 ? median : null;
 
   return {
@@ -75,15 +68,15 @@ export function heroStatsVM(
       value: med != null ? `${med} days` : "—",
       note:
         med != null
-          ? "Based on real data from people like you"
+          ? "v2.0 recency-weighted median (survival bias corrected)"
           : "Cohort median appears once enough eCOPR timelines exist in your group",
     },
     queuePosition: {
-      value: atTop ? "Top of the list" : `Top ${rankPct}%`,
+      value: atTop ? "Top of the list" : `${queueAhead} ahead`,
       note: atTop
-        ? "0 people with the same profile ahead of you"
-        : `${aheadCount} people with the same profile ahead of you`,
-      tone: atTop || rankPct >= 50 ? "good" : "warn",
+        ? "No one in your cohort with an earlier AOR is still waiting on eCOPR"
+        : `${queueAhead} applicant${queueAhead === 1 ? "" : "s"} with an earlier AOR still waiting on eCOPR`,
+      tone: atTop ? "good" : queueAhead <= 5 ? "good" : "warn",
     },
     expectedApproval: {
       value: ppr?.windowLabel ?? "—",
@@ -203,7 +196,6 @@ export function timelineRowsVM(
 
 const BAR_FILL_BY_KEY: Record<MilestoneKey, "g" | "b" | "a" | "r"> = {
   aor: "g",
-  bil: "b",
   biometrics: "b",
   background: "a",
   medical: "a",
@@ -231,14 +223,41 @@ export function cohortBarsVM(
 
 /* ─── HISTOGRAM ─────────────────────────────────────────────────────── */
 
+function userEcoprDays(
+  profile: DashboardContextValue["profile"],
+): number | null {
+  const aor = profile.aorDate?.trim() || milestoneDate(profile.milestones, "aor");
+  const ecopr = milestoneDate(profile.milestones, "ecopr");
+  if (!aor || !ecopr) return null;
+  const d = daysBetween(aor, ecopr);
+  return Number.isNaN(d) ? null : d;
+}
+
 export function histVM(
-  ctx: Pick<DashboardContextValue, "cohort">,
+  ctx: Pick<DashboardContextValue, "cohort" | "profile">,
 ): DnHistBar[] {
+  const p25 = ctx.cohort.p25_days;
+  const p75 = ctx.cohort.p75_days;
+  const ecoprDays = userEcoprDays(ctx.profile);
   return ctx.cohort.dist.map((r) => ({
     label: r.range,
     value: r.count,
-    type: r.you ? "y" : "n",
+    type: classifyHistBarTone(r.range, ecoprDays, p25, p75),
   }));
+}
+
+export function histSubtitleVM(
+  ctx: Pick<DashboardContextValue, "cohort">,
+): string {
+  const n =
+    ctx.cohort.dist.reduce((s, r) => s + (r.count ?? 0), 0) ||
+    ctx.cohort.n_completed ||
+    0;
+  const total = ctx.cohort.n_verified;
+  if (n === 0) {
+    return `${total} applicants in cohort · no eCOPR completions logged yet`;
+  }
+  return `${n} eCOPR completion${n === 1 ? "" : "s"} of ${total} applicants · your position highlighted`;
 }
 
 /* ─── DOT MAP ───────────────────────────────────────────────────────── */
@@ -295,46 +314,13 @@ export function streamCompareVM(
   });
 }
 
-/* ─── ALERTS ────────────────────────────────────────────────────────── */
-
-export function alertsVM(
-  ctx: Pick<DashboardContextValue, "cohortInsights">,
-): DnAlertCard[] {
-  return ctx.cohortInsights.slice(0, 4).map((ins) => ({
-    tone: ins.t === "r" || ins.t === "a" ? "amber" : "green",
-    iconKind: ins.t === "r" || ins.t === "a" ? "warn" : "check",
-    title: stripHtml(ins.txt).split(" — ")[0] ?? "Community update",
-    desc: stripHtml(ins.txt),
-    meta: ["Community"],
-    linkLabel: "View details",
-    href: "/community",
-  }));
-}
-
-function stripHtml(html: string): string {
-  const plain = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
-  // Decode entities left in insight strings so plain-text alerts never show
-  // literals like "&apos;" (double-escaped upstream or legacy content).
-  if (typeof document === "undefined") {
-    return plain
-      .replace(/&apos;|&#39;/gi, "'")
-      .replace(/&quot;/gi, '"')
-      .replace(/&lt;/gi, "<")
-      .replace(/&gt;/gi, ">")
-      .replace(/&amp;/gi, "&");
-  }
-  const ta = document.createElement("textarea");
-  ta.innerHTML = plain;
-  return ta.value;
-}
-
 /* ─── SIDEBAR SECTIONS ──────────────────────────────────────────────── */
 
 /**
  * Produce the four sidebar sections for the live dashboard.
  *
  * The Dashboard section uses in-page anchor links (`#tl-sec`, `#cohort-sec`,
- * `#alerts-sec`) — when the user is on `/dashboard` these scroll smoothly;
+ * `#share-sec`) — when the user is on `/dashboard` these scroll smoothly;
  * on sub-routes (`/dashboard/share`, `/dashboard/stats`) they navigate to
  * `/dashboard#…`. The Share section links to the two real sub-routes
  * (`/dashboard/stats`, `/dashboard/share`).
@@ -380,12 +366,6 @@ export function sidebarSectionsVM({
       icon: "cohort",
       href: anchor("#cohort-sec"),
       badge: cohortTotal > 0 ? cohortTotal.toLocaleString() : undefined,
-    },
-    {
-      key: "alerts",
-      label: "Alerts",
-      icon: "alerts",
-      href: anchor("#alerts-sec"),
     },
   ];
 

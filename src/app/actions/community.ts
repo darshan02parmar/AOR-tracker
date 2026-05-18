@@ -41,7 +41,6 @@ function displayNameFromEmail(email: string): string {
 function timelineFromProfile(p: UserProfile): { label: string; done: boolean }[] {
   const order: MilestoneKey[] = [
     "aor",
-    "bil",
     "biometrics",
     "background",
     "medical",
@@ -51,7 +50,6 @@ function timelineFromProfile(p: UserProfile): { label: string; done: boolean }[]
   ];
   const short: Record<MilestoneKey, string> = {
     aor: "AOR",
-    bil: "BIL",
     biometrics: "Bio",
     background: "BGC",
     medical: "Med",
@@ -137,7 +135,7 @@ export async function getCommunityMsCountsAction(): Promise<CommunityMsCounts> {
 
 /** Keys that map to `CommunityMs` tags — same subset the feed accepts. */
 const SUBMIT_TIMELINE_KEYS = new Set<MilestoneKey>([
-  "bil",
+  "biometrics",
   "background",
   "medical",
   "p1",

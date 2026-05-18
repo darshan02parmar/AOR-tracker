@@ -8,7 +8,6 @@ export type DashboardScrollSpyKey =
   | "overview"
   | "timeline"
   | "cohort"
-  | "alerts"
   | "share-link";
 
 /** In document order — last section whose top is at/above the line wins. */
@@ -16,7 +15,6 @@ const SECTIONS: { id: string; key: DashboardScrollSpyKey }[] = [
   { id: "top", key: "overview" },
   { id: "tl-sec", key: "timeline" },
   { id: "cohort-sec", key: "cohort" },
-  { id: "alerts-sec", key: "alerts" },
   { id: "share-sec", key: "share-link" },
 ];
 

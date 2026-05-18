@@ -1,7 +1,11 @@
 "use server";
 
 import { getDb } from "@/lib/db";
-import { buildCohortKey, cohortKeyFromProfile, streamFallbackKey } from "@/lib/cohort";
+import {
+  buildStatsCohortKey,
+  cohortKeyFromProfile,
+  streamFallbackKey,
+} from "@/lib/cohort";
 import { ensureCohortStatsPlaceholder } from "@/lib/ensure-cohort-stats";
 import {
   milestoneLabelForKey,
@@ -68,21 +72,18 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
         province: profile.province,
         milestones: profile.milestones,
         cohortKey: profile.aorDate
-          ? buildCohortKey({
+          ? buildStatsCohortKey({
               aorDate: profile.aorDate,
               stream: profile.stream,
               type: profile.type,
-              province: profile.province,
             })
-          : streamFallbackKey(
-              profile.stream,
-              profile.province,
-              profile.type,
-            ),
+          : streamFallbackKey(profile.stream, profile.type),
+        seededData: false,
         updatedAt: now,
       },
       $setOnInsert: {
         createdAt: now,
+        seededData: false,
       },
     },
     { upsert: true },
@@ -107,6 +108,9 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
         type: p.type,
         province: p.province,
         aorDate: p.aorDate,
+        seededData: saved.seededData === true,
+        caseNo: typeof saved.caseNo === "string" ? saved.caseNo : undefined,
+        username: typeof saved.username === "string" ? saved.username : undefined,
       });
     }
     await notifyDiscordProfileEvent({
@@ -117,6 +121,9 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
       type: p.type,
       province: p.province,
       aorDate: p.aorDate,
+      seededData: saved.seededData === true,
+      caseNo: typeof saved.caseNo === "string" ? saved.caseNo : undefined,
+      username: typeof saved.username === "string" ? saved.username : undefined,
     });
   }
   return { ok: true };
@@ -155,13 +162,12 @@ export async function createDraftProfileAction(
   }
   const profile = applyDraftHints(newProfile(norm), hints);
   const cohortKey = profile.aorDate
-    ? buildCohortKey({
+    ? buildStatsCohortKey({
         aorDate: profile.aorDate,
         stream: profile.stream,
         type: profile.type,
-        province: profile.province,
       })
-    : streamFallbackKey(profile.stream, profile.province, profile.type);
+    : streamFallbackKey(profile.stream, profile.type);
   await db.collection("profiles").insertOne({
     emailNorm: norm,
     createdAt: new Date(profile.createdAt),
@@ -172,6 +178,7 @@ export async function createDraftProfileAction(
     province: profile.province,
     milestones: profile.milestones,
     cohortKey,
+    seededData: false,
   });
   return { ok: true, profile };
 }
@@ -188,6 +195,7 @@ export async function updateMilestoneAction(
   const update: Record<string, unknown> = {
     [`milestones.${key}.date`]: date,
     [`milestones.${key}.updatedAt`]: date ? now : null,
+    seededData: false,
     updatedAt: new Date(),
   };
   if (key === "aor" && date) {
@@ -202,11 +210,10 @@ export async function updateMilestoneAction(
       { emailNorm: norm },
       {
         $set: {
-          cohortKey: buildCohortKey({
+          cohortKey: buildStatsCohortKey({
             aorDate: profile.aorDate,
             stream: profile.stream,
             type: profile.type,
-            province: profile.province,
           }),
         },
       },
@@ -232,6 +239,9 @@ export async function updateMilestoneAction(
       type: profile.type,
       province: profile.province,
       aorDate: profile.aorDate,
+      seededData: doc.seededData === true,
+      caseNo: typeof doc.caseNo === "string" ? doc.caseNo : undefined,
+      username: typeof doc.username === "string" ? doc.username : undefined,
     });
   }
   await notifyDiscordProfileEvent({
@@ -244,6 +254,9 @@ export async function updateMilestoneAction(
     milestoneKey: key,
     milestoneLabel: milestoneLabelForKey(key),
     date,
+    seededData: doc.seededData === true,
+    caseNo: typeof doc.caseNo === "string" ? doc.caseNo : undefined,
+    username: typeof doc.username === "string" ? doc.username : undefined,
   });
   return { ok: true, profile };
 }
@@ -256,7 +269,6 @@ export async function ensureDemoProfileAction(): Promise<UserProfile> {
   const now = new Date().toISOString();
   const milestones = emptyMilestones();
   milestones.aor = { date: "2025-02-25", updatedAt: now };
-  milestones.bil = { date: "2025-03-12", updatedAt: now };
   milestones.biometrics = { date: "2025-03-24", updatedAt: now };
   const profile: UserProfile = {
     email: norm,
@@ -278,15 +290,15 @@ export async function ensureDemoProfileAction(): Promise<UserProfile> {
         type: profile.type,
         province: profile.province,
         milestones: profile.milestones,
-        cohortKey: buildCohortKey({
+        cohortKey: buildStatsCohortKey({
           aorDate: profile.aorDate,
           stream: profile.stream,
           type: profile.type,
-          province: profile.province,
         }),
+        seededData: false,
         updatedAt: new Date(),
       },
-      $setOnInsert: { createdAt: new Date() },
+      $setOnInsert: { createdAt: new Date(), seededData: false },
     },
     { upsert: true },
   );

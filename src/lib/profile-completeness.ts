@@ -2,7 +2,6 @@ import { MILESTONE_DEFS } from "./constants";
 import type { MilestoneKey, UserProfile } from "./types";
 
 const POST_AOR_MILESTONES: MilestoneKey[] = [
-  "bil",
   "biometrics",
   "background",
   "medical",

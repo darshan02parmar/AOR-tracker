@@ -54,6 +54,10 @@ export type DashboardContextValue = {
   syncCohortBusy: boolean;
   /** Fewer than 2 profiles in the active cohort — treat model as low confidence. */
   cohortDataSparse: boolean;
+  /** §6.1 — peers with earlier AOR still without eCOPR. */
+  queueAhead: number;
+  /** Biometrics completed ≥60 days after AOR (v2.0 late flag). */
+  lateBiometrics: boolean;
 };
 
 const DashboardContext = createContext<DashboardContextValue | null>(null);

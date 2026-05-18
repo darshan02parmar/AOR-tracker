@@ -127,14 +127,8 @@ export type TrackMilestoneDef = {
 
 export const TRACK_MILESTONES: TrackMilestoneDef[] = [
   {
-    key: "bil",
-    label: "BIL — Background Initiated Letter",
-    emptyState: "Not yet received",
-    note: "The date IRCC sent your BIL email.",
-  },
-  {
     key: "biometrics",
-    label: "Biometrics Confirmed",
+    label: "Biometrics Completed",
     emptyState: "Not yet confirmed",
     note: "When IRCC confirmed your biometrics in the portal.",
   },
@@ -232,7 +226,7 @@ export type TrustItem = {
 export const TRUST_ITEMS: TrustItem[] = [
   {
     iconKey: "lock",
-    text: "Your email is stored as a SHA-256 hash only — never readable by anyone",
+    text: "Your email is used only to resume your profile — we never sell or share it",
   },
   {
     iconKey: "verified",

@@ -62,8 +62,14 @@ export function milestoneLabelForKey(key: string): string {
   return MILESTONE_DEFS.find((d) => d.key === key)?.label ?? key;
 }
 
+export type DiscordProfileMeta = {
+  seededData?: boolean;
+  caseNo?: string;
+  username?: string;
+};
+
 export type DiscordNotifyPayload =
-  | {
+  | ({
       kind: "profile_saved";
       email: string;
       cohortKey: string;
@@ -71,8 +77,8 @@ export type DiscordNotifyPayload =
       type: string;
       province: string;
       aorDate: string;
-    }
-  | {
+    } & DiscordProfileMeta)
+  | ({
       kind: "milestone";
       email: string;
       cohortKey: string;
@@ -82,7 +88,7 @@ export type DiscordNotifyPayload =
       milestoneKey: MilestoneKey;
       milestoneLabel: string;
       date: string | null;
-    };
+    } & DiscordProfileMeta);
 
 function baseDescriptionLines(payload: {
   email: string;
@@ -90,16 +96,25 @@ function baseDescriptionLines(payload: {
   type: string;
   province: string;
   cohortKey: string;
+  seededData?: boolean;
+  caseNo?: string;
+  username?: string;
 }): string[] {
   const human = humanizeCohortKey(payload.cohortKey);
-  return [
+  const lines = [
+    `**Seeded:** ${payload.seededData === true ? "Yes" : payload.seededData === false ? "No" : "—"}`,
     `**Email:** ${payload.email}`,
+  ];
+  if (payload.caseNo?.trim()) lines.push(`**Case #:** ${payload.caseNo.trim()}`);
+  if (payload.username?.trim()) lines.push(`**Username:** ${payload.username.trim()}`);
+  lines.push(
     `**Stream:** ${payload.stream}`,
     `**Type:** ${payload.type}`,
     `**Province:** ${payload.province}`,
     `**Cohort key:** \`${payload.cohortKey}\``,
     `**Cohort:** ${human}`,
-  ];
+  );
+  return lines;
 }
 
 function embedTitle(payload: DiscordNotifyPayload): string {
@@ -147,7 +162,62 @@ export type DiscordNewCohortPayload = {
   type: string;
   province: string;
   aorDate: string;
+  seededData?: boolean;
+  caseNo?: string;
+  username?: string;
 };
+
+export type DiscordCecSeedSummaryPayload = {
+  excelPath: string;
+  rowsRead: number;
+  upserted: number;
+  modified: number;
+  skipped: number;
+  errorCount: number;
+  cohortKeysTouched: string[];
+  cohortsUpserted?: number;
+  calibrationMedian?: number;
+  discordEach: boolean;
+};
+
+export async function notifyDiscordCecSeedSummary(
+  p: DiscordCecSeedSummaryPayload,
+): Promise<void> {
+  const cohortList =
+    p.cohortKeysTouched.length <= 12
+      ? p.cohortKeysTouched.map((k) => `\`${k}\``).join(", ")
+      : `${p.cohortKeysTouched.slice(0, 12).map((k) => `\`${k}\``).join(", ")} … (+${p.cohortKeysTouched.length - 12} more)`;
+
+  const description = [
+    "**CEC Excel import finished** (`seededData: true` — team tracking label).",
+    "",
+    `**File:** \`${p.excelPath}\``,
+    `**Rows read:** ${p.rowsRead}`,
+    `**Upserted:** ${p.upserted} · **Modified:** ${p.modified} · **Skipped:** ${p.skipped}`,
+    p.errorCount > 0 ? `**Parse errors:** ${p.errorCount} (see API response)` : "",
+    p.cohortsUpserted != null
+      ? `**Cohort stats upserted:** ${p.cohortsUpserted}`
+      : "",
+    p.calibrationMedian != null
+      ? `**Calibration median (days):** ${Math.round(p.calibrationMedian)}`
+      : "",
+    "",
+    `**Cohort keys:** ${cohortList || "—"}`,
+    p.discordEach
+      ? "_Per-row profile webhooks were also sent (`discord=each`)._"
+      : "_Per-row webhooks omitted (default). Use `?cec=1&discord=each` only for small tests._",
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  await postDiscordEmbeds([
+    {
+      title: "CEC seed complete",
+      description,
+      color: COLOR_COHORT_OPS,
+    },
+  ]);
+}
 
 /** Ops alert: first profile tied to a cohort key that had no `cohort_stats` row yet. */
 export async function notifyDiscordNewCohortPlaceholder(
@@ -159,9 +229,12 @@ export async function notifyDiscordNewCohortPlaceholder(
   const description = [
     "A **placeholder** `cohort_stats` document was inserted because this cohort key did not exist yet.",
     "",
+    `**Seeded:** ${p.seededData === true ? "Yes" : p.seededData === false ? "No" : "—"}`,
     `**Cohort key:** \`${p.cohortKey}\``,
     `**Cohort:** ${human}`,
     `**Profile (trigger):** ${p.triggerEmail}`,
+    p.caseNo?.trim() ? `**Case #:** ${p.caseNo.trim()}` : "",
+    p.username?.trim() ? `**Username:** ${p.username.trim()}` : "",
     `**Stream / type / province:** ${p.stream} · ${p.type} · ${p.province}`,
     `**AOR date:** ${p.aorDate?.trim() || "—"}`,
     "",

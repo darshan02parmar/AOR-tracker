@@ -13,7 +13,6 @@
  *   - cohort bars, histogram, dot-map, compare    → ctx.cohort / ctx.cohortDisplay
  *   - PPR window                                  → ctx.ppr
  *   - shareUrl                                    → ctx.shareUrl
- *   - alerts                                      → ctx.cohortInsights (filtered to "alerts")
  *
  * Look for `TODO(dashboard-new):` markers throughout the components.
  */
@@ -189,20 +188,6 @@ export const DN_TIMELINE: DnTimelineRow[] = [
     desc: "Your application entered the IRCC processing queue.",
     badge: { kind: "verified", label: "Verified" },
     date: { date: "Feb 20, 2026", day: "Day 0" },
-  },
-  {
-    key: "bil",
-    state: "done",
-    name: "BIL — Background Initiated Letter",
-    desc: "IRCC has begun background processing on your file.",
-    badge: { kind: "verified", label: "Verified · contributed to cohort stats" },
-    date: { date: "Mar 8, 2026", day: "Day 16" },
-    edit: {
-      label: "Edit",
-      fieldLabel: "BIL Date",
-      initial: "2026-03-08",
-      fromDate: true,
-    },
   },
   {
     key: "bio",
@@ -408,48 +393,6 @@ export const DN_STREAM_COMPARE: DnStreamRow[] = [
   { name: "PNP", days: "216d", fillPct: 84, variant: "neutral" },
 ];
 
-/* ───────────────────────────── ALERTS ────────────────────────────────── */
-
-export type DnAlertCard = {
-  tone: "amber" | "green";
-  iconKind: "warn" | "check";
-  title: string;
-  desc: string;
-  meta: string[];
-  linkLabel: string;
-  href: string;
-};
-
-export const DN_ALERTS: DnAlertCard[] = [
-  {
-    tone: "amber",
-    iconKind: "warn",
-    title: "WES Verification Delay — CEC General",
-    desc:
-      "12 applicants report WES credential results not updating in the IRCC online tracker. IRCC confirmation pending. May delay biometrics confirmation for some applicants.",
-    meta: ["12 members", "3 days ago"],
-    linkLabel: "View full details",
-    href: "#",
-  },
-  {
-    tone: "green",
-    iconKind: "check",
-    title: "Processing Velocity Up This Week — CEC General",
-    desc:
-      "18 PPR approvals reported in the Feb 2026 cohort this week — highest weekly count since launch. Processing appears to be accelerating.",
-    meta: ["18 members", "1 day ago"],
-    linkLabel: "View community feed",
-    href: "#",
-  },
-];
-
-export const DN_ALERT_STRIP = {
-  title: "WES Delay Alert:",
-  body:
-    "12 CEC General applicants report WES results not updating in IRCC tracker.",
-  linkLabel: "View details",
-};
-
 /* ───────────────────────────── SHARE ─────────────────────────────────── */
 
 export type DnShare = {
@@ -480,7 +423,6 @@ export type SidebarIconKey =
   | "overview"
   | "timeline"
   | "cohort"
-  | "alerts"
   | "feed"
   | "stats"
   | "plus"
@@ -527,14 +469,6 @@ export const DN_SIDEBAR: SidebarSections = {
       icon: "cohort",
       href: "#cohort-sec",
       badge: "1,240",
-    },
-    {
-      key: "alerts",
-      label: "Alerts",
-      icon: "alerts",
-      href: "#alerts-sec",
-      badge: "1",
-      badgeTone: "red",
     },
   ],
   community: [

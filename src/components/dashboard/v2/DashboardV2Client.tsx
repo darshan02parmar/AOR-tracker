@@ -6,8 +6,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { DashboardAlertStrip } from "./DashboardAlertStrip";
-import { DashboardAlertsList } from "./DashboardAlertsList";
 import { DashboardAppBar } from "./DashboardAppBar";
 import { DashboardCohortSection } from "./DashboardCohortSection";
 import { DashboardConsultingCTA } from "./DashboardConsultingCTA";
@@ -32,12 +30,10 @@ import {
  *
  *   ┌───────────────────────────────── DashboardAppBar ───────────────┐
  *   │                       dnb (sticky, h: 60)                       │
- *   ├──────────────────── DashboardAlertStrip (dismissible) ──────────┤
  *   │  DashboardSidebar  │             <main> dmain                   │
  *   │  (sticky, 248px)   │   HeroBar · Rings · PprBar                 │
  *   │                    │   Timeline (#tl-sec)                       │
  *   │                    │   Cohort (#cohort-sec)                     │
- *   │                    │   Alerts (#alerts-sec)                     │
  *   │                    │   Share  (#share-sec)                      │
  *   │                    │   Consulting CTA                           │
  *   └────────────────────┴────────────────────────────────────────────┘
@@ -96,7 +92,6 @@ export function DashboardV2Client() {
     <DashboardV2UiProvider>
       <div className="dashboard-v2-page flex min-h-0 flex-1 flex-col">
         <DashboardAppBar />
-        <DashboardAlertStrip />
         <div className="dlay">
           <DashboardSidebar sections={sections} />
           <main ref={mainRef} className="dmain">
@@ -109,7 +104,6 @@ export function DashboardV2Client() {
             <DashboardPprBar />
             <DashboardTimeline />
             <DashboardCohortSection />
-            <DashboardAlertsList />
             <DashboardShareSection />
             <DashboardConsultingCTA />
             <div style={{ height: 36 }} />

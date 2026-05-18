@@ -203,11 +203,6 @@ export function DashboardTimeline({
           <TimelineRow key={row.key} row={row} onSaveDate={onSaveDate} />
         ))}
       </div>
-
-      <div className="data-note">
-        <IconInfo aria-hidden />
-        {note}
-      </div>
     </section>
   );
 }

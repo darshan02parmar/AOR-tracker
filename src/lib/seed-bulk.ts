@@ -342,7 +342,6 @@ function buildMilestonesForProfile(
 
   if (!complete) {
     const keys: MilestoneKey[] = [
-      "bil",
       "biometrics",
       "background",
       "medical",
@@ -364,7 +363,6 @@ function buildMilestonesForProfile(
   );
   const cum = pprOffsets(total, rng);
   const keys: MilestoneKey[] = [
-    "bil",
     "biometrics",
     "background",
     "medical",
@@ -472,7 +470,6 @@ export async function runBulkCohortSeed(db: Db): Promise<BulkSeedResult> {
         province: spec.province,
         aorDate,
         daysToEcopr,
-        bil: milestones.bil?.date ?? "",
         biometrics: milestones.biometrics?.date ?? "",
         background: milestones.background?.date ?? "",
         medical: milestones.medical?.date ?? "",

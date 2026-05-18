@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
-import { DashboardAlertsList } from "./DashboardAlertsList";
 import { DashboardCohortBars } from "./DashboardCohortBars";
 import { DashboardCohortSection } from "./DashboardCohortSection";
 import { DashboardConsultingCTA } from "./DashboardConsultingCTA";
@@ -12,20 +11,19 @@ import { DashboardHistogram } from "./DashboardHistogram";
 import { DashboardPprBar } from "./DashboardPprBar";
 import { DashboardRings } from "./DashboardRings";
 import { DashboardShareSection } from "./DashboardShareSection";
-import { DashboardStreamCompare } from "./DashboardStreamCompare";
 import { DashboardTimeline } from "./DashboardTimeline";
 import {
-  alertsVM,
   cohortBarsVM,
   dotMapVM,
   heroStatsVM,
   histVM,
+  histSubtitleVM,
   infoCardsVM,
   journeyProgressVM,
-  streamCompareVM,
   timelineRowsVM,
 } from "./live-vm";
 import { humanizeCohortKey } from "@/lib/cohort";
+import { applicantIdFromEmail } from "@/lib/share-timeline-vm";
 import type { MilestoneKey } from "@/lib/types";
 
 /**
@@ -36,7 +34,6 @@ import type { MilestoneKey } from "@/lib/types";
  *   - Overview      → #top    (rendered by `DashboardShellV2`)
  *   - My Timeline   → #tl-sec (rendered by `DashboardTimeline`)
  *   - My Cohort     → #cohort-sec
- *   - Alerts        → #alerts-sec
  *
  * Share / Stats are reachable both via the on-page sections and via the
  * dedicated sub-routes (`/dashboard/share`, `/dashboard/stats`), which share
@@ -57,9 +54,8 @@ export function DashboardTimelineTabV2() {
     [ctx, ctx.milestoneDefsForCohort],
   );
   const hist = useMemo(() => histVM(ctx), [ctx]);
+  const histSubtitle = useMemo(() => histSubtitleVM(ctx), [ctx]);
   const dotMap = useMemo(() => dotMapVM(ctx), [ctx]);
-  const streamCompare = useMemo(() => streamCompareVM(ctx), [ctx]);
-  const alerts = useMemo(() => alertsVM(ctx), [ctx]);
 
   const onSaveDate = async (key: string, value: string) => {
     await ctx.onSaveMilestone(key as MilestoneKey, value);
@@ -68,14 +64,6 @@ export function DashboardTimelineTabV2() {
   return (
     <>
       <DashboardHeroBar stats={heroStats} />
-      <DashboardShareSection
-        share={{
-          shareUrl: ctx.shareUrl,
-          shareUrlDisplay: ctx.shareUrl.replace(/^https?:\/\//, ""),
-          githubUrl: "https://github.com/Get-North-Path/AOR-tracker",
-        }}
-        error={ctx.shareLinkError}
-      />
       <DashboardRings cards={infoCards} />
       <DashboardPprBar journey={journeyProgress} />
       
@@ -84,18 +72,25 @@ export function DashboardTimelineTabV2() {
         note={`Cohort: ${humanizeCohortKey(ctx.activeCohortKey)} · ${ctx.cohortTotal} verified profiles`}
         onSaveDate={onSaveDate}
       />
+      <DashboardShareSection
+        share={{
+          shareUrl: ctx.shareUrl,
+          shareUrlDisplay: ctx.shareUrl.replace(/^https?:\/\//, ""),
+          githubUrl: "https://github.com/Get-North-Path/AOR-tracker",
+        }}
+        error={ctx.shareLinkError}
+      />
 
       <DashboardCohortSection
         title={`Your Cohort — ${humanizeCohortKey(ctx.activeCohortKey)}`}
         subtitle={`${ctx.cohortTotal} verified applicants${ctx.cohortDataSparse ? " · Data refreshed daily" : ""}`}
       >
         <DashboardCohortBars bars={cohortBars} />
-        <DashboardHistogram
-          bars={hist}
-          subtitle={`${ctx.cohort.n_verified} verified completions · your position highlighted`}
+        <DashboardHistogram bars={hist} subtitle={histSubtitle} />
+        <DashboardDotMap
+          map={dotMap}
+          applicantId={applicantIdFromEmail(ctx.email)}
         />
-        <DashboardDotMap map={dotMap} applicantId={`#${ctx.email.length}`} />
-        <DashboardStreamCompare rows={streamCompare} />
       </DashboardCohortSection>
 
       <DashboardConsultingCTA />
