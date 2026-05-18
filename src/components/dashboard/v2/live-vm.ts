@@ -153,33 +153,89 @@ export function infoCardsVM(
 
 /* ─── PPR WINDOW ────────────────────────────────────────────────────── */
 
+function addDaysToIso(iso: string, days: number): string {
+  const d = new Date(`${iso}T12:00:00`);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 export function journeyProgressVM(
-  ctx: Pick<DashboardContextValue, "days" | "median" | "pct" | "profile">,
+  ctx: Pick<
+    DashboardContextValue,
+    "days" | "median" | "profile" | "queueAhead"
+  >,
 ): DnJourneyProgress {
-  const { days, median, pct, profile } = ctx;
-  const remaining = median > 0 ? Math.max(0, median - days) : null;
-  const aorLabel = fmtDate(profile.aorDate) || "AOR pending";
+  const { days, median, profile, queueAhead } = ctx;
+  const aorIso = profile.aorDate?.trim();
+  const aorLabel = fmtDate(aorIso) || "AOR pending";
+  const med = median > 0 ? median : null;
+  const remaining = med != null ? Math.max(0, med - days) : null;
+  const progressPct =
+    med != null
+      ? Math.min(100, Math.round((days / med) * 1000) / 10)
+      : 0;
+  const pctDisplay =
+    med != null
+      ? (Math.round((days / med) * 1000) / 10).toFixed(1)
+      : "—";
+
+  const medianFinishLabel =
+    med != null && aorIso
+      ? fmtDate(addDaysToIso(aorIso, med))
+      : null;
+
+  const startLabel = aorIso
+    ? `Start — ${aorLabel} (Day 0)`
+    : `Start — ${aorLabel}`;
+
+  const endLabel =
+    med != null && medianFinishLabel
+      ? `Median finish — ${medianFinishLabel} (Day ${med})`
+      : med != null
+        ? `Median finish — Day ${med}`
+        : "Median finish — pending cohort data";
+
+  const centerLabel =
+    med != null
+      ? `You are here — Day ${days} of ${med} — ${pctDisplay}% through your journey`
+      : `You are here — Day ${days} — cohort median pending`;
+
+  const atTop = queueAhead === 0;
 
   return {
     title: "Where you are on your journey",
-    subtitle:
-      "This shows today's position between when you applied and when we expect you'll be approved",
-    progressPct: Math.min(100, pct),
-    axisLabels: [
-      `Day 0 — You applied (${aorLabel})`,
-      `Today — Day ${days}`,
-      median > 0
-        ? `Day ${median} — Typical finish line`
-        : "Typical finish line — pending cohort data",
+    progressPct,
+    startLabel,
+    endLabel,
+    centerLabel,
+    stats: [
+      {
+        label: "Waited",
+        value: `${days} days`,
+        sub: "since AOR",
+        tone: "green",
+      },
+      {
+        label: "Remaining",
+        value: remaining != null ? `~${remaining} days` : "—",
+        sub: "to median",
+        tone: "amber",
+      },
+      {
+        label: "Journey",
+        value: med != null ? `${pctDisplay}%` : "—",
+        sub: med != null ? `${days} ÷ ${med} × 100` : "median pending",
+        tone: "default",
+      },
+      {
+        label: "Queue",
+        value: atTop ? "Top" : `${queueAhead} ahead`,
+        sub: atTop
+          ? "0 ahead of you"
+          : `${queueAhead} with earlier AOR still waiting`,
+        tone: "default",
+      },
     ],
-    daysWaited: {
-      label: "Days you've already waited",
-      value: `${days} days`,
-    },
-    daysRemaining: {
-      label: "Estimated days remaining",
-      value: remaining != null ? `~${remaining} more days` : "—",
-    },
   };
 }
 

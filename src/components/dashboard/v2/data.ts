@@ -115,34 +115,55 @@ export const DN_INFO_CARDS: DnInfoCard[] = [
 
 /* ───────────────────────────── JOURNEY PROGRESS ──────────────────────── */
 
+export type DnJourneyStat = {
+  label: string;
+  value: string;
+  sub: string;
+  tone?: "green" | "amber" | "default";
+};
+
 export type DnJourneyProgress = {
   title: string;
-  subtitle: string;
   /** Animated progress fill width %. */
   progressPct: number;
-  axisLabels: [string, string, string];
-  daysWaited: { label: string; value: string };
-  daysRemaining: { label: string; value: string };
+  startLabel: string;
+  endLabel: string;
+  centerLabel: string;
+  stats: [DnJourneyStat, DnJourneyStat, DnJourneyStat, DnJourneyStat];
 };
 
 export const DN_JOURNEY_PROGRESS: DnJourneyProgress = {
   title: "Where you are on your journey",
-  subtitle:
-    "This shows today's position between when you applied and when we expect you'll be approved",
-  progressPct: 38,
-  axisLabels: [
-    "Day 0 — You applied (Mar 5, 2026)",
-    "Today — Day 70",
-    "Day 184 — Typical finish line",
+  progressPct: 34.8,
+  startLabel: "Start — Mar 4, 2026 (Day 0)",
+  endLabel: "Median finish — Sep 30, 2026 (Day 210)",
+  centerLabel: "You are here — Day 73 of 210 — 34.8% through your journey",
+  stats: [
+    {
+      label: "Waited",
+      value: "73 days",
+      sub: "since AOR",
+      tone: "green",
+    },
+    {
+      label: "Remaining",
+      value: "~137 days",
+      sub: "to median",
+      tone: "amber",
+    },
+    {
+      label: "Journey",
+      value: "34.8%",
+      sub: "73 ÷ 210 × 100",
+      tone: "default",
+    },
+    {
+      label: "Queue",
+      value: "Top",
+      sub: "0 ahead of you",
+      tone: "default",
+    },
   ],
-  daysWaited: {
-    label: "Days you've already waited",
-    value: "70 days",
-  },
-  daysRemaining: {
-    label: "Estimated days remaining",
-    value: "~114 more days",
-  },
 };
 
 /* ───────────────────────────── TIMELINE ──────────────────────────────── */

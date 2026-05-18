@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaCalendarAlt, FaHourglassHalf, FaMapMarkerAlt } from "react-icons/fa";
 import { DN_JOURNEY_PROGRESS, type DnJourneyProgress } from "./data";
 
 /**
- * Journey progress card with animated bar, axis labels, and waited/remaining stats.
+ * Journey progress card — start/median axis, bar, status line, four metric tiles.
  *
- * Sample reference: `.progress-section` in `samples/pr-tracker-redesign.html`.
+ * Sample reference: `.progress-card` in `samples/aortrack_timeline.html`.
  */
 export function DashboardPprBar({
   journey = DN_JOURNEY_PROGRESS,
@@ -21,43 +20,43 @@ export function DashboardPprBar({
   }, [journey.progressPct]);
 
   return (
-    <div className="progress-section">
-      <div className="section-title">
-        <FaMapMarkerAlt className="section-title-icon" aria-hidden />
+    <section className="progress-section" aria-labelledby="journey-progress-title">
+      <h2 id="journey-progress-title" className="progress-section-title">
         {journey.title}
+      </h2>
+
+      <div className="prog-labels">
+        <span>{journey.startLabel}</span>
+        <span>{journey.endLabel}</span>
       </div>
-      <div className="section-note">{journey.subtitle}</div>
-      <div className="progress-bar-wrap">
+
+      <div className="prog-track">
         <div
-          className="progress-bar-fill"
+          className="prog-fill"
           style={{ width: `${progress}%` }}
+          role="progressbar"
+          aria-valuenow={progress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={journey.centerLabel}
         />
       </div>
-      <div className="progress-labels">
-        {journey.axisLabels.map((label) => (
-          <span key={label}>{label}</span>
+
+      <p className="prog-now-label">{journey.centerLabel}</p>
+
+      <div className="prog-stats">
+        {journey.stats.map((stat) => (
+          <div key={stat.label} className="prog-stat">
+            <div className="prog-stat-label">{stat.label}</div>
+            <div
+              className={`prog-stat-value${stat.tone === "green" ? " stat-green" : stat.tone === "amber" ? " stat-amber" : ""}`}
+            >
+              {stat.value}
+            </div>
+            <div className="prog-stat-sub">{stat.sub}</div>
+          </div>
         ))}
       </div>
-      <div className="pbar-stats">
-        <div className="pbar-stat">
-          <div className="pbar-stat-icon teal">
-            <FaCalendarAlt aria-hidden />
-          </div>
-          <div>
-            <div className="pbar-stat-label">{journey.daysWaited.label}</div>
-            <div className="pbar-stat-val">{journey.daysWaited.value}</div>
-          </div>
-        </div>
-        <div className="pbar-stat">
-          <div className="pbar-stat-icon amber">
-            <FaHourglassHalf aria-hidden />
-          </div>
-          <div>
-            <div className="pbar-stat-label">{journey.daysRemaining.label}</div>
-            <div className="pbar-stat-val">{journey.daysRemaining.value}</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   );
 }
