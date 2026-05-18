@@ -43,6 +43,9 @@ export function WikiFullPage() {
             <li>
               <a href="#dashboard-backend">Dashboard backend</a>
             </li>
+            <li>
+              <a href="#cohort-v2">Cohort &amp; statistics (v2.0)</a>
+            </li>
           </ul>
         </nav>
 
@@ -123,9 +126,12 @@ clearSessionEmail()`}</pre>
           <section className="wiki-section" id="sess-server">
             <h2>Server: profiles in MongoDB</h2>
             <p>
-              Primary persistence is the <code>profiles</code> collection. Documents
-              are keyed by normalized email, e.g. <code>emailNorm</code>, built via{" "}
-              <code>normalizeEmail</code> in <code>src/lib/profile.ts</code>.
+              Primary persistence is the <code>profiles</code> collection. Browser
+              sessions use normalized <code>emailNorm</code> (
+              <code>normalizeEmail</code> in <code>src/lib/profile.ts</code>). CEC
+              Excel imports also store a unique <code>caseNo</code> (myimmitracker Case
+              #) and <code>seededData: true</code> for team tracking — live{" "}
+              <code>/track</code> saves set <code>seededData: false</code>.
             </p>
             <p>
               <strong>Read profile:</strong> <code>getProfileAction(email)</code> in{" "}
@@ -307,7 +313,8 @@ clearSessionEmail()`}</pre>
             <p>
               Approved public posts match <code>{`{ approved: true }`}</code>.{" "}
               <code>getCommunityFeedAction</code> sorts by <code>createdAt: -1</code>,
-              applies optional <code>ms</code> filter (PPR / BIL / BGC / Med), clamps
+              applies optional <code>ms</code> filter (eCOPR / biometrics / BGC / med,
+              etc.), clamps
               page to <code>totalPages</code>, and maps rows through{" "}
               <code>serializePost</code> in <code>src/lib/seed.ts</code> so the wire
               shape matches <code>CommunityPost</code>.
@@ -433,8 +440,8 @@ clearSessionEmail()`}</pre>
               </li>
               <li>
                 <strong>onboarding</strong> — Steps 1–3 collect AOR date, stream, type,
-                optional PNP province, milestone checkboxes + dates, then review +
-                consent + email. All client-side until submit.
+                optional PNP province, milestone checkboxes + dates (no BIL — biometrics
+                only), then review + consent + email. All client-side until submit.
               </li>
               <li>
                 <strong>success</strong> — After a successful save, CTA navigates to{" "}
@@ -460,8 +467,8 @@ clearSessionEmail()`}</pre>
               </li>
               <li>
                 <code>saveProfileAction</code> persists the full milestone map and
-                demographic fields; this is the same action family the dashboard uses
-                for profile-shaped updates.
+                demographic fields; sets <code>seededData: false</code>. Same action
+                family the dashboard uses for profile-shaped updates.
               </li>
               <li>
                 <code>writeSessionEmail</code> (<code>src/lib/session-client.ts</code>)
@@ -570,15 +577,28 @@ clearSessionEmail()`}</pre>
           </section>
 
           <section className="wiki-section" id="dash-live-vs-static">
-            <h2>Cohort stats: static row vs live aggregate</h2>
+            <h2>Cohort stats: v2.0 aggregates vs live fill counts</h2>
             <p>
-              <code>cohort_stats</code> documents feed <code>cohort</code> /{" "}
-              <code>cohortDisplay</code> baselines (medians, verified counts). When{" "}
-              <code>liveAggregate.profileCount &gt;= 2</code>, the UI prefers live
-              per-milestone filled counts from <code>profiles</code> aggregation (
-              <code>getLiveCohortAggregateAction</code>) for richer charts; fewer than
-              two profiles falls back to the static cohort doc so the UI does not
-              over-promise precision.
+              <code>cohort_stats</code> rows are rebuilt by the v2.0 sync job (
+              <code>runCohortStatsSyncJob</code>) — recency-weighted medians, P10–P90,
+              survival imputation for still-waiting files, and histogram buckets. The
+              dashboard reads these for <strong>typical wait</strong>,{" "}
+              <strong>journey %</strong> (days since AOR ÷ median), and the{" "}
+              <strong>expected approval window</strong> (calendar AOR + P25 … AOR + P75).
+            </p>
+            <p>
+              Separately, <code>getLiveCohortAggregateAction</code> counts how many
+              profiles in the cohort have each milestone date filled. When{" "}
+              <code>profileCount &gt;= 2</code>, milestone charts prefer those live
+              counts; otherwise the UI falls back to static <code>per_milestone_n</code>{" "}
+              on the cohort doc.
+            </p>
+            <p>
+              <code>getQueuePositionAction</code> (in{" "}
+              <code>src/app/actions/aggregate.ts</code>) ranks the viewer among
+              same-cohort peers with an earlier AOR who still lack eCOPR. See{" "}
+              <a href="#cohort-v2">Cohort &amp; statistics (v2.0)</a> for the full
+              pipeline.
             </p>
           </section>
 
@@ -702,6 +722,166 @@ clearSessionEmail()`}</pre>
             Because identification is only the client-stored email string, any dashboard
             server action that accepts <code>email</code> must be treated as publicly
             callable with arbitrary addresses until hardened.
+          </div>
+        </section>
+
+        <section id="cohort-v2" className="wiki-major-section">
+          <h2 className="wiki-block-title">Cohort &amp; statistics (v2.0)</h2>
+          <p className="wiki-lead">
+            Cohort medians and dashboard forecasts follow the v2.0 algorithm (
+            <code>src/lib/cohort-algorithm-v2.ts</code>, spec notes in{" "}
+            <code>analyze,md</code> and <code>docs/COHORT_SYNC.md</code>). Outcomes
+            are measured as <strong>days from AOR to eCOPR</strong> (permanent
+            residence). The BIL milestone was removed; biometrics is a single step.
+          </p>
+
+          <section className="wiki-section" id="cohort-key">
+            <h2>Stats cohort key (no province)</h2>
+            <p>
+              Each profile stores <code>cohortKey</code> for aggregation. v2.0 uses a
+              four-part stats key (province is <em>not</em> part of the bucket):
+            </p>
+            <pre className="wiki-code">{`{streamGroup}:{month}:{year}:{inland|outland}
+
+Example: CEC:5:2026:inland
+
+CEC General, CEC STEM, CEC Healthcare, CEC French → streamGroup "CEC"
+Built by buildStatsCohortKey() in src/lib/cohort.ts`}</pre>
+            <p>
+              Peer comparisons across AOR months use <code>peerCohortKeyPattern</code>.
+              Human-readable labels use <code>humanizeCohortKey</code>.
+            </p>
+          </section>
+
+          <section className="wiki-section" id="cohort-algorithm">
+            <h2>v2.0 sync pipeline</h2>
+            <p className="wiki-flow">
+              {`profiles (including seededData: true)
+→ reconcileProfileCohortKeys()
+→ load stored_median from cohort_calibration (bootstrap 180d first run)
+→ dynamic cutoff = today − clamp(1.5 × stored_median, 270, 547) days
+→ eligible: AOR on/before cutoff; eCOPR requires biometrics date
+→ completed: eCOPR date; waiting: imputed as days_elapsed + 30
+→ recency weights on completions → weighted P10–P90 + median
+→ upsert cohort_stats per key; append cohort_calibration row`}
+            </p>
+            <div className="wiki-table-wrap">
+              <table className="wiki-table">
+                <thead>
+                  <tr>
+                    <th>Module</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <code>src/lib/cohort-algorithm-v2.ts</code>
+                    </td>
+                    <td>Cutoff, imputation, weights, percentiles, late biometrics, P1 year stats</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>src/lib/cohort-calibration.ts</code>
+                    </td>
+                    <td>
+                      <code>cohort_calibration</code> — persisted median for next cutoff
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>src/lib/cohort-sync-job.ts</code>
+                    </td>
+                    <td>
+                      Reconcile + aggregate; <code>algorithm_version: &quot;v2.0&quot;</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>src/lib/ppr-estimate.ts</code>
+                    </td>
+                    <td>Calendar window from AOR + cohort P25/P75 days</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section className="wiki-section" id="cohort-mongo">
+            <h2>MongoDB collections</h2>
+            <ul>
+              <li>
+                <strong>
+                  <code>profiles</code>
+                </strong>{" "}
+                — <code>aorDate</code>, <code>milestones</code>, <code>cohortKey</code>.
+                Optional: <code>caseNo</code>, <code>username</code>,{" "}
+                <code>seededData</code>, <code>currentStatus</code>.
+              </li>
+              <li>
+                <strong>
+                  <code>cohort_stats</code>
+                </strong>{" "}
+                — medians, P10–P90, <code>n_eligible</code>, <code>n_imputed</code>,{" "}
+                histogram <code>dist</code>.
+              </li>
+              <li>
+                <strong>
+                  <code>cohort_calibration</code>
+                </strong>{" "}
+                — sync audit: <code>cutoff_date</code>, <code>new_median_days</code>.
+              </li>
+            </ul>
+          </section>
+
+          <section className="wiki-section" id="cohort-seed">
+            <h2>CEC Excel seed (dev)</h2>
+            <pre className="wiki-code">{`curl "http://localhost:3000/api/dev/seed?cec=1"
+curl "http://localhost:3000/api/dev/seed?cec=1&wipe=1"
+curl "http://localhost:3000/api/dev/seed?cec=1&discord=summary"`}</pre>
+            <p>
+              <code>src/lib/seed-cec-tracker.ts</code> upserts by <code>caseNo</code>,
+              synthetic email <code>{`{username}{caseNo}@gmail.com`}</code>, maps{" "}
+              <strong>AOR Received</strong> to <code>aorDate</code>, sets{" "}
+              <code>seededData: true</code>. Discord is <strong>off by default</strong>{" "}
+              during bulk import. Requires <code>ALLOW_DEV_SEED=1</code> or development
+              mode.
+            </p>
+          </section>
+
+          <section className="wiki-section" id="cohort-cron">
+            <h2>Scheduled / manual sync</h2>
+            <ul>
+              <li>
+                <code>POST /api/cron/sync-cohorts</code> — Bearer{" "}
+                <code>CRON_SECRET</code>
+              </li>
+              <li>
+                <code>POST /api/dev/sync-cohorts</code> — dev only
+              </li>
+            </ul>
+            <p>
+              See <code>docs/COHORT_SYNC.md</code> for the operator checklist.
+            </p>
+          </section>
+
+          <section className="wiki-section" id="cohort-milestones">
+            <h2>Milestone keys</h2>
+            <p>
+              Active keys: <code>aor</code>, <code>biometrics</code>,{" "}
+              <code>background</code>, <code>medical</code>, <code>p1</code>,{" "}
+              <code>p2</code>, <code>ecopr</code>. eCOPR without biometrics is excluded
+              from median stats. <strong>Removed:</strong> <code>bil</code>.
+            </p>
+          </section>
+
+          <div className="wiki-callout">
+            <strong>Public methodology</strong>
+            <p style={{ margin: 0, color: "var(--muted)" }}>
+              User-facing copy at <code>/cohort</code> (
+              <code>src/content/guides/cohort.html</code>). Keep wiki + guide aligned
+              when the algorithm changes.
+            </p>
           </div>
         </section>
       </div>
