@@ -38,12 +38,12 @@ export function CommunityClient({ data }: Props) {
         submitCta={data.submitCta}
       />
 
-      <CommunityRightPanel
+      {/* <CommunityRightPanel
         insights={data.insights}
         pulse={data.pulse}
         contributors={data.contributors}
         discord={data.discord}
-      />
+      /> */}
     </div>
   );
 }

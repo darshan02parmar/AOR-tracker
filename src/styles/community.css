@@ -38,7 +38,7 @@
 
 .mkt-community-page .cm-layout {
   display: grid;
-  grid-template-columns: 240px 1fr 300px;
+  grid-template-columns: 240px 1fr;
   gap: 0;
   /*
    * Lock the 3-column layout to a single viewport screen (minus the 60px
