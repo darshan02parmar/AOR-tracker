@@ -35,7 +35,10 @@ export type CohortDistributionResult = {
   nCompleted: number;
   nWaiting: number;
   nImputed: number;
+  /** Stats-eligible completions (AOR + biometrics + eCOPR) for weighted percentiles. */
   completedDays: number[];
+  /** All logged eCOPR days (AOR + eCOPR) for the dashboard histogram. */
+  histogramDays: number[];
 };
 
 export type P1Percentiles = {
@@ -190,6 +193,16 @@ export function computeCohortDistribution(
     .filter((x) => !x.imputed)
     .map((x) => x.days);
 
+  const histogramDays: number[] = [];
+  for (const p of profiles) {
+    const aor = p.aorDate?.trim() || milestoneDate(p.milestones, "aor");
+    if (!aor || noon(aor) < cutoff) continue;
+    const ecopr = milestoneDate(p.milestones, "ecopr");
+    if (!ecopr) continue;
+    const d = daysBetween(aor, ecopr);
+    if (!Number.isNaN(d)) histogramDays.push(d);
+  }
+
   return {
     p10: weightedPercentile(points, 0.1),
     p25: weightedPercentile(points, 0.25),
@@ -201,6 +214,7 @@ export function computeCohortDistribution(
     nWaiting,
     nImputed,
     completedDays,
+    histogramDays,
   };
 }
 

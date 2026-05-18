@@ -17,6 +17,7 @@ import {
   dotMapVM,
   heroStatsVM,
   histVM,
+  histSubtitleVM,
   infoCardsVM,
   journeyProgressVM,
   timelineRowsVM,
@@ -53,6 +54,7 @@ export function DashboardTimelineTabV2() {
     [ctx, ctx.milestoneDefsForCohort],
   );
   const hist = useMemo(() => histVM(ctx), [ctx]);
+  const histSubtitle = useMemo(() => histSubtitleVM(ctx), [ctx]);
   const dotMap = useMemo(() => dotMapVM(ctx), [ctx]);
 
   const onSaveDate = async (key: string, value: string) => {
@@ -84,10 +86,7 @@ export function DashboardTimelineTabV2() {
         subtitle={`${ctx.cohortTotal} verified applicants${ctx.cohortDataSparse ? " · Data refreshed daily" : ""}`}
       >
         <DashboardCohortBars bars={cohortBars} />
-        <DashboardHistogram
-          bars={hist}
-          subtitle={`${ctx.cohort.n_verified} verified completions · your position highlighted`}
-        />
+        <DashboardHistogram bars={hist} subtitle={histSubtitle} />
         <DashboardDotMap
           map={dotMap}
           applicantId={applicantIdFromEmail(ctx.email)}

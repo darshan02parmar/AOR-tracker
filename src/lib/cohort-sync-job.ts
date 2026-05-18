@@ -14,17 +14,9 @@ import {
   STATS_MILESTONE_KEYS,
   type ProfileForStats,
 } from "@/lib/cohort-algorithm-v2";
+import { buildHistogramFromDays } from "@/lib/cohort-histogram";
 import { emptyCohortStats } from "@/lib/seed";
 import type { CohortStats, MilestoneKey } from "@/lib/types";
-
-const DIST_BUCKETS: { range: string; lo: number; hi: number }[] = [
-  { range: "< 120d", lo: 0, hi: 120 },
-  { range: "120–150d", lo: 120, hi: 150 },
-  { range: "150–180d", lo: 150, hi: 180 },
-  { range: "180–210d", lo: 180, hi: 210 },
-  { range: "210–240d", lo: 210, hi: 240 },
-  { range: "> 240d", lo: 240, hi: 1_000_000 },
-];
 
 function profileFieldsFromDoc(doc: Record<string, unknown>): ProfileForStats & {
   stream: string;
@@ -77,17 +69,6 @@ export async function reconcileProfileCohortKeys(db: Db): Promise<number> {
   return updated;
 }
 
-function buildHistogram(completedDays: number[]): CohortStats["dist"] {
-  const empty = emptyCohortStats("_").dist;
-  if (completedDays.length === 0) return empty.map((r) => ({ ...r }));
-  const n = completedDays.length;
-  return DIST_BUCKETS.map((b) => {
-    const count = completedDays.filter((d) => d >= b.lo && d < b.hi).length;
-    const pct = n > 0 ? Math.round((count / n) * 100) : 0;
-    return { range: b.range, count, pct, you: false };
-  });
-}
-
 function aggregateOneCohort(
   cohortKey: string,
   cohortProfiles: (ProfileForStats & { stream: string; type: string })[],
@@ -132,7 +113,7 @@ function aggregateOneCohort(
     completion_rate,
     weekly_delta: 0,
     per_milestone_n: perMilestone,
-    dist: buildHistogram(distResult.completedDays),
+    dist: buildHistogramFromDays(distResult.histogramDays),
     pulseWeekly: [],
     stream_medians: [],
     p1_p25_days: p1Global.n >= 5 ? p1Global.p25 : 0,

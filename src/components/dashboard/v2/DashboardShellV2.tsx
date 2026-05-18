@@ -190,6 +190,7 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
     return {
       ...cohort,
       per_milestone_n: { ...liveAggregate.perMilestoneFilled },
+      dist: liveAggregate.histogramDist,
     };
   }, [cohort, liveAggregate]);
 

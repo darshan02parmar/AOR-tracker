@@ -18,6 +18,8 @@
 import type { DashboardContextValue } from "@/components/dashboard/DashboardContext";
 import { fmtDate } from "@/lib/format";
 import { cohortKeyFromProfile, humanizeCohortKey } from "@/lib/cohort";
+import { classifyHistBarTone } from "@/lib/cohort-histogram";
+import { daysBetween, milestoneDate } from "@/lib/cohort-algorithm-v2";
 import type { MilestoneDefRow } from "@/lib/cohort-dynamic";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
 import { applicantIdFromEmail, timelineRowsFromProfile } from "@/lib/share-timeline-vm";
@@ -221,14 +223,41 @@ export function cohortBarsVM(
 
 /* ─── HISTOGRAM ─────────────────────────────────────────────────────── */
 
+function userEcoprDays(
+  profile: DashboardContextValue["profile"],
+): number | null {
+  const aor = profile.aorDate?.trim() || milestoneDate(profile.milestones, "aor");
+  const ecopr = milestoneDate(profile.milestones, "ecopr");
+  if (!aor || !ecopr) return null;
+  const d = daysBetween(aor, ecopr);
+  return Number.isNaN(d) ? null : d;
+}
+
 export function histVM(
-  ctx: Pick<DashboardContextValue, "cohort">,
+  ctx: Pick<DashboardContextValue, "cohort" | "profile">,
 ): DnHistBar[] {
+  const p25 = ctx.cohort.p25_days;
+  const p75 = ctx.cohort.p75_days;
+  const ecoprDays = userEcoprDays(ctx.profile);
   return ctx.cohort.dist.map((r) => ({
     label: r.range,
     value: r.count,
-    type: r.you ? "y" : "n",
+    type: classifyHistBarTone(r.range, ecoprDays, p25, p75),
   }));
+}
+
+export function histSubtitleVM(
+  ctx: Pick<DashboardContextValue, "cohort">,
+): string {
+  const n =
+    ctx.cohort.dist.reduce((s, r) => s + (r.count ?? 0), 0) ||
+    ctx.cohort.n_completed ||
+    0;
+  const total = ctx.cohort.n_verified;
+  if (n === 0) {
+    return `${total} applicants in cohort · no eCOPR completions logged yet`;
+  }
+  return `${n} eCOPR completion${n === 1 ? "" : "s"} of ${total} applicants · your position highlighted`;
 }
 
 /* ─── DOT MAP ───────────────────────────────────────────────────────── */

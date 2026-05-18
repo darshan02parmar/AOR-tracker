@@ -11,6 +11,7 @@ import {
   cohortBarsVM,
   dotMapVM,
   histVM,
+  histSubtitleVM,
   streamCompareVM,
 } from "./live-vm";
 import { humanizeCohortKey } from "@/lib/cohort";
@@ -31,6 +32,7 @@ export function DashboardStatsTabV2() {
     [ctx, ctx.milestoneDefsForCohort],
   );
   const hist = useMemo(() => histVM(ctx), [ctx]);
+  const histSubtitle = useMemo(() => histSubtitleVM(ctx), [ctx]);
   const dotMap = useMemo(() => dotMapVM(ctx), [ctx]);
   const streamCompare = useMemo(() => streamCompareVM(ctx), [ctx]);
 
@@ -51,10 +53,7 @@ export function DashboardStatsTabV2() {
       </section>
 
       <DashboardCohortBars bars={cohortBars} />
-      <DashboardHistogram
-        bars={hist}
-        subtitle={`${ctx.cohort.n_verified} verified completions · your position highlighted`}
-      />
+      <DashboardHistogram bars={hist} subtitle={histSubtitle} />
       <DashboardDotMap map={dotMap} applicantId={`#${ctx.email.length}`} />
       <DashboardStreamCompare rows={streamCompare} />
 
