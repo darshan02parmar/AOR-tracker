@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 /**
  * `/dashboard` layout — wraps every sub-route in `DashboardShellV2`, which
  * loads the user profile + cohort data, mounts the v2 chrome (app-bar,
- * alert strip, sidebar, toaster) and provides both `DashboardContext` and
+ * sidebar, toaster) and provides both `DashboardContext` and
  * `DashboardV2UiContext` to its children.
  *
  * Old chrome (`DashboardShell`) is still on disk under

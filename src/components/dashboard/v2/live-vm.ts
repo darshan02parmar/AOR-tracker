@@ -22,7 +22,6 @@ import type { MilestoneDefRow } from "@/lib/cohort-dynamic";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
 import { applicantIdFromEmail, timelineRowsFromProfile } from "@/lib/share-timeline-vm";
 import type {
-  DnAlertCard,
   DnCohortBar,
   DnDotMap,
   DnHeroStats,
@@ -286,59 +285,13 @@ export function streamCompareVM(
   });
 }
 
-/* ─── ALERTS ────────────────────────────────────────────────────────── */
-
-export function alertsVM(
-  ctx: Pick<DashboardContextValue, "cohortInsights" | "lateBiometrics" | "days">,
-): DnAlertCard[] {
-  const out: DnAlertCard[] = [];
-  if (ctx.lateBiometrics) {
-    out.push({
-      tone: "amber" as const,
-      iconKind: "warn" as const,
-      title: "Late biometrics",
-      desc: `Your biometrics were logged ${ctx.days} days after AOR. Applicants with biometrics ≥60 days after AOR often see longer eCOPR timelines in community data.`,
-      meta: ["Your profile"],
-      linkLabel: "Learn more",
-      href: "/cohort",
-    });
-  }
-  const fromInsights: DnAlertCard[] = ctx.cohortInsights.slice(0, 4).map((ins) => ({
-    tone: (ins.t === "r" || ins.t === "a" ? "amber" : "green") as DnAlertCard["tone"],
-    iconKind: (ins.t === "r" || ins.t === "a" ? "warn" : "check") as DnAlertCard["iconKind"],
-    title: stripHtml(ins.txt).split(" — ")[0] ?? "Community update",
-    desc: stripHtml(ins.txt),
-    meta: ["Community"],
-    linkLabel: "View details",
-    href: "/community",
-  }));
-  return [...out, ...fromInsights].slice(0, 5);
-}
-
-function stripHtml(html: string): string {
-  const plain = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
-  // Decode entities left in insight strings so plain-text alerts never show
-  // literals like "&apos;" (double-escaped upstream or legacy content).
-  if (typeof document === "undefined") {
-    return plain
-      .replace(/&apos;|&#39;/gi, "'")
-      .replace(/&quot;/gi, '"')
-      .replace(/&lt;/gi, "<")
-      .replace(/&gt;/gi, ">")
-      .replace(/&amp;/gi, "&");
-  }
-  const ta = document.createElement("textarea");
-  ta.innerHTML = plain;
-  return ta.value;
-}
-
 /* ─── SIDEBAR SECTIONS ──────────────────────────────────────────────── */
 
 /**
  * Produce the four sidebar sections for the live dashboard.
  *
  * The Dashboard section uses in-page anchor links (`#tl-sec`, `#cohort-sec`,
- * `#alerts-sec`) — when the user is on `/dashboard` these scroll smoothly;
+ * `#share-sec`) — when the user is on `/dashboard` these scroll smoothly;
  * on sub-routes (`/dashboard/share`, `/dashboard/stats`) they navigate to
  * `/dashboard#…`. The Share section links to the two real sub-routes
  * (`/dashboard/stats`, `/dashboard/share`).
@@ -384,12 +337,6 @@ export function sidebarSectionsVM({
       icon: "cohort",
       href: anchor("#cohort-sec"),
       badge: cohortTotal > 0 ? cohortTotal.toLocaleString() : undefined,
-    },
-    {
-      key: "alerts",
-      label: "Alerts",
-      icon: "alerts",
-      href: anchor("#alerts-sec"),
     },
   ];
 

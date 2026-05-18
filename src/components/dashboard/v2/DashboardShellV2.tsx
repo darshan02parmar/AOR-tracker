@@ -47,7 +47,6 @@ import {
 import { clearSessionEmail, readSessionEmail } from "@/lib/session-client";
 import type { CohortStats, MilestoneKey, UserProfile } from "@/lib/types";
 
-import { DashboardAlertStrip } from "./DashboardAlertStrip";
 import { DashboardAppBar } from "./DashboardAppBar";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardToaster } from "./DashboardToaster";
@@ -464,8 +463,6 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
             shareHref="/dashboard/share"
             timelineHref="/dashboard"
           />
-
-          <DashboardAlertStrip />
 
           <div className="dlay">
             <DashboardSidebar

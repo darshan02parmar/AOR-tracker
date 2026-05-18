@@ -13,7 +13,6 @@ import {
   type SidebarSections,
 } from "./data";
 import {
-  IconAlerts,
   IconCohort,
   IconEmail,
   IconFeed,
@@ -34,7 +33,6 @@ const ICONS: Record<
   overview: IconOverview,
   timeline: IconTimeline,
   cohort: IconCohort,
-  alerts: IconAlerts,
   feed: IconFeed,
   stats: IconStats,
   plus: IconPlus,
