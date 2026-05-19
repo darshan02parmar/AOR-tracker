@@ -21,7 +21,7 @@ import { DashboardStreamCompare } from "./DashboardStreamCompare";
  * same visual but is wired to real cohort data).
  */
 export function DashboardCohortSection({
-  title = "Your Cohort — Feb 2026 · CEC General",
+  title = "Your Cohort — Feb 2026 · CEC",
   subtitle = "1,240 verified applicants · All provinces",
   children,
 }: {

@@ -53,14 +53,7 @@ export const MILESTONE_DEFS: {
   },
 ];
 
-export const STREAM_OPTIONS = [
-  "CEC General",
-  "CEC STEM",
-  "CEC Healthcare",
-  "CEC French",
-  "FSW General",
-  "PNP",
-] as const;
+export const STREAM_OPTIONS = ["CEC", "FSW General", "PNP"] as const;
 
 export const PROVINCES = [
   "Ontario",

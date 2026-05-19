@@ -7,10 +7,7 @@ export type StreamOption = (typeof STREAM_OPTIONS)[number];
  * Only streams listed here get statically generated route segments.
  */
 const STREAM_PAGE_SLUG_BY_LABEL: Partial<Record<StreamOption, string>> = {
-  "CEC General": "cec",
-  // "CEC STEM": "cec-stem",
-  // "CEC Healthcare": "cec-healthcare",
-  // "CEC French": "cec-french",
+  CEC: "cec",
   "FSW General": "fsw",
   "PNP": "pnp",
 };

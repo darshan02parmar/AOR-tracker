@@ -14,6 +14,7 @@
  * receives safe markup. Never relax this without adding HTML sanitisation.
  */
 
+import { normalizeStreamLabel } from "@/lib/cohort";
 import { communityTimelineFromMs } from "@/lib/community-timeline";
 import type { CommunityPost, CommunityReplyRef } from "@/lib/types";
 import type {
@@ -76,7 +77,7 @@ function displayIdFromName(name: string): string {
  *  `<stream> · <aorDate> AOR · <type>`. */
 function streamFromMeta(meta: string): string | undefined {
   const first = meta.split("·")[0]?.trim();
-  return first || undefined;
+  return first ? normalizeStreamLabel(first) : undefined;
 }
 
 /** Build the structured `cohort` rows from the loose `meta` string.
@@ -91,7 +92,7 @@ function cohortFromMeta(meta: string): CohortItem[] {
   for (let i = 0; i < segments.length; i++) {
     const seg = segments[i];
     if (i === 0) {
-      items.push({ label: "Stream", value: seg });
+      items.push({ label: "Stream", value: normalizeStreamLabel(seg) });
       continue;
     }
     const aorMatch = seg.match(/^(\d{4}-\d{2}-\d{2})\s*AOR$/i);

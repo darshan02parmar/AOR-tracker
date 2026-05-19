@@ -1,5 +1,5 @@
 import type { Db } from "mongodb";
-import { cohortKeyFromProfile } from "@/lib/cohort";
+import { cohortKeyFromProfile, normalizeStreamLabel } from "@/lib/cohort";
 import {
   getLatestStoredMedian,
   insertCalibration,
@@ -27,7 +27,7 @@ function profileFieldsFromDoc(doc: Record<string, unknown>): ProfileForStats & {
   const m = doc.milestones as Record<string, { date?: string | null }> | undefined;
   return {
     aorDate: (doc.aorDate as string)?.trim() ?? "",
-    stream: (doc.stream as string) ?? "CEC General",
+    stream: normalizeStreamLabel((doc.stream as string) ?? "CEC"),
     type: (doc.type as string) ?? "Inland",
     province: (doc.province as string) ?? "Other",
     milestones: m ?? {},
@@ -60,9 +60,12 @@ export async function reconcileProfileCohortKeys(db: Db): Promise<number> {
   for await (const doc of cursor) {
     const rec = doc as Record<string, unknown>;
     const p = profileFieldsFromDoc(rec);
-    const next = cohortKeyFromProfile(p);
-    if (rec.cohortKey !== next) {
-      await col.updateOne({ _id: doc._id }, { $set: { cohortKey: next } });
+    const nextKey = cohortKeyFromProfile(p);
+    const $set: Record<string, unknown> = {};
+    if (rec.cohortKey !== nextKey) $set.cohortKey = nextKey;
+    if (rec.stream !== p.stream) $set.stream = p.stream;
+    if (Object.keys($set).length > 0) {
+      await col.updateOne({ _id: doc._id }, { $set });
       updated++;
     }
   }

@@ -26,7 +26,7 @@ export type StreamId = (typeof STREAM_OPTIONS)[number];
 export type StreamCard = {
   /** Storage value (matches `STREAM_OPTIONS`). */
   id: StreamId;
-  /** Headline label on the card (e.g. "CEC General"). */
+  /** Headline label on the card (e.g. "CEC"). */
   name: string;
   /** Long-form description ("Canadian Experience Class"). */
   sub: string;
@@ -46,25 +46,11 @@ export type StreamIconKey =
 
 export const STREAM_CARDS: StreamCard[] = [
   {
-    id: "CEC General",
-    name: "CEC General",
-    sub: "Canadian Experience Class",
+    id: "CEC",
+    name: "CEC",
+    sub: "Canadian Experience Class (all pathways)",
     meta: "184d avg · 1,240 tracked",
     icon: "maple",
-  },
-  {
-    id: "CEC STEM",
-    name: "CEC STEM",
-    sub: "Science, Tech, Engineering, Math",
-    meta: "162d avg · 847 tracked",
-    icon: "stem",
-  },
-  {
-    id: "CEC French",
-    name: "CEC French",
-    sub: "Francophone Priority",
-    meta: "134d avg · 312 tracked",
-    icon: "french",
   },
   {
     id: "FSW General",
@@ -80,23 +66,13 @@ export const STREAM_CARDS: StreamCard[] = [
     meta: "216d avg · 489 tracked",
     icon: "landmark",
   },
-  {
-    id: "CEC Healthcare",
-    name: "CEC Healthcare",
-    sub: "Healthcare Occupations",
-    meta: "Limited data · 89 tracked",
-    icon: "hospital",
-  },
 ];
 
 /** Best-effort lookup for the "stream avg" used in the step-3 summary. */
 const STREAM_AVG_DAYS: Record<StreamId, number> = {
-  "CEC General": 184,
-  "CEC STEM": 162,
-  "CEC French": 134,
+  CEC: 184,
   "FSW General": 198,
   PNP: 216,
-  "CEC Healthcare": 172,
 };
 
 export function streamAverage(stream: StreamId): number {
@@ -178,7 +154,7 @@ export type CohortBar = {
 };
 
 /**
- * Static preview of the CEC-General cohort histogram used in the left panel.
+ * Static preview of the CEC cohort histogram used in the left panel.
  *
  * TODO(real-cohort): wire to `getCohortStatsAction(streamFallbackKey(stream))`
  *   on stream change so the histogram reflects the currently-selected
@@ -208,8 +184,8 @@ export type LeftStat = {
 };
 
 export const LEFT_PANEL_STATS: LeftStat[] = [
-  { value: "184", unit: "d", label: "CEC General avg", delta: "+2d this week" },
-  { value: "162", unit: "d", label: "CEC STEM avg", delta: "-4d this week" },
+  { value: "184", unit: "d", label: "CEC avg", delta: "+2d this week" },
+  { value: "198", unit: "d", label: "FSW General avg", delta: "-4d this week" },
   { value: "96", unit: "%", label: "Accuracy rate" },
   { value: "39", unit: "%", label: "Feb cohort PPR'd" },
 ];

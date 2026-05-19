@@ -9,6 +9,7 @@ import {
 } from "@/lib/community-feed";
 import { serializePost } from "@/lib/seed";
 import { normalizeEmail, isValidEmail } from "@/lib/profile";
+import { normalizeStreamLabel } from "@/lib/cohort";
 import { milestoneDate } from "@/lib/cohort-algorithm-v2";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
 import { getCohortStatsForProfileAction } from "@/app/actions/cohort";
@@ -51,9 +52,11 @@ function displayNameFromEmail(email: string): string {
 }
 
 function metaFromProfile(p: UserProfile): string {
-  const parts = [p.stream, p.aorDate ? `${p.aorDate} AOR` : null, p.type].filter(
-    Boolean,
-  );
+  const parts = [
+    normalizeStreamLabel(p.stream),
+    p.aorDate ? `${p.aorDate} AOR` : null,
+    p.type,
+  ].filter(Boolean);
   return parts.join(" · ");
 }
 
@@ -366,7 +369,7 @@ export async function createCommunityPostAction(
     ms: input.ms,
     msLabel,
     body,
-    stream: p.stream,
+    stream: normalizeStreamLabel(p.stream),
     type: p.type,
     province: p.province,
     caseNo: p.caseNo,

@@ -53,7 +53,7 @@ export async function getLandingHomeAction(): Promise<{
   const cohortDoc =
     (await db
       .collection("cohort_stats")
-      .findOne({ cohortKey: "CEC_GENERAL:2:2025:inland" })) ??
+      .findOne({ cohortKey: "CEC:2:2025:inland" })) ??
     (await db.collection("cohort_stats").findOne({}));
 
   const medianSample =

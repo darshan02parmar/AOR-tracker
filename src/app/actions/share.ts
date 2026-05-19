@@ -4,7 +4,7 @@ import { randomBytes } from "crypto";
 import type { DnTimelineRow } from "@/components/dashboard/v2/data";
 import { getCohortStatsForProfileAction } from "@/app/actions/cohort";
 import { getDb } from "@/lib/db";
-import { humanizeCohortKey } from "@/lib/cohort";
+import { humanizeCohortKey, normalizeStreamLabel } from "@/lib/cohort";
 import { fmtDate } from "@/lib/format";
 import { emptyMilestones, isValidEmail, normalizeEmail } from "@/lib/profile";
 import {
@@ -49,7 +49,7 @@ function sliceProfileFromDoc(doc: Record<string, unknown>): Pick<
   return {
     email: doc.emailNorm as string,
     aorDate: (doc.aorDate as string) ?? "",
-    stream: (doc.stream as string) ?? "CEC General",
+    stream: normalizeStreamLabel((doc.stream as string) ?? "CEC"),
     type: (doc.type as string) ?? "Inland",
     province: (doc.province as string) ?? "Ontario",
     milestones: m ?? emptyMilestones(),

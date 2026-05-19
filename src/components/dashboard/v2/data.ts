@@ -32,11 +32,11 @@ export type DnProfile = {
 
 export const DN_PROFILE: DnProfile = {
   applicantId: "#4821",
-  stream: "CEC General",
+  stream: "CEC",
   typeLabel: "Inland",
   province: "Ontario",
   aorDateLabel: "Feb 20, 2026",
-  cohortLabel: "CEC General · Feb 2026",
+  cohortLabel: "Feb 2026 · CEC · Inland",
 };
 
 /* ───────────────────────────── HERO STATS ────────────────────────────── */
@@ -293,7 +293,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
 ];
 
 export const DN_TIMELINE_NOTE =
-  "Estimates from 1,240 Gemini-verified submissions · CEC General · Feb 2026 · Updated May 3, 2026";
+  "Estimates from 1,240 Gemini-verified submissions · CEC · Feb 2026 · Updated May 3, 2026";
 
 /* ───────────────────────────── COHORT BARS ───────────────────────────── */
 
@@ -407,9 +407,7 @@ export type DnStreamRow = {
 };
 
 export const DN_STREAM_COMPARE: DnStreamRow[] = [
-  { name: "CEC French", days: "134d", fillPct: 52, variant: "fastest" },
-  { name: "CEC STEM", days: "162d", fillPct: 63, variant: "neutral" },
-  { name: "CEC General", days: "184d", fillPct: 72, variant: "you" },
+  { name: "CEC", days: "184d", fillPct: 72, variant: "you" },
   { name: "FSW General", days: "198d", fillPct: 77, variant: "neutral" },
   { name: "PNP", days: "216d", fillPct: 84, variant: "neutral" },
 ];

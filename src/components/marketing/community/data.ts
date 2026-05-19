@@ -233,7 +233,7 @@ export const seedCommunity: CommunityPageData = {
   cohortMini: {
     label: "Active Session",
     rows: [
-      { key: "Stream", value: "CEC General", emphasis: "green" },
+      { key: "Stream", value: "CEC", emphasis: "green" },
       { key: "AOR Month", value: "Feb 2026" },
       { key: "Day", value: "72", emphasis: "green" },
       { key: "Submissions", value: "3" },
@@ -303,7 +303,7 @@ export const seedCommunity: CommunityPageData = {
     {
       id: "ins-1",
       tone: "amber",
-      title: "WES Tracker Lag — CEC General",
+      title: "WES Tracker Lag — CEC",
       body: "12 applicants report WES results showing up 7–14 days after the IRCC tracker reflects them. May delay your BGC initiation.",
       reporters: "12 reporters",
       age: "3 days ago",
@@ -313,7 +313,7 @@ export const seedCommunity: CommunityPageData = {
       id: "ins-2",
       tone: "green",
       title: "eCOPR velocity up this week",
-      body: "18 eCOPR issuances logged in the Feb 2026 CEC General cohort this week — highest since tracking began.",
+      body: "18 eCOPR issuances logged in the Feb 2026 CEC cohort this week — highest since tracking began.",
       reporters: "18 reporters",
       age: "1 day ago",
     },
@@ -328,7 +328,7 @@ export const seedCommunity: CommunityPageData = {
   ],
 
   pulse: {
-    label: "Weekly eCOPR pulse — CEC General",
+    label: "Weekly eCOPR pulse — CEC",
     weeks: [
       { label: "Apr 7", value: 8 },
       { label: "Apr 14", value: 11 },

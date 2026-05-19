@@ -56,7 +56,7 @@ export function TrackHeroPanel({ liveCount }: Props) {
         </div>
 
         <div className="tk-cp">
-          <div className="tk-cp-label">CEC General — Days to PPR Distribution</div>
+          <div className="tk-cp-label">CEC — Days to PPR Distribution</div>
           <div className="tk-cp-bars">
             {COHORT_PREVIEW.map((b, i) => (
               <div
