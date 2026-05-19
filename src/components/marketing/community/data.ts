@@ -61,6 +61,8 @@ export type Reply = {
   /** CSS color (var or hex) for the avatar circle. */
   avatarColor: string;
   text: string;
+  /** Relative time, e.g. "2 hrs ago". */
+  timestamp?: string;
 };
 
 export type PostBase = {

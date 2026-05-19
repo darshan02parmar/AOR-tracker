@@ -63,7 +63,7 @@ export async function getLandingHomeAction(): Promise<{
 
   const posts = await db
     .collection("community_posts")
-    .find({ approved: true })
+    .find({ approved: true, replyToId: { $exists: false } })
     .sort({ createdAt: -1 })
     .limit(8)
     .toArray();

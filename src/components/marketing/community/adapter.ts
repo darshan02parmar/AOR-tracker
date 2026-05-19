@@ -21,6 +21,7 @@ import type {
   CohortItem,
   MilestoneAccent,
   MilestoneChipColor,
+  Reply,
   TimelineDot,
 } from "./data";
 
@@ -115,6 +116,39 @@ function timelineFromPostMs(ms: string): TimelineDot[] {
  *  its line breaks (the dashboard panel achieves the same via
  *  `whitespace-pre-wrap`; for parity with the seed cards which expect HTML,
  *  we render `<br>` here). */
+const REPLY_AVATAR_COLORS = [
+  "#1e5f8c",
+  "#7c3aed",
+  "#0d9488",
+  "#b45309",
+  "#be123c",
+  "#4338ca",
+] as const;
+
+function avatarColorFromInitials(initials: string): string {
+  let h = 0;
+  for (let i = 0; i < initials.length; i++) {
+    h = (h + initials.charCodeAt(i)) % REPLY_AVATAR_COLORS.length;
+  }
+  return REPLY_AVATAR_COLORS[h] ?? REPLY_AVATAR_COLORS[0];
+}
+
+function plainBodyText(body: string, bodyIsHtml: boolean): string {
+  if (!bodyIsHtml) return body;
+  return body.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function communityPostToReply(src: CommunityPost): Reply {
+  return {
+    id: src.id,
+    authorId: displayIdFromName(src.name),
+    avatarLabel: src.initials,
+    avatarColor: avatarColorFromInitials(src.initials),
+    text: plainBodyText(src.body, src.bodyIsHtml),
+    timestamp: timeAgo(src.createdAt),
+  };
+}
+
 function escapeAndWrap(plain: string): string {
   const escaped = plain
     .replace(/&/g, "&amp;")
@@ -161,6 +195,8 @@ export function communityPostToApproved(
     MS_TO_ACCENT[src.ms] ?? options?.fallbackAccent ?? "med";
   const chipColor = MS_TO_CHIP_COLOR[src.ms] ?? "med";
   const cohortRows = cohortFromMeta(src.meta);
+  const nestedReplies = src.replies?.map(communityPostToReply) ?? [];
+  const replyCount = nestedReplies.length;
 
   return {
     kind: "approved",
@@ -176,11 +212,8 @@ export function communityPostToApproved(
     bodyHtml: src.bodyIsHtml ? src.body : escapeAndWrap(src.body),
     helpfulCount: src.helpful ?? 0,
     helpfulActive: src.viewerHasMarkedHelpful ?? false,
-    /* Per-parent reply count needs a `$lookup` over `replyToId`. Not wired
-       yet — top-level cards just don't surface a reply count. */
-    replyCount: 0,
-    replies: [],
-    replyTo: src.replyTo ?? undefined,
+    replyCount,
+    replies: nestedReplies,
   };
 }
 
