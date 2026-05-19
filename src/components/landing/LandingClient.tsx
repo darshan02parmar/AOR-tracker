@@ -129,7 +129,7 @@ export function LandingClient() {
             <div className="hsv">
               {medianSample != null ? `${Math.round(medianSample)}d` : "—"}
             </div>
-            <div className="hsl">Avg. CEC General</div>
+            <div className="hsl">Avg. CEC</div>
           </div>
           <div>
             <div className="hsv">96%</div>

@@ -15,7 +15,7 @@ import {
 import { emptyMilestones, isValidEmail } from "@/lib/profile";
 import type { MilestoneKey, MilestoneEntry } from "@/lib/types";
 
-const DEFAULT_STREAM = "CEC General";
+const DEFAULT_STREAM = "CEC";
 const DEFAULT_TYPE = "Inland";
 const DEFAULT_PROVINCE = "Ontario";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { buildWesRowsForCohort } from "@/lib/cohort-dynamic";
-import { humanizeCohortKey, pulseTitleFromAor } from "@/lib/cohort";
+import { humanizeCohortKey, pulseTitleFromAor, streamGroupForStats } from "@/lib/cohort";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { fmtDate } from "@/lib/format";
 import { useMemo } from "react";
@@ -33,13 +33,9 @@ export function DashboardStatsTab() {
               ...cohort.stream_medians.map((s) => s.median),
               1,
             );
+            const userGroup = streamGroupForStats(profile.stream);
             return cohort.stream_medians.map((s, i) => {
-              const nameL = s.name.toLowerCase().replace(/—/g, " ");
-              const isY = profile.stream
-                .toLowerCase()
-                .split(/\s+/)
-                .filter(Boolean)
-                .every((tok) => nameL.includes(tok));
+              const isY = streamGroupForStats(s.name) === userGroup;
               return (
                 <div
                   key={s.name}

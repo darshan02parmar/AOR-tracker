@@ -210,7 +210,7 @@ export function TrackPageClient() {
       createdAt: now,
       updatedAt: now,
       aorDate,
-      stream: stream ?? "CEC General",
+      stream: stream ?? "CEC",
       type: appType ?? "Inland",
       province: province || "Ontario",
       milestones,
@@ -240,7 +240,7 @@ export function TrackPageClient() {
     try {
       const draft = await createDraftProfileAction(trimmed, {
         aorDate,
-        stream: stream ?? "CEC General",
+        stream: stream ?? "CEC",
         type: appType ?? "Inland",
         province: province || "Ontario",
       });

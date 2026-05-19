@@ -17,7 +17,12 @@
 
 import type { DashboardContextValue } from "@/components/dashboard/DashboardContext";
 import { fmtDate } from "@/lib/format";
-import { cohortKeyFromProfile, humanizeCohortKey } from "@/lib/cohort";
+import {
+  cohortKeyFromProfile,
+  humanizeCohortKey,
+  normalizeStreamLabel,
+  streamGroupForStats,
+} from "@/lib/cohort";
 import { classifyHistBarTone } from "@/lib/cohort-histogram";
 import { daysBetween, milestoneDate } from "@/lib/cohort-algorithm-v2";
 import type { MilestoneDefRow } from "@/lib/cohort-dynamic";
@@ -42,7 +47,7 @@ import type {
 export function profileVM(email: string, profile: UserProfile): DnProfile {
   return {
     applicantId: applicantIdFromEmail(email),
-    stream: profile.stream || "—",
+    stream: normalizeStreamLabel(profile.stream) || "—",
     typeLabel: profile.type || "—",
     province: profile.province || "—",
     aorDateLabel: fmtDate(profile.aorDate) || "Not set",
@@ -344,18 +349,36 @@ export function streamCompareVM(
 ): DnStreamRow[] {
   const medians = ctx.cohort.stream_medians;
   if (medians.length === 0) return [];
-  const max = Math.max(...medians.map((s) => s.median), 1);
-  const fastest = medians.reduce(
+
+  const userGroup = streamGroupForStats(ctx.profile.stream);
+  const byGroup = new Map<string, { name: string; median: number }>();
+  for (const s of medians) {
+    const group = streamGroupForStats(s.name);
+    const label =
+      group === "CEC"
+        ? "CEC"
+        : group === "FSW"
+          ? "FSW General"
+          : group === "PNP"
+            ? "PNP"
+            : s.name;
+    const existing = byGroup.get(group);
+    if (!existing || s.median < existing.median) {
+      byGroup.set(group, { name: label, median: s.median });
+    }
+  }
+  const rows = [...byGroup.values()];
+  if (rows.length === 0) return [];
+
+  const max = Math.max(...rows.map((s) => s.median), 1);
+  const fastest = rows.reduce(
     (acc, cur) => (cur.median < acc.median ? cur : acc),
-    medians[0],
+    rows[0],
   );
-  const userTokens = ctx.profile.stream
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(Boolean);
-  return medians.map((s) => {
-    const nameL = s.name.toLowerCase().replace(/—/g, " ");
-    const isYou = userTokens.every((tok) => nameL.includes(tok));
+
+  return rows.map((s) => {
+    const group = streamGroupForStats(s.name);
+    const isYou = group === userGroup;
     const variant: DnStreamRow["variant"] = isYou
       ? "you"
       : s.name === fastest.name

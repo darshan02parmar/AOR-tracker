@@ -14,6 +14,7 @@
  * receives safe markup. Never relax this without adding HTML sanitisation.
  */
 
+import { normalizeStreamLabel } from "@/lib/cohort";
 import { communityTimelineFromMs } from "@/lib/community-timeline";
 import type { CommunityPost, CommunityReplyRef } from "@/lib/types";
 import type {
@@ -21,6 +22,7 @@ import type {
   CohortItem,
   MilestoneAccent,
   MilestoneChipColor,
+  Reply,
   TimelineDot,
 } from "./data";
 
@@ -46,6 +48,20 @@ const MS_TO_CHIP_COLOR: Record<string, MilestoneChipColor> = {
   med: "med",
 };
 
+/** Short chip labels on feed cards (canonical display; overrides legacy `msl`). */
+const MS_CHIP_LABEL: Record<string, string> = {
+  ecopr: "eCOPR received",
+  p1: "P1 — PR Portal (first)",
+  p2: "P2 — PR Portal (photo & address)",
+  bil: "BIL",
+  bg: "BGC Started",
+  med: "Medical Done",
+};
+
+function milestoneChipLabel(ms: string, msl: string): string {
+  return MS_CHIP_LABEL[ms] ?? msl;
+}
+
 /* ─── helpers ───────────────────────────────────────────────────────── */
 
 /** "Applicant · <local>" → "#<local>". Keeps the leading "#" so it lines up
@@ -61,7 +77,7 @@ function displayIdFromName(name: string): string {
  *  `<stream> · <aorDate> AOR · <type>`. */
 function streamFromMeta(meta: string): string | undefined {
   const first = meta.split("·")[0]?.trim();
-  return first || undefined;
+  return first ? normalizeStreamLabel(first) : undefined;
 }
 
 /** Build the structured `cohort` rows from the loose `meta` string.
@@ -76,7 +92,7 @@ function cohortFromMeta(meta: string): CohortItem[] {
   for (let i = 0; i < segments.length; i++) {
     const seg = segments[i];
     if (i === 0) {
-      items.push({ label: "Stream", value: seg });
+      items.push({ label: "Stream", value: normalizeStreamLabel(seg) });
       continue;
     }
     const aorMatch = seg.match(/^(\d{4}-\d{2}-\d{2})\s*AOR$/i);
@@ -115,6 +131,39 @@ function timelineFromPostMs(ms: string): TimelineDot[] {
  *  its line breaks (the dashboard panel achieves the same via
  *  `whitespace-pre-wrap`; for parity with the seed cards which expect HTML,
  *  we render `<br>` here). */
+const REPLY_AVATAR_COLORS = [
+  "#1e5f8c",
+  "#7c3aed",
+  "#0d9488",
+  "#b45309",
+  "#be123c",
+  "#4338ca",
+] as const;
+
+function avatarColorFromInitials(initials: string): string {
+  let h = 0;
+  for (let i = 0; i < initials.length; i++) {
+    h = (h + initials.charCodeAt(i)) % REPLY_AVATAR_COLORS.length;
+  }
+  return REPLY_AVATAR_COLORS[h] ?? REPLY_AVATAR_COLORS[0];
+}
+
+function plainBodyText(body: string, bodyIsHtml: boolean): string {
+  if (!bodyIsHtml) return body;
+  return body.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function communityPostToReply(src: CommunityPost): Reply {
+  return {
+    id: src.id,
+    authorId: displayIdFromName(src.name),
+    avatarLabel: src.initials,
+    avatarColor: avatarColorFromInitials(src.initials),
+    text: plainBodyText(src.body, src.bodyIsHtml),
+    timestamp: timeAgo(src.createdAt),
+  };
+}
+
 function escapeAndWrap(plain: string): string {
   const escaped = plain
     .replace(/&/g, "&amp;")
@@ -161,13 +210,15 @@ export function communityPostToApproved(
     MS_TO_ACCENT[src.ms] ?? options?.fallbackAccent ?? "med";
   const chipColor = MS_TO_CHIP_COLOR[src.ms] ?? "med";
   const cohortRows = cohortFromMeta(src.meta);
+  const nestedReplies = src.replies?.map(communityPostToReply) ?? [];
+  const replyCount = nestedReplies.length;
 
   return {
     kind: "approved",
     id: src.id,
     displayId: displayIdFromName(src.name),
     accent,
-    milestoneChip: { label: src.msl, color: chipColor },
+    milestoneChip: { label: milestoneChipLabel(src.ms, src.msl), color: chipColor },
     stream: streamFromMeta(src.meta),
     timestamp: timeAgo(src.createdAt),
     geminiVerified: false,
@@ -176,11 +227,8 @@ export function communityPostToApproved(
     bodyHtml: src.bodyIsHtml ? src.body : escapeAndWrap(src.body),
     helpfulCount: src.helpful ?? 0,
     helpfulActive: src.viewerHasMarkedHelpful ?? false,
-    /* Per-parent reply count needs a `$lookup` over `replyToId`. Not wired
-       yet — top-level cards just don't surface a reply count. */
-    replyCount: 0,
-    replies: [],
-    replyTo: src.replyTo ?? undefined,
+    replyCount,
+    replies: nestedReplies,
   };
 }
 

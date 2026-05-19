@@ -9,6 +9,7 @@ import {
 } from "@/lib/community-feed";
 import { serializePost } from "@/lib/seed";
 import { normalizeEmail, isValidEmail } from "@/lib/profile";
+import { normalizeStreamLabel } from "@/lib/cohort";
 import { milestoneDate } from "@/lib/cohort-algorithm-v2";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
 import { getCohortStatsForProfileAction } from "@/app/actions/cohort";
@@ -33,7 +34,7 @@ const MS_LABEL: Record<CommunityMs, string> = {
   ecopr: "eCOPR received",
   p1: "P1 — PR Portal (first)",
   p2: "P2 — PR Portal (photo & address)",
-  bil: "BIL Received",
+  bil: "BIL",
   bg: "BGC Started",
   med: "Medical Done",
 };
@@ -51,9 +52,11 @@ function displayNameFromEmail(email: string): string {
 }
 
 function metaFromProfile(p: UserProfile): string {
-  const parts = [p.stream, p.aorDate ? `${p.aorDate} AOR` : null, p.type].filter(
-    Boolean,
-  );
+  const parts = [
+    normalizeStreamLabel(p.stream),
+    p.aorDate ? `${p.aorDate} AOR` : null,
+    p.type,
+  ].filter(Boolean);
   return parts.join(" · ");
 }
 
@@ -92,7 +95,7 @@ export async function getCommunityMsCountsAction(): Promise<CommunityMsCounts> {
   const rows = await db
     .collection("community_posts")
     .aggregate([
-      { $match: { approved: true } },
+      { $match: { approved: true, replyToId: { $exists: false } } },
       { $group: { _id: "$ms", n: { $sum: 1 } } },
     ])
     .toArray();
@@ -166,6 +169,7 @@ export async function getCommunitySubmitMilestoneTimelineOptionsAction(
   const defs = mergeMilestoneDefsForCohort(
     aorDate || "2000-01-01",
     median,
+    cohort,
   );
   const options: CommunitySubmitMilestoneOption[] = defs
     .filter((d) => SUBMIT_TIMELINE_KEYS.has(d.key))
@@ -207,7 +211,10 @@ export async function getCommunityFeedAction(
   );
   const requestedPage = Math.max(1, Math.floor(opts?.page ?? 1));
 
-  const filter: Record<string, unknown> = { approved: true };
+  const filter: Record<string, unknown> = {
+    approved: true,
+    replyToId: { $exists: false },
+  };
   const mf = opts?.msFilter?.trim();
   if (mf && mf !== "all" && MS_OPTIONS.includes(mf as CommunityMs)) {
     filter.ms = mf;
@@ -238,10 +245,37 @@ export async function getCommunityFeedAction(
     .limit(pageSize)
     .toArray();
 
+  const parentIds = rows.map((r) => r._id as ObjectId);
+  const replyDocs =
+    parentIds.length > 0
+      ? await col
+          .find({ approved: true, replyToId: { $in: parentIds } })
+          .sort({ createdAt: 1 })
+          .toArray()
+      : [];
+
+  const repliesByParent = new Map<string, Record<string, unknown>[]>();
+  for (const doc of replyDocs) {
+    const pid = String(doc.replyToId);
+    const bucket = repliesByParent.get(pid);
+    if (bucket) bucket.push(doc as Record<string, unknown>);
+    else repliesByParent.set(pid, [doc as Record<string, unknown>]);
+  }
+
   return {
-    posts: rows.map((r) =>
-      serializePost(r as Record<string, unknown>, viewerNorm),
-    ),
+    posts: rows.map((r) => {
+      const parentId = String(r._id);
+      const serialized = serializePost(
+        r as Record<string, unknown>,
+        viewerNorm,
+      );
+      const nested = repliesByParent.get(parentId);
+      if (!nested?.length) return serialized;
+      return {
+        ...serialized,
+        replies: nested.map((doc) => serializePost(doc, viewerNorm)),
+      };
+    }),
     total,
     page,
     pageSize,
@@ -336,7 +370,7 @@ export async function createCommunityPostAction(
     ms: input.ms,
     msLabel,
     body,
-    stream: p.stream,
+    stream: normalizeStreamLabel(p.stream),
     type: p.type,
     province: p.province,
     caseNo: p.caseNo,

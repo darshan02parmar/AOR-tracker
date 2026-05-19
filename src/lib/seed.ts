@@ -64,7 +64,7 @@ const SEED_POSTS: Omit<
     name: "Applicant #3302",
     meta: "CEC · Feb 25 AOR · Inland",
     ms: "bil",
-    msl: "BIL Received",
+    msl: "BIL",
     body: "Got my BIL <strong>15 days after AOR.</strong> Tracker shows pending even though biometrics done Apr 27. Anyone?",
     tl: [
       { label: "AOR", done: true },

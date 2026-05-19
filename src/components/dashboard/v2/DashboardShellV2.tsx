@@ -240,7 +240,11 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
       return [...MILESTONE_DEFS];
     }
     const med = cohortDisplay?.median_days_to_ppr ?? 0;
-    return mergeMilestoneDefsForCohort(profile.aorDate, med, cohortDisplay ?? undefined);
+    return mergeMilestoneDefsForCohort(
+      profile.aorDate,
+      med,
+      cohortDisplay ?? undefined,
+    );
   }, [profile, cohortDisplay]);
 
   const days = profile?.aorDate ? daysSinceAor(profile.aorDate) : 0;

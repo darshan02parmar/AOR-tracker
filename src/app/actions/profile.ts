@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db";
 import {
   buildStatsCohortKey,
   cohortKeyFromProfile,
+  normalizeStreamLabel,
   streamFallbackKey,
 } from "@/lib/cohort";
 import { ensureCohortStatsPlaceholder } from "@/lib/ensure-cohort-stats";
@@ -33,7 +34,7 @@ function docToProfile(doc: Record<string, unknown>): UserProfile {
     createdAt: iso(doc.createdAt),
     updatedAt: iso(doc.updatedAt),
     aorDate: (doc.aorDate as string) ?? "",
-    stream: (doc.stream as string) ?? "CEC General",
+    stream: normalizeStreamLabel((doc.stream as string) ?? "CEC"),
     type: (doc.type as string) ?? "Inland",
     province: (doc.province as string) ?? "Ontario",
     milestones: normalizeMilestonesFromDoc(doc.milestones),
@@ -60,6 +61,7 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
   if (!isValidEmail(profile.email)) return { ok: false, error: "Invalid email" };
   const db = await getDb();
   const norm = normalizeEmail(profile.email);
+  const stream = normalizeStreamLabel(profile.stream);
   const now = new Date();
   await db.collection("profiles").updateOne(
     { emailNorm: norm },
@@ -67,17 +69,17 @@ export async function saveProfileAction(profile: UserProfile): Promise<{
       $set: {
         emailNorm: norm,
         aorDate: profile.aorDate,
-        stream: profile.stream,
+        stream,
         type: profile.type,
         province: profile.province,
         milestones: profile.milestones,
         cohortKey: profile.aorDate
           ? buildStatsCohortKey({
               aorDate: profile.aorDate,
-              stream: profile.stream,
+              stream,
               type: profile.type,
             })
-          : streamFallbackKey(profile.stream, profile.type),
+          : streamFallbackKey(stream, profile.type),
         updatedAt: now,
       },
       $setOnInsert: {
@@ -142,7 +144,9 @@ function applyDraftHints(
     ...base,
     aorDate:
       hints.aorDate !== undefined ? String(hints.aorDate).trim() : base.aorDate,
-    stream: hints.stream?.trim() || base.stream,
+    stream: hints.stream?.trim()
+      ? normalizeStreamLabel(hints.stream)
+      : base.stream,
     type: hints.type?.trim() || base.type,
     province: hints.province?.trim() || base.province,
   };
@@ -274,7 +278,7 @@ export async function ensureDemoProfileAction(): Promise<UserProfile> {
     createdAt: now,
     updatedAt: now,
     aorDate: "2025-02-25",
-    stream: "CEC General",
+    stream: "CEC",
     type: "Inland",
     province: "Ontario",
     milestones,

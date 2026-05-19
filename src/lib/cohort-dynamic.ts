@@ -12,7 +12,13 @@ export type CohortInsight = {
   txt: string;
 };
 
-/** Typical share of median days-to-eCOPR for each milestone (rough inland model). */
+/** Same threshold as `estimatePprWindow` limited-data flag (v2.0 §6.2). */
+export const MIN_ELIGIBLE_FOR_MILESTONE_EST = 30;
+
+/**
+ * Typical share of v2.0 recency-weighted median days-to-eCOPR for each milestone.
+ * All estimated dates are derived from `median_days_to_ppr` only — no global P1 tables.
+ */
 const MEDIAN_DAY_FRAC: Record<MilestoneKey, number> = {
   aor: 0,
   biometrics: 0.17,
@@ -22,6 +28,15 @@ const MEDIAN_DAY_FRAC: Record<MilestoneKey, number> = {
   p2: 0.9,
   ecopr: 1,
 };
+
+const ESTIMATE_ORDER: MilestoneKey[] = [
+  "biometrics",
+  "background",
+  "medical",
+  "p1",
+  "p2",
+  "ecopr",
+];
 
 export type MilestoneDefRow = (typeof MILESTONE_DEFS)[number];
 
@@ -35,35 +50,67 @@ function addDaysFromAor(aorDate: string, days: number): string {
   });
 }
 
+function cohortEligibleForEstimates(
+  cohort?: Pick<CohortStats, "n_eligible" | "n_verified">,
+): boolean {
+  if (!cohort) return true;
+  const n = cohort.n_eligible ?? cohort.n_verified ?? 0;
+  return n >= MIN_ELIGIBLE_FOR_MILESTONE_EST;
+}
+
+/** v2.0 pacing: fraction × median, strictly increasing, eCOPR = median. */
+function daysAfterAorByMilestone(medianDays: number): Map<MilestoneKey, number> {
+  const med = Math.max(30, Math.round(medianDays));
+  const out = new Map<MilestoneKey, number>();
+  let prev = 0;
+
+  for (const key of ESTIMATE_ORDER) {
+    if (key === "ecopr") {
+      out.set(key, med);
+      continue;
+    }
+    let days = Math.max(1, Math.round(MEDIAN_DAY_FRAC[key] * med));
+    days = Math.min(days, med - 1);
+    days = Math.max(days, prev + 1);
+    out.set(key, days);
+    prev = days;
+  }
+
+  return out;
+}
+
 /**
- * Merge static milestone labels with dates estimated from AOR + cohort median (to eCOPR).
+ * Merge static milestone labels with dates estimated from v2.0 cohort median (to eCOPR).
+ * Uses `MEDIAN_DAY_FRAC` only — not global P1 percentiles.
  */
 export function mergeMilestoneDefsForCohort(
   aorDate: string,
   medianPpr: number,
-  cohort?: Pick<
-    CohortStats,
-    "p1_p25_days" | "p1_p50_days" | "p1_p75_days"
-  >,
+  cohort?: Pick<CohortStats, "n_eligible" | "n_verified">,
 ): MilestoneDefRow[] {
   const aor = new Date(`${aorDate}T12:00:00`);
   if (Number.isNaN(aor.getTime())) {
     return [...MILESTONE_DEFS];
   }
 
-  if (!medianPpr || medianPpr <= 0 || !Number.isFinite(medianPpr)) {
+  const insufficientMedian =
+    !medianPpr || medianPpr <= 0 || !Number.isFinite(medianPpr);
+  const insufficientSample =
+    insufficientMedian || !cohortEligibleForEstimates(cohort);
+
+  if (insufficientSample) {
+    const desc = insufficientMedian
+      ? "No cohort median yet — add eCOPR timelines in this group to unlock estimates."
+      : "Insufficient cohort data for v2.0 estimates (need at least 30 eligible profiles).";
     return MILESTONE_DEFS.map((def) => ({
       ...def,
       est: def.key === "aor" ? fmtDate(aorDate) || "—" : "—",
-      desc:
-        def.key === "aor"
-          ? def.desc
-          : "No cohort median yet — add eCOPR timelines in this group to unlock estimates.",
+      desc: def.key === "aor" ? def.desc : desc,
     }));
   }
 
   const med = Math.max(30, Math.round(medianPpr));
-  const p1p50 = cohort?.p1_p50_days ?? 0;
+  const daysByKey = daysAfterAorByMilestone(med);
 
   return MILESTONE_DEFS.map((def) => {
     if (def.key === "aor") {
@@ -73,28 +120,12 @@ export function mergeMilestoneDefsForCohort(
         desc: def.desc,
       };
     }
-    if (def.key === "p1" && p1p50 > 0) {
-      const est = addDaysFromAor(aorDate, p1p50);
-      return {
-        ...def,
-        est: `~${est}`,
-        desc: `Typical ~${p1p50}d after AOR (2026 P1 cohort data).`,
-      };
-    }
-    if (def.key === "p2" && cohort?.p1_p75_days && cohort.p1_p75_days > 0) {
-      const est = addDaysFromAor(aorDate, cohort.p1_p75_days);
-      return {
-        ...def,
-        est: `~${est}`,
-        desc: `Typical ~${cohort.p1_p75_days}d after AOR (P1–P2 spread from cohort).`,
-      };
-    }
-    const daysAfter = Math.max(1, Math.round(MEDIAN_DAY_FRAC[def.key] * med));
+    const daysAfter = daysByKey.get(def.key) ?? 1;
     const est = `~${addDaysFromAor(aorDate, daysAfter)}`;
     return {
       ...def,
       est,
-      desc: `Typical ~${daysAfter}d after AOR (cohort median to eCOPR ${med}d).`,
+      desc: `Typical ~${daysAfter}d after AOR (v2.0 cohort median to eCOPR ${med}d).`,
     };
   });
 }

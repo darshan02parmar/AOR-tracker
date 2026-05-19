@@ -662,11 +662,14 @@
   display: block;
 }
 
-/* STREAM GRID */
+/* STREAM GRID — CEC full width, then FSW + PNP on one row */
 .mkt-track-page .tk-stream-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.7rem;
+}
+.mkt-track-page .tk-stream-opt:first-child {
+  grid-column: 1 / -1;
 }
 .mkt-track-page .tk-stream-opt {
   border: 2px solid var(--border);

@@ -1,21 +1,25 @@
 import type { UserProfile } from "@/lib/types";
 
-const STREAM_SLUG: Record<string, string> = {
-  "CEC General": "CEC_GENERAL",
-  "CEC STEM": "CEC_STEM",
-  "CEC Healthcare": "CEC_HEALTHCARE",
-  "CEC French": "CEC_FRENCH",
-  "FSW General": "FSW_GENERAL",
-  PNP: "PNP",
-};
+/** Canonical profile label stored in MongoDB for all CEC pathways. */
+export const CEC_STREAM_LABEL = "CEC";
 
-/** Stats stream group per v2.0 doc — all CEC variants merge to CEC. */
-const CEC_STREAM_LABELS = new Set([
+/** Legacy track labels → unified `CEC`. */
+export const CEC_LEGACY_STREAM_LABELS = [
   "CEC General",
   "CEC STEM",
   "CEC Healthcare",
   "CEC French",
-]);
+] as const;
+
+const STREAM_SLUG: Record<string, string> = {
+  CEC: "CEC",
+  "CEC General": "CEC",
+  "CEC STEM": "CEC",
+  "CEC Healthcare": "CEC",
+  "CEC French": "CEC",
+  "FSW General": "FSW_GENERAL",
+  PNP: "PNP",
+};
 
 const STATS_GROUP_LABEL: Record<string, string> = {
   CEC: "CEC",
@@ -40,14 +44,29 @@ const MONTH_SHORT = [
 ];
 
 export function streamSlugFromLabel(stream: string): string {
-  return STREAM_SLUG[stream] ?? "CEC_GENERAL";
+  return STREAM_SLUG[stream] ?? "CEC";
+}
+
+/** Normalize stored/display stream — all CEC variants → `CEC`. */
+export function normalizeStreamLabel(stream: string): string {
+  const t = stream?.trim();
+  if (!t) return CEC_STREAM_LABEL;
+  if (t === CEC_STREAM_LABEL) return CEC_STREAM_LABEL;
+  if ((CEC_LEGACY_STREAM_LABELS as readonly string[]).includes(t)) {
+    return CEC_STREAM_LABEL;
+  }
+  const slug = STREAM_SLUG[t];
+  if (slug === "CEC") return CEC_STREAM_LABEL;
+  if (t.toUpperCase().startsWith("CEC ")) return CEC_STREAM_LABEL;
+  return t;
 }
 
 /** Unified stream group for cohort stats (v2.0). */
 export function streamGroupForStats(stream: string): string {
-  if (CEC_STREAM_LABELS.has(stream)) return "CEC";
-  const slug = streamSlugFromLabel(stream);
-  if (slug.startsWith("CEC_")) return "CEC";
+  const normalized = normalizeStreamLabel(stream);
+  if (normalized === CEC_STREAM_LABEL) return "CEC";
+  const slug = streamSlugFromLabel(normalized);
+  if (slug === "CEC" || slug.startsWith("CEC_")) return "CEC";
   return STATS_GROUP_LABEL[slug] ?? slug.replace(/_GENERAL$/, "");
 }
 

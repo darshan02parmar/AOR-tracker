@@ -1,4 +1,5 @@
 import type { MilestoneKey, MilestoneEntry, UserProfile } from "./types";
+import { normalizeStreamLabel } from "./cohort";
 import { MILESTONE_DEFS } from "./constants";
 
 export function normalizeEmail(email: string): string {
@@ -36,7 +37,7 @@ export function newProfile(email: string): UserProfile {
     createdAt: now,
     updatedAt: now,
     aorDate: "",
-    stream: "CEC General",
+    stream: "CEC",
     type: "Inland",
     province: "Ontario",
     milestones: emptyMilestones(),
