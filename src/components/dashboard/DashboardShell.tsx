@@ -30,7 +30,10 @@ import {
   type CohortSummaryRow,
   type LiveCohortAggregate,
 } from "@/app/actions/aggregate";
-import { getCohortStatsByKeyAction } from "@/app/actions/cohort";
+import {
+  getCohortStatsByKeyAction,
+  getGlobalMilestonePaceAction,
+} from "@/app/actions/cohort";
 import { syncCohortStatsFromProfilesAction } from "@/app/actions/cohort-sync";
 import { getProfileAction, updateMilestoneAction } from "@/app/actions/profile";
 import { ensureShareTokenForEmailAction } from "@/app/actions/share";
@@ -53,7 +56,12 @@ import {
   pctThroughMedian,
 } from "@/lib/ppr-estimate";
 import { clearSessionEmail, readSessionEmail } from "@/lib/session-client";
-import type { CohortStats, MilestoneKey, UserProfile } from "@/lib/types";
+import type {
+  CohortStats,
+  GlobalMilestonePace,
+  MilestoneKey,
+  UserProfile,
+} from "@/lib/types";
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -75,6 +83,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     string | null
   >(null);
   const [syncCohortBusy, setSyncCohortBusy] = useState(false);
+  const [milestonePace, setMilestonePace] =
+    useState<GlobalMilestonePace | null>(null);
   const [shareState, setShareState] = useState<{
     email: string;
     token: string | null;
@@ -138,6 +148,16 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     }, 0);
     return () => window.clearTimeout(id);
   }, [email, load]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void getGlobalMilestonePaceAction().then((pace) => {
+      if (!cancelled) setMilestonePace(pace);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!email) return;
@@ -220,13 +240,12 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     if (!profile?.aorDate?.trim()) {
       return [...MILESTONE_DEFS];
     }
-    const med = cohortDisplay?.median_days_to_ppr ?? 0;
     return mergeMilestoneDefsForCohort(
       profile.aorDate,
-      med,
-      cohortDisplay ?? undefined,
+      milestonePace,
+      profile,
     );
-  }, [profile, cohortDisplay]);
+  }, [profile, milestonePace]);
 
   const days = profile?.aorDate ? daysSinceAor(profile.aorDate) : 0;
   const median = cohortDisplay?.median_days_to_ppr ?? 0;
@@ -271,6 +290,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       const pk = cohortKeyFromProfile(profile);
       const vk = viewingCohortKeyOverride ?? pk;
       await hydrateCohortView(vk, pk);
+      const pace = await getGlobalMilestonePaceAction();
+      setMilestonePace(pace);
     } finally {
       setSyncCohortBusy(false);
     }

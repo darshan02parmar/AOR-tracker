@@ -79,7 +79,7 @@ export function timelineRowsFromProfile(
 
     if (includeEdit && def.key !== "ecopr") {
       row.edit = {
-        label: hasDate ? "Edit" : "+ Add date",
+        label: hasDate ? "Edit" : "Add date",
         fieldLabel: `${def.label} Date`,
         initial: m?.date ?? undefined,
         saveLabel: hasDate

@@ -2,7 +2,10 @@
 
 import { randomBytes } from "crypto";
 import type { DnTimelineRow } from "@/components/dashboard/v2/data";
-import { getCohortStatsForProfileAction } from "@/app/actions/cohort";
+import {
+  getCohortStatsForProfileAction,
+  getGlobalMilestonePaceAction,
+} from "@/app/actions/cohort";
 import { getDb } from "@/lib/db";
 import { humanizeCohortKey, normalizeStreamLabel } from "@/lib/cohort";
 import { fmtDate } from "@/lib/format";
@@ -138,6 +141,7 @@ export async function getPublicSharePayloadAction(
   });
 
   const median = cohort.median_days_to_ppr;
+  const pace = await getGlobalMilestonePaceAction();
   const days = aorDate ? daysSinceAor(aorDate) : 0;
   const pct = pctThroughMedian(days, median);
 
@@ -156,8 +160,8 @@ export async function getPublicSharePayloadAction(
 
   const defs = mergeMilestoneDefsForCohort(
     aorDate || "2000-01-01",
-    median,
-    cohort,
+    pace,
+    profile,
   );
   const timelineRows = timelineRowsFromProfile(defs, profile, {
     includeEdit: false,

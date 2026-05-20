@@ -57,6 +57,17 @@ export type CohortStats = {
   last_updated: string;
 };
 
+/** Global avg inter-milestone gaps from `seededData: true` profiles (sync job). */
+export type GlobalMilestonePace = {
+  computed_at: string;
+  segment_avg_days: Partial<Record<MilestoneKey, number>>;
+  segment_n: Partial<Record<MilestoneKey, number>>;
+  cumulative_avg_days: Partial<Record<MilestoneKey, number>>;
+  total_avg_days_to_ecopr: number;
+  profiles_scanned: number;
+  seeded_profiles: number;
+};
+
 export type CohortCalibration = {
   computed_at: string;
   cutoff_date: string;

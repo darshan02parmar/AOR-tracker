@@ -235,7 +235,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
     },
     pending: true,
     edit: {
-      label: "+ Add date",
+      label: "Add date",
       fieldLabel: "Background Check Start Date",
       saveLabel: "Save & contribute to community",
     },
@@ -250,7 +250,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
       label: "Est. Day 75–110 · 298 cohort members past this",
     },
     pending: true,
-    edit: { label: "+ Add date", fieldLabel: "Medical Results Date" },
+    edit: { label: "Add date", fieldLabel: "Medical Results Date" },
   },
   {
     key: "p1",
@@ -263,7 +263,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
       label: "Est. after medical · varies by stream",
     },
     pending: true,
-    edit: { label: "+ Add date", fieldLabel: "P1 (portal first invitation) Date" },
+    edit: { label: "Add date", fieldLabel: "P1 (portal first invitation) Date" },
   },
   {
     key: "p2",
@@ -276,7 +276,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
       label: "Est. after P1 · when IRCC requests portal step 2",
     },
     pending: true,
-    edit: { label: "+ Add date", fieldLabel: "P2 (portal photo & address) Date" },
+    edit: { label: "Add date", fieldLabel: "P2 (portal photo & address) Date" },
   },
   {
     key: "ecopr",

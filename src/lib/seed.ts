@@ -147,6 +147,9 @@ export async function ensureIndexes(db: Db): Promise<void> {
     .createIndex({ shareToken: 1 }, { unique: true, sparse: true });
   await db.collection("cohort_stats").createIndex({ cohortKey: 1 }, { unique: true });
   await db.collection("cohort_calibration").createIndex({ computed_at: -1 });
+  await db
+    .collection("milestone_pace")
+    .createIndex({ paceKey: 1 }, { unique: true });
   await posts.createIndex({ createdAt: -1 });
 }
 

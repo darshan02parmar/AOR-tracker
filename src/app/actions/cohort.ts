@@ -2,8 +2,12 @@
 
 import { getDb } from "@/lib/db";
 import { cohortKeyFromProfile, streamFallbackKey } from "@/lib/cohort";
+import {
+  milestonePaceFilter,
+  parseMilestonePaceDoc,
+} from "@/lib/milestone-gap-estimates";
 import { serializeCohort } from "@/lib/seed";
-import type { CohortStats } from "@/lib/types";
+import type { CohortStats, GlobalMilestonePace } from "@/lib/types";
 import type { UserProfile } from "@/lib/types";
 
 export async function getCohortStatsByKeyAction(
@@ -36,4 +40,10 @@ export async function getCohortStatsForProfileAction(
     primaryKey,
   );
   return { ...base, cohortKey: primaryKey };
+}
+
+export async function getGlobalMilestonePaceAction(): Promise<GlobalMilestonePace | null> {
+  const db = await getDb();
+  const doc = await db.collection("milestone_pace").findOne(milestonePaceFilter());
+  return parseMilestonePaceDoc(doc as Record<string, unknown> | null);
 }

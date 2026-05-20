@@ -12,7 +12,7 @@ import { normalizeEmail, isValidEmail } from "@/lib/profile";
 import { normalizeStreamLabel } from "@/lib/cohort";
 import { milestoneDate } from "@/lib/cohort-algorithm-v2";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
-import { getCohortStatsForProfileAction } from "@/app/actions/cohort";
+import { getGlobalMilestonePaceAction } from "@/app/actions/cohort";
 import { getProfileAction } from "@/app/actions/profile";
 import { mergeMilestoneDefsForCohort } from "@/lib/cohort-dynamic";
 import { communityTimelineFromMs } from "@/lib/community-timeline";
@@ -142,7 +142,7 @@ export type CommunitySubmitMilestoneOption = {
 
 /**
  * Milestone rows for the Submit Milestone modal: same pipeline as the
- * dashboard timeline (`mergeMilestoneDefsForCohort` + cohort median), filtered
+ * dashboard timeline (`mergeMilestoneDefsForCohort` + global seeded pace), filtered
  * to milestones that can be tagged on a community post.
  */
 export async function getCommunitySubmitMilestoneTimelineOptionsAction(
@@ -159,17 +159,11 @@ export async function getCommunitySubmitMilestoneTimelineOptionsAction(
     p.aorDate.trim() ||
     (p.milestones.aor?.date as string | undefined)?.trim() ||
     "";
-  const cohort = await getCohortStatsForProfileAction({
-    aorDate: aorDate || "2000-01-01",
-    stream: p.stream,
-    type: p.type,
-    province: p.province,
-  });
-  const median = cohort.median_days_to_ppr;
+  const pace = await getGlobalMilestonePaceAction();
   const defs = mergeMilestoneDefsForCohort(
     aorDate || "2000-01-01",
-    median,
-    cohort,
+    pace,
+    p,
   );
   const options: CommunitySubmitMilestoneOption[] = defs
     .filter((d) => SUBMIT_TIMELINE_KEYS.has(d.key))

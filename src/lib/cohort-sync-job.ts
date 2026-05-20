@@ -15,6 +15,10 @@ import {
   type ProfileForStats,
 } from "@/lib/cohort-algorithm-v2";
 import { buildHistogramFromDays } from "@/lib/cohort-histogram";
+import {
+  computeGlobalSeededMilestonePace,
+  milestonePaceFilter,
+} from "@/lib/milestone-gap-estimates";
 import { emptyCohortStats } from "@/lib/seed";
 import type { CohortStats, MilestoneKey } from "@/lib/types";
 
@@ -246,6 +250,28 @@ export async function runCohortStatsSyncJob(db: Db): Promise<{
   }
 
   await db.collection("cohort_calibration").createIndex({ computed_at: -1 });
+
+  const seededDocs = await profCol
+    .find(
+      { seededData: true },
+      { projection: { aorDate: 1, milestones: 1, seededData: 1 } },
+    )
+    .toArray();
+  const pace = computeGlobalSeededMilestonePace(
+    seededDocs.map((d) => {
+      const rec = d as Record<string, unknown>;
+      return {
+        aorDate: (rec.aorDate as string) ?? "",
+        milestones: rec.milestones as Record<string, { date?: string | null }>,
+        seededData: true as const,
+      };
+    }),
+  );
+  await db.collection("milestone_pace").replaceOne(
+    milestonePaceFilter(),
+    { ...milestonePaceFilter(), ...pace },
+    { upsert: true },
+  );
 
   return { profilesCohortKeyUpdates, cohortsUpserted };
 }

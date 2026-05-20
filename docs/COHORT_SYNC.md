@@ -78,7 +78,8 @@ In MongoDB:
 
 On the dashboard (sign in with a seeded synthetic email):
 
-- **Typical wait** uses the v2.0 median.
+- **Timeline est. dates** use global average gaps between milestones from `seededData: true` profiles (`milestone_pace` / `paceKey: global_seeded`), recomputed on each cohort sync. Pending steps can project forward from your last logged milestone.
+- **Typical wait** (PPR window) uses the v2.0 median.
 - **Journey %** = `days_since_AOR / median`.
 - **Expected approval window** = `AOR + P25` … `AOR + P75`.
 - **Queue position** = earlier-AOR peers still without eCOPR.
