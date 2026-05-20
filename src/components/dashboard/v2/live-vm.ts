@@ -60,21 +60,30 @@ export function profileVM(email: string, profile: UserProfile): DnProfile {
 export function heroStatsVM(
   ctx: Pick<
     DashboardContextValue,
-    "days" | "median" | "ppr" | "queueAhead"
+    | "days"
+    | "median"
+    | "journeyDays"
+    | "journeyFromSeededPace"
+    | "ppr"
+    | "queueAhead"
   >,
 ): DnHeroStats {
-  const { days, median, ppr, queueAhead } = ctx;
+  const { days, median, journeyDays, journeyFromSeededPace, ppr, queueAhead } =
+    ctx;
   const atTop = queueAhead === 0;
-  const med = median > 0 ? median : null;
+  const journey = journeyDays > 0 ? journeyDays : null;
+  const cohortMed = median > 0 ? median : null;
 
   return {
     daysSinceAor: days,
     typicalWait: {
-      value: med != null ? `${med} days` : "—",
+      value: journey != null ? `${journey} days` : "—",
       note:
-        med != null
-          ? "v2.0 recency-weighted median (survival bias corrected)"
-          : "Cohort median appears once enough eCOPR timelines exist in your group",
+        journey != null
+          ? journeyFromSeededPace
+            ? "Typical AOR → eCOPR from seeded milestone gaps (matches your timeline)"
+            : "v2.0 recency-weighted median (survival bias corrected)"
+          : "Run cohort sync after seeding to unlock timeline and journey estimates",
     },
     queuePosition: {
       value: atTop ? "Top of the list" : `${queueAhead} ahead`,
@@ -86,8 +95,12 @@ export function heroStatsVM(
     expectedApproval: {
       value: ppr?.windowLabel ?? "—",
       note: ppr?.limitedData
-        ? "Early estimate — limited data"
-        : "Not guaranteed — estimate only",
+        ? journeyFromSeededPace
+          ? "Early estimate — limited seeded data"
+          : "Early estimate — limited cohort data"
+        : journeyFromSeededPace
+          ? "Typical eCOPR month from seeded milestone gaps (matches your timeline)"
+          : "v2.0 cohort P25–P75 window — not guaranteed",
     },
   };
 }
@@ -95,7 +108,10 @@ export function heroStatsVM(
 /* ─── RINGS ─────────────────────────────────────────────────────────── */
 
 export function infoCardsVM(
-  ctx: Pick<DashboardContextValue, "pct" | "days" | "median" | "cohort">,
+  ctx: Pick<
+    DashboardContextValue,
+    "pct" | "days" | "journeyDays" | "journeyFromSeededPace" | "cohort"
+  >,
 ): DnInfoCard[] {
   const cohortPct = Math.round((ctx.cohort.completion_rate ?? 0) * 100);
   const pw = ctx.cohort.pulseWeekly ?? [];
@@ -107,9 +123,11 @@ export function infoCardsVM(
       : Math.round((ctx.cohort.weekly_delta ?? 0) * 100);
 
   const journeyExplain =
-    ctx.median > 0
-      ? `You've passed ${ctx.pct}% of the typical timeline. Most people in your group finish their journey in about ${ctx.median} days — you're on Day ${ctx.days}.`
-      : `You're on Day ${ctx.days}. A cohort median will appear once enough people in your group have logged eCOPR dates.`;
+    ctx.journeyDays > 0
+      ? ctx.journeyFromSeededPace
+        ? `You've passed ${ctx.pct}% of the typical seeded timeline. Milestone gaps suggest a full journey of about ${ctx.journeyDays} days from AOR — you're on Day ${ctx.days}.`
+        : `You've passed ${ctx.pct}% of the typical timeline. Most people in your group finish in about ${ctx.journeyDays} days — you're on Day ${ctx.days}.`
+      : `You're on Day ${ctx.days}. Journey length appears once cohort or seeded pace data is available.`;
 
   const cohortExplain =
     cohortPct === 0
@@ -167,13 +185,17 @@ function addDaysToIso(iso: string, days: number): string {
 export function journeyProgressVM(
   ctx: Pick<
     DashboardContextValue,
-    "days" | "median" | "profile" | "queueAhead"
+    | "days"
+    | "journeyDays"
+    | "journeyFromSeededPace"
+    | "profile"
+    | "queueAhead"
   >,
 ): DnJourneyProgress {
-  const { days, median, profile, queueAhead } = ctx;
+  const { days, journeyDays, journeyFromSeededPace, profile, queueAhead } = ctx;
   const aorIso = profile.aorDate?.trim();
   const aorLabel = fmtDate(aorIso) || "AOR pending";
-  const med = median > 0 ? median : null;
+  const med = journeyDays > 0 ? journeyDays : null;
   const remaining = med != null ? Math.max(0, med - days) : null;
   const progressPct =
     med != null
@@ -184,26 +206,25 @@ export function journeyProgressVM(
       ? (Math.round((days / med) * 1000) / 10).toFixed(1)
       : "—";
 
-  const medianFinishLabel =
-    med != null && aorIso
-      ? fmtDate(addDaysToIso(aorIso, med))
-      : null;
+  const finishLabel =
+    med != null && aorIso ? fmtDate(addDaysToIso(aorIso, med)) : null;
+  const finishPrefix = journeyFromSeededPace ? "Typical finish" : "Median finish";
 
   const startLabel = aorIso
     ? `Start — ${aorLabel} (Day 0)`
     : `Start — ${aorLabel}`;
 
   const endLabel =
-    med != null && medianFinishLabel
-      ? `Median finish — ${medianFinishLabel} (Day ${med})`
+    med != null && finishLabel
+      ? `${finishPrefix} — ${finishLabel} (Day ${med})`
       : med != null
-        ? `Median finish — Day ${med}`
-        : "Median finish — pending cohort data";
+        ? `${finishPrefix} — Day ${med}`
+        : "Typical finish — pending data";
 
   const centerLabel =
     med != null
       ? `You are here — Day ${days} of ${med} — ${pctDisplay}% through your journey`
-      : `You are here — Day ${days} — cohort median pending`;
+      : `You are here — Day ${days} — journey length pending`;
 
   const atTop = queueAhead === 0;
 
@@ -223,13 +244,13 @@ export function journeyProgressVM(
       {
         label: "Remaining",
         value: remaining != null ? `~${remaining} days` : "—",
-        sub: "to median",
+        sub: journeyFromSeededPace ? "to typical eCOPR" : "to median",
         tone: "amber",
       },
       {
         label: "Journey",
         value: med != null ? `${pctDisplay}%` : "—",
-        sub: med != null ? `${days} ÷ ${med} × 100` : "median pending",
+        sub: med != null ? `${days} ÷ ${med} × 100` : "pending",
         tone: "default",
       },
       {
@@ -326,7 +347,12 @@ export function histSubtitleVM(
 export function dotMapVM(
   ctx: Pick<
     DashboardContextValue,
-    "cohortTotal" | "days" | "median" | "cohortDataSparse" | "cohort"
+    | "cohortTotal"
+    | "days"
+    | "journeyDays"
+    | "median"
+    | "cohortDataSparse"
+    | "cohort"
   >,
 ): DnDotMap {
   // We render at most 500 dots to keep the SVG cheap. When the cohort is
@@ -337,7 +363,10 @@ export function dotMapVM(
   const midUpTo = Math.min(total, pprUpTo + Math.round(total * 0.3));
   const youIndex = Math.min(
     total - 1,
-    Math.max(0, Math.round((ctx.days / Math.max(ctx.median, 1)) * total)),
+    Math.max(
+      0,
+      Math.round((ctx.days / Math.max(ctx.journeyDays || ctx.median, 1)) * total),
+    ),
   );
   return { total, pprUpTo, midUpTo, youIndex };
 }

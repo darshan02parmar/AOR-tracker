@@ -38,6 +38,8 @@ export function DashboardTimelineTab() {
     savedFlash,
     days,
     median,
+    journeyDays,
+    journeyFromSeededPace,
     ppr,
     pct,
     ringOffset,
@@ -58,12 +60,19 @@ export function DashboardTimelineTab() {
           <div className="ssub">{fmtDate(profile.aorDate) || "—"}</div>
         </div>
         <div className="sc">
-          <div className="slbl">Median PPR (cohort)</div>
-          <div className="sval">{median > 0 ? median : "—"}</div>
-          <div className="ssub">days · {profile.stream}</div>
+          <div className="slbl">
+            {journeyFromSeededPace ? "Typical journey" : "Median PPR (cohort)"}
+          </div>
+          <div className="sval">{journeyDays > 0 ? journeyDays : "—"}</div>
+          <div className="ssub">
+            days · {profile.stream}
+            {journeyFromSeededPace && median > 0
+              ? ` · cohort median ${median}d`
+              : ""}
+          </div>
         </div>
         <div className="sc">
-          <div className="slbl">Est. PPR window</div>
+          <div className="slbl">Est. eCOPR</div>
           <div className="sval mt-1 text-base leading-tight">
             {ppr?.windowLabel ?? "—"}
           </div>
@@ -95,7 +104,8 @@ export function DashboardTimelineTab() {
           days={days}
           pct={pct}
           ringOffset={ringOffset}
-          median={median}
+          journeyDays={journeyDays}
+          journeyFromSeededPace={journeyFromSeededPace}
           ppr={ppr}
           cohort={cohortDisplay}
           similarCohorts={similarCohortsDisplay}

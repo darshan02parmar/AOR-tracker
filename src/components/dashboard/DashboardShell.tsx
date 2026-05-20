@@ -52,8 +52,10 @@ import { cohortKeyFromProfile, humanizeCohortKey } from "@/lib/cohort";
 import { computeProfileCompleteness } from "@/lib/profile-completeness";
 import {
   daysSinceAor,
-  estimatePprWindow,
+  journeyTargetDays,
+  journeyUsesSeededPace,
   pctThroughMedian,
+  resolveApprovalEstimate,
 } from "@/lib/ppr-estimate";
 import { clearSessionEmail, readSessionEmail } from "@/lib/session-client";
 import type {
@@ -198,8 +200,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   const ppr = useMemo(() => {
     if (!profile || !cohortDisplay || !profile.aorDate) return null;
-    return estimatePprWindow(profile.aorDate, cohortDisplay);
-  }, [profile, cohortDisplay]);
+    return resolveApprovalEstimate(
+      profile.aorDate,
+      cohortDisplay,
+      milestonePace,
+      profile,
+    );
+  }, [profile, cohortDisplay, milestonePace]);
 
   const completeness = useMemo(
     () => (profile ? computeProfileCompleteness(profile) : null),
@@ -249,7 +256,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   const days = profile?.aorDate ? daysSinceAor(profile.aorDate) : 0;
   const median = cohortDisplay?.median_days_to_ppr ?? 0;
-  const pct = pctThroughMedian(days, median);
+  const journeyDays = journeyTargetDays(milestonePace, median);
+  const journeyFromSeededPace = journeyUsesSeededPace(milestonePace);
+  const pct = pctThroughMedian(days, journeyDays);
 
   useEffect(() => {
     const t = window.setTimeout(() => setRingPct(pct), 250);
@@ -367,6 +376,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     switchProfile,
     days,
     median,
+    journeyDays,
+    journeyFromSeededPace,
+    milestonePace,
     pct,
     ppr,
     completeness,
@@ -549,7 +561,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               days={days}
               pct={pct}
               ringOffset={ringOffset}
-              median={median}
+              journeyDays={journeyDays}
+              journeyFromSeededPace={journeyFromSeededPace}
               ppr={ppr}
               cohort={cohortDisplay}
               similarCohorts={similarCohortsDisplay}

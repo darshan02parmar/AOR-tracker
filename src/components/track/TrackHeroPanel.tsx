@@ -1,14 +1,19 @@
 import { FaArrowUp } from "react-icons/fa";
 import {
-  COHORT_PREVIEW,
+  cohortPreviewForEstimate,
   LEFT_PANEL_STATS,
   TRUST_ITEMS,
+  type StreamId,
 } from "./data";
 import { IconArrowLeft, TrustIcon } from "./track-icons";
 
 type Props = {
   /** Live counter label rendered in the eyebrow chip (e.g. "14,827 timelines live"). */
   liveCount: string;
+  /** Selected stream — used for histogram title when known. */
+  stream?: StreamId | null;
+  /** Typical AOR → eCOPR days (seeded pace or cohort median) for the red marker. */
+  estimatedDays?: number | null;
 };
 
 /**
@@ -20,7 +25,16 @@ type Props = {
  * component — `liveCount` is passed in as a prop and updated by the
  * parent client orchestrator.
  */
-export function TrackHeroPanel({ liveCount }: Props) {
+export function TrackHeroPanel({
+  liveCount,
+  stream,
+  estimatedDays = null,
+}: Props) {
+  const cohortBars = cohortPreviewForEstimate(estimatedDays ?? null);
+  const chartTitle = stream
+    ? `${stream} — Days to eCOPR distribution`
+    : "CEC — Days to eCOPR distribution";
+
   return (
     <div className="tk-left">
       <div className="tk-left-content">
@@ -56,9 +70,9 @@ export function TrackHeroPanel({ liveCount }: Props) {
         </div>
 
         <div className="tk-cp">
-          <div className="tk-cp-label">CEC — Days to PPR Distribution</div>
+          <div className="tk-cp-label">{chartTitle}</div>
           <div className="tk-cp-bars">
-            {COHORT_PREVIEW.map((b, i) => (
+            {cohortBars.map((b, i) => (
               <div
                 key={`${b.label}-${i}`}
                 className={`tk-cp-bar${b.state ? ` ${b.state}` : ""}`}
@@ -68,7 +82,7 @@ export function TrackHeroPanel({ liveCount }: Props) {
             ))}
           </div>
           <div className="tk-cp-labels">
-            {COHORT_PREVIEW.map((b, i) => (
+            {cohortBars.map((b, i) => (
               <div
                 key={`l-${b.label}-${i}`}
                 className={`tk-cp-lbl${b.state ? ` ${b.state}` : ""}`}

@@ -9,7 +9,7 @@
     "start": "NODE_ENV=production node server.mjs",
     "start:next": "next start",
     "lint": "eslint",
-    "test": "npx tsx --test src/lib/milestone-gap-estimates.test.ts"
+    "test": "npx tsx --test src/lib/milestone-gap-estimates.test.ts src/lib/ppr-estimate.test.ts"
   },
   "dependencies": {
     "mongodb": "^7.2.0",

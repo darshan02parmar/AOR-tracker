@@ -1,8 +1,17 @@
 "use client";
 
 import { useMemo } from "react";
-import type { CohortStats, MilestoneKey } from "@/lib/types";
-import { estimatePprWindow } from "@/lib/ppr-estimate";
+import type {
+  CohortStats,
+  GlobalMilestonePace,
+  MilestoneEntry,
+  MilestoneKey,
+} from "@/lib/types";
+import {
+  journeyTargetDays,
+  journeyUsesSeededPace,
+  resolveApprovalEstimate,
+} from "@/lib/ppr-estimate";
 import {
   TRACK_MILESTONES,
   type AppType,
@@ -38,9 +47,11 @@ type Props = {
   onBack: () => void;
   onSubmit: () => void;
 
-  /** Live cohort stats for the same PPR math as `/dashboard` (null while loading). */
+  /** Live cohort stats (null while loading). */
   cohortStats: CohortStats | null;
   cohortStatsLoading: boolean;
+  milestonePace: GlobalMilestonePace | null;
+  milestonePaceLoading: boolean;
 };
 
 const DATE_FMT = new Intl.DateTimeFormat("en-CA", {
@@ -52,6 +63,29 @@ const DATE_FMT = new Intl.DateTimeFormat("en-CA", {
 function daysBetween(start: string, end: Date): number {
   const s = new Date(`${start}T12:00:00`).getTime();
   return Math.floor((end.getTime() - s) / 86400000);
+}
+
+function draftProfileForEstimate(
+  aorDate: string,
+  checked: Record<PostAorKey, boolean>,
+  dates: Record<PostAorKey, string>,
+): { aorDate: string; milestones: Record<MilestoneKey, MilestoneEntry> } {
+  const entry = (key: PostAorKey): MilestoneEntry => ({
+    date: checked[key] && dates[key]?.trim() ? dates[key].trim() : null,
+    updatedAt: null,
+  });
+  return {
+    aorDate,
+    milestones: {
+      aor: { date: aorDate || null, updatedAt: null },
+      biometrics: entry("biometrics"),
+      background: entry("background"),
+      medical: entry("medical"),
+      p1: entry("p1"),
+      p2: entry("p2"),
+      ecopr: entry("ecopr"),
+    },
+  };
 }
 
 /**
@@ -78,28 +112,39 @@ export function TrackStep3Review(props: Props) {
     onSubmit,
     cohortStats,
     cohortStatsLoading,
+    milestonePace,
+    milestonePaceLoading,
   } = props;
 
   const daysElapsed = aorDate ? daysBetween(aorDate, new Date()) : 0;
-
-  const medianDays =
+  const cohortMedian =
     cohortStats && cohortStats.median_days_to_ppr > 0
       ? cohortStats.median_days_to_ppr
-      : null;
+      : 0;
+  const journeyFromSeeded = journeyUsesSeededPace(milestonePace);
+  const typicalDays = journeyTargetDays(milestonePace, cohortMedian);
+  const typicalDaysDisplay =
+    typicalDays > 0 ? `${typicalDays}d` : null;
 
-  const dashboardPprLabel = useMemo(() => {
-    if (
-      !aorDate ||
-      !cohortStats ||
-      !cohortStats.median_days_to_ppr ||
-      cohortStats.median_days_to_ppr <= 0
-    ) {
-      return null;
-    }
-    return estimatePprWindow(aorDate, cohortStats).windowLabel;
-  }, [aorDate, cohortStats]);
+  const draftProfile = useMemo(
+    () => draftProfileForEstimate(aorDate, checked, dates),
+    [aorDate, checked, dates],
+  );
 
-  const pprWindowDisplay = cohortStatsLoading ? "…" : dashboardPprLabel ?? "—";
+  const approvalLabel = useMemo(() => {
+    if (!aorDate || !cohortStats) return null;
+    return resolveApprovalEstimate(
+      aorDate,
+      cohortStats,
+      milestonePace,
+      draftProfile,
+    ).windowLabel;
+  }, [aorDate, cohortStats, milestonePace, draftProfile]);
+
+  const approvalDisplay =
+    cohortStatsLoading || milestonePaceLoading
+      ? "…"
+      : approvalLabel ?? "—";
 
   const aorLabel = aorDate
     ? DATE_FMT.format(new Date(`${aorDate}T12:00:00`))
@@ -137,13 +182,15 @@ export function TrackStep3Review(props: Props) {
           </div>
           <div className="tk-summary-stat">
             <div className="tk-summary-stat-val green">
-              {medianDays != null ? `${medianDays}d` : "—"}
+              {typicalDaysDisplay ?? "—"}
             </div>
-            <div className="tk-summary-stat-label">Cohort median</div>
+            <div className="tk-summary-stat-label">
+              {journeyFromSeeded ? "Typical journey" : "Cohort median"}
+            </div>
           </div>
           <div className="tk-summary-stat">
-            <div className="tk-summary-stat-val">{pprWindowDisplay}</div>
-            <div className="tk-summary-stat-label">Est. PPR window</div>
+            <div className="tk-summary-stat-val">{approvalDisplay}</div>
+            <div className="tk-summary-stat-label">Est. eCOPR</div>
           </div>
         </div>
       </div>

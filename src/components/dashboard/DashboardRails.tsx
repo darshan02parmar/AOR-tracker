@@ -7,7 +7,8 @@ import { fmtDate } from "@/lib/format";
 export function DashboardRails({
   days,
   pct,
-  median,
+  journeyDays,
+  journeyFromSeededPace,
   ppr,
   cohort,
   similarCohorts,
@@ -17,7 +18,8 @@ export function DashboardRails({
   days: number;
   pct: number;
   ringOffset: number;
-  median: number;
+  journeyDays: number;
+  journeyFromSeededPace: boolean;
   ppr: PprEstimate | null;
   cohort: CohortStats;
   similarCohorts: CohortSummaryRow[];
@@ -42,7 +44,11 @@ export function DashboardRails({
         <div className="rrfoot">
           <div className="rrpct">{pct}% through</div>
           <div className="rrsub">
-            {median > 0 ? `Based on ${median}d median` : "Cohort median not available"}
+            {journeyDays > 0
+              ? journeyFromSeededPace
+                ? `Based on ${journeyDays}d seeded timeline`
+                : `Based on ${journeyDays}d cohort median`
+              : "Journey length not available"}
           </div>
         </div>
         <div className="ebox">

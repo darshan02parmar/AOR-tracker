@@ -8,7 +8,12 @@ import type {
 import type { ProfileCompleteness } from "@/lib/profile-completeness";
 import type { PprEstimate } from "@/lib/ppr-estimate";
 import type { CohortInsight, MilestoneDefRow } from "@/lib/cohort-dynamic";
-import type { CohortStats, MilestoneKey, UserProfile } from "@/lib/types";
+import type {
+  CohortStats,
+  GlobalMilestonePace,
+  MilestoneKey,
+  UserProfile,
+} from "@/lib/types";
 
 export type DashboardContextValue = {
   email: string;
@@ -32,8 +37,13 @@ export type DashboardContextValue = {
   savedFlash: MilestoneKey | null;
   switchProfile: () => void;
   days: number;
+  /** v2.0 cohort median (PPR window, histogram, stream compare). */
   median: number;
+  /** Timeline length for journey % / progress bar — seeded pace total when available. */
+  journeyDays: number;
+  journeyFromSeededPace: boolean;
   pct: number;
+  milestonePace: GlobalMilestonePace | null;
   ppr: PprEstimate | null;
   completeness: ProfileCompleteness | null;
   similarCohortsDisplay: CohortSummaryRow[];

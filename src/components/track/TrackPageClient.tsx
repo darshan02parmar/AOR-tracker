@@ -7,9 +7,13 @@ import {
   getProfileAction,
   saveProfileAction,
 } from "@/app/actions/profile";
-import { getCohortStatsForProfileAction } from "@/app/actions/cohort";
+import {
+  getCohortStatsForProfileAction,
+  getGlobalMilestonePaceAction,
+} from "@/app/actions/cohort";
 import { emptyMilestones, isValidEmail } from "@/lib/profile";
-import type { CohortStats } from "@/lib/types";
+import { journeyTargetDays } from "@/lib/ppr-estimate";
+import type { CohortStats, GlobalMilestonePace } from "@/lib/types";
 import { writeSessionEmail } from "@/lib/session-client";
 import type { MilestoneEntry, MilestoneKey, UserProfile } from "@/lib/types";
 import { useToast } from "@/components/ToastContext";
@@ -109,9 +113,12 @@ export function TrackPageClient() {
   const [consentError, setConsentError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  /** Step 3: same cohort document as dashboard for PPR window copy. */
+  /** Step 3: cohort + seeded pace (same math as `/dashboard`). */
   const [reviewCohort, setReviewCohort] = useState<CohortStats | null>(null);
   const [reviewCohortLoading, setReviewCohortLoading] = useState(false);
+  const [milestonePace, setMilestonePace] =
+    useState<GlobalMilestonePace | null>(null);
+  const [milestonePaceLoading, setMilestonePaceLoading] = useState(true);
 
   // ── Live counter (cosmetic, matches sample) ──────────────────────────────
   const [liveCount, setLiveCount] = useState(14_827);
@@ -129,9 +136,31 @@ export function TrackPageClient() {
   );
 
   useEffect(() => {
-    if (step !== 3 || phase !== "onboarding") {
-      return;
-    }
+    let cancelled = false;
+    void getGlobalMilestonePaceAction()
+      .then((p) => {
+        if (!cancelled) setMilestonePace(p);
+      })
+      .catch(() => {
+        if (!cancelled) setMilestonePace(null);
+      })
+      .finally(() => {
+        if (!cancelled) setMilestonePaceLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const estimatedDays = useMemo(() => {
+    if (!aorDate) return null;
+    const med = reviewCohort?.median_days_to_ppr ?? 0;
+    const days = journeyTargetDays(milestonePace, med);
+    return days > 0 ? days : null;
+  }, [aorDate, reviewCohort, milestonePace]);
+
+  useEffect(() => {
+    if (phase !== "onboarding") return;
     if (!aorDate || !stream || !appType) return;
 
     const prov = stream === "PNP" ? province || "Other" : province || "Ontario";
@@ -164,7 +193,7 @@ export function TrackPageClient() {
         setReviewCohortLoading(false);
       }, 0);
     };
-  }, [step, phase, aorDate, stream, appType, province]);
+  }, [phase, aorDate, stream, appType, province]);
 
   // ── Step transitions ─────────────────────────────────────────────────────
   const goToStep = (n: 1 | 2 | 3) => {
@@ -276,7 +305,11 @@ export function TrackPageClient() {
     <div className="mkt-track-page flex min-h-0 flex-1 flex-col">
       <TrackNav />
       <div className="tk-page">
-        <TrackHeroPanel liveCount={liveCountLabel} />
+        <TrackHeroPanel
+          liveCount={liveCountLabel}
+          stream={stream}
+          estimatedDays={estimatedDays}
+        />
 
         <div className="tk-right">
           {phase === "gate" ? (
@@ -356,6 +389,8 @@ export function TrackPageClient() {
                   onSubmit={() => void onSubmit()}
                   cohortStats={reviewCohort}
                   cohortStatsLoading={reviewCohortLoading}
+                  milestonePace={milestonePace}
+                  milestonePaceLoading={milestonePaceLoading}
                 />
               ) : null}
             </>

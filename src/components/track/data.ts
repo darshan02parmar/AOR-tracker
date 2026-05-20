@@ -167,11 +167,42 @@ export const COHORT_PREVIEW: CohortBar[] = [
   { height: 90, label: "165d", state: "active" },
   { height: 100, label: "180d", state: "active" },
   { height: 82, label: "195d", state: "active" },
-  { height: 60, label: "210d", state: "you" },
+  { height: 60, label: "210d" },
   { height: 40, label: "225d" },
   { height: 22, label: "240d" },
   { height: 10, label: "255d" },
 ];
+
+/** Highlight the bucket nearest to the user's typical journey / eCOPR estimate. */
+export function cohortPreviewForEstimate(days: number | null): CohortBar[] {
+  if (days == null || days <= 0) {
+    return COHORT_PREVIEW.map((b) => ({
+      ...b,
+      state: b.label === "210d" ? ("you" as const) : b.state,
+    }));
+  }
+  const bucketDays = COHORT_PREVIEW.map((b) =>
+    Number.parseInt(b.label.replace(/\D/g, ""), 10),
+  );
+  let youIdx = 0;
+  let best = Number.POSITIVE_INFINITY;
+  for (let i = 0; i < bucketDays.length; i++) {
+    const diff = Math.abs(bucketDays[i]! - days);
+    if (diff < best) {
+      best = diff;
+      youIdx = i;
+    }
+  }
+  return COHORT_PREVIEW.map((b, i) => ({
+    ...b,
+    state:
+      i === youIdx
+        ? ("you" as const)
+        : b.state === "active"
+          ? ("active" as const)
+          : undefined,
+  }));
+}
 
 // ─── Left-panel "preview stats" cards (static; future: cohort/PPR feed) ─────
 
