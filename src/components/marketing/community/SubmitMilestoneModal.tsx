@@ -350,7 +350,7 @@ export function SubmitMilestoneModal({
               onChange={(e) => setNote(e.target.value)}
             />
             <div className="m-note">
-              Your post will go through Gemini moderation before appearing in
+              Your post will go through community moderation before appearing in
               the community feed. Usually takes under 30 seconds. Visible only
               to you until approved.
             </div>

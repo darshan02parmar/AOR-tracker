@@ -74,8 +74,8 @@ export type PostBase = {
   milestoneChip: { label: string; color: MilestoneChipColor };
   stream?: string;
   timestamp: string;
-  /** Show "Gemini Verified" mod-soft badge in the meta row. */
-  geminiVerified?: boolean;
+  /** Show "Verified" mod-soft badge in the meta row. */
+  communityVerified?: boolean;
   cohort: CohortItem[];
   /** Optional mini progress timeline (shown on rich PPR cards). */
   timeline?: TimelineDot[];
@@ -84,7 +84,7 @@ export type PostBase = {
   helpfulCount: number;
   helpfulActive?: boolean;
   replyCount: number;
-  /** Right-side info string like "Gemini-verified · Feb 2026 cohort". */
+  /** Right-side info string like "Community-verified · Feb 2026 cohort". */
   dataSource?: string;
   /** Existing approved replies (shown if non-empty). */
   replies?: Reply[];

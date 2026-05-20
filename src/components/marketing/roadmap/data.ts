@@ -296,7 +296,7 @@ const seedRoadmap: RoadmapData = {
       categories: ["data"],
       votes: 7,
       progress: 40,
-      note: "Gemini audit running on flagged submissions",
+      note: "Automated audit running on flagged submissions",
       assignee: { initials: "gn", tone: "green" },
     },
     {
@@ -326,9 +326,9 @@ const seedRoadmap: RoadmapData = {
     // ── DONE ─────────────────────────────────────────────────────────────
     {
       issue: 31,
-      title: "Gemini moderation pipeline v1",
+      title: "Community moderation pipeline v1",
       description:
-        "Full 7-category Gemini 2.5 Flash/Pro pipeline, BullMQ queue, 5-tier action-service verdict execution.",
+        "Full 7-category automated moderation pipeline, BullMQ queue, 5-tier action-service verdict execution.",
       status: "done",
       priority: "low",
       categories: ["feat", "sec"],
@@ -354,7 +354,7 @@ const seedRoadmap: RoadmapData = {
       issue: 22,
       title: "Community feed with SSE live updates",
       description:
-        "Paginated feed of Gemini-approved posts with SSE real-time new post bar. Filter chips persisted to localStorage.",
+        "Paginated feed of moderated posts with SSE real-time new post bar. Filter chips persisted to localStorage.",
       status: "done",
       priority: "low",
       categories: ["feat", "perf"],
@@ -435,11 +435,11 @@ const seedRoadmap: RoadmapData = {
       date: "May 1, 2026",
       status: "Reached",
       state: "reached",
-      title: "Gemini Moderation",
+      title: "Community moderation",
       description:
         "Full pipeline, 7 categories, BullMQ queue, action-service verdict execution, admin review queue with appeal flow.",
       chips: [
-        "Gemini Pipeline",
+        "Moderation pipeline",
         "7 Categories",
         "BullMQ",
         "Admin Queue",

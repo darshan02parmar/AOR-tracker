@@ -215,7 +215,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
     state: "done",
     name: "Biometrics Confirmed",
     desc: "Your biometrics verified in the IRCC system.",
-    badge: { kind: "pending", label: "Pending Gemini review" },
+    badge: { kind: "pending", label: "Pending review" },
     date: { date: "Mar 22, 2026", day: "Day 30" },
     edit: {
       label: "Edit",
@@ -293,7 +293,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
 ];
 
 export const DN_TIMELINE_NOTE =
-  "Estimates from 1,240 Gemini-verified submissions · CEC · Feb 2026 · Updated May 3, 2026";
+  "Estimates from 1,240 community-verified submissions · CEC · Feb 2026 · Updated May 3, 2026";
 
 /* ───────────────────────────── COHORT BARS ───────────────────────────── */
 

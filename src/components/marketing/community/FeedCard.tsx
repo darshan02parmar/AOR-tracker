@@ -43,14 +43,14 @@ function MetaRow({
   milestoneChip,
   stream,
   timestamp,
-  geminiVerified,
+  communityVerified,
   removedBadge,
 }: {
   displayId: string;
   milestoneChip: { label: string; color: MilestoneChipColor };
   stream?: string;
   timestamp: string;
-  geminiVerified?: boolean;
+  communityVerified?: boolean;
   removedBadge?: boolean;
 }) {
   return (
@@ -62,8 +62,8 @@ function MetaRow({
           {milestoneChip.label}
         </div>
         {stream ? <div className="fc-stream">{stream}</div> : null}
-        {geminiVerified ? (
-          <div className="fc-mod-badge mod-soft">Gemini Verified</div>
+        {communityVerified ? (
+          <div className="fc-mod-badge mod-soft">Verified</div>
         ) : null}
         {removedBadge ? (
           <div className="fc-mod-badge mod-removed">Removed</div>
@@ -225,7 +225,7 @@ export function FeedCard({ post, newEntry }: Props) {
           milestoneChip={post.milestoneChip}
           stream={post.stream}
           timestamp={post.timestamp}
-          geminiVerified={post.geminiVerified}
+          communityVerified={post.communityVerified}
         />
         <CohortRow items={post.cohort} />
         {post.timeline ? <MiniTimeline dots={post.timeline} /> : null}

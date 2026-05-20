@@ -127,7 +127,7 @@ export function AppealModal({
               onChange={(e) => setReason(e.target.value)}
             />
             <div className="m-note">
-              Appeals are reviewed by a human moderator (not Gemini) within 48
+              Appeals are reviewed by a human moderator within 48
               hours. You have {context?.daysRemaining ?? 6} days remaining to
               appeal.
             </div>

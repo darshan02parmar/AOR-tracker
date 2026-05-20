@@ -237,7 +237,7 @@ export const TRUST_ITEMS: TrustItem[] = [
   },
   {
     iconKey: "verified",
-    text: "All community submissions are Gemini-verified before affecting your estimates",
+    text: "All community submissions are reviewed before affecting your estimates",
   },
   {
     iconKey: "trash",

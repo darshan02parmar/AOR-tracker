@@ -47,7 +47,7 @@ export function TrackHeroPanel({
           Track your <em>exact position</em> in the queue.
         </h1>
         <p className="tk-left-sub">
-          Real data from applicants like you. Gemini-verified submissions only.
+          Real data from applicants like you. Community-verified submissions only.
           No guesswork — your cohort, your stream, your actual estimate.
         </p>
 

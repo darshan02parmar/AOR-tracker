@@ -221,7 +221,7 @@ export function communityPostToApproved(
     milestoneChip: { label: milestoneChipLabel(src.ms, src.msl), color: chipColor },
     stream: streamFromMeta(src.meta),
     timestamp: timeAgo(src.createdAt),
-    geminiVerified: false,
+    communityVerified: false,
     cohort: cohortRows,
     timeline: timelineFromPostMs(src.ms),
     bodyHtml: src.bodyIsHtml ? src.body : escapeAndWrap(src.body),

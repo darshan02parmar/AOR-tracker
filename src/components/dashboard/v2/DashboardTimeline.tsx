@@ -73,7 +73,7 @@ function TimelineRow({
         await onSaveDate(row.key, value);
       } else {
         await new Promise((r) => window.setTimeout(r, 1200));
-        showToast("Milestone updated · Submitted for Gemini review");
+        showToast("Milestone updated · Submitted for community review");
       }
       toggleEdit(row.key);
     } finally {
@@ -192,7 +192,7 @@ export function DashboardTimeline({
         <div>
           <div className="sec-title">My Milestone Timeline</div>
           <div className="sec-sub">
-            Hover any row to edit your date — updates are Gemini-verified before
+            Hover any row to edit your date — updates are community-verified before
             contributing to community stats
           </div>
         </div>

@@ -132,9 +132,9 @@ const seedChangelog: ChangelogData = {
       id: "v041",
       version: "v0.4.1",
       date: "May 3, 2026",
-      title: "Gemini Moderation Hotfixes",
+      title: "Moderation hotfixes",
       description:
-        "Patch reducing D2 false-positive rate and fixing JSON parse failures on malformed Gemini responses.",
+        "Patch reducing D2 false-positive rate and fixing JSON parse failures on malformed moderation API responses.",
       releaseUrl: `${REPO}/releases/tag/v0.4.1`,
       isLatest: true,
       sections: [
@@ -147,7 +147,7 @@ const seedChangelog: ChangelogData = {
               issue: { number: 68, url: `${REPO}/issues/68` },
             },
             {
-              html: "JSON repair prompt retry now fires correctly on malformed Gemini response — previously returned unhandled promise rejection causing submissions to silently drop",
+              html: "JSON repair prompt retry now fires correctly on malformed moderation API response — previously returned unhandled promise rejection causing submissions to silently drop",
               dot: "r",
               issue: { number: 65, url: `${REPO}/issues/65` },
             },
@@ -179,7 +179,7 @@ const seedChangelog: ChangelogData = {
       id: "v040",
       version: "v0.4.0",
       date: "May 1, 2026",
-      title: "Gemini Moderation Pipeline",
+      title: "Community moderation pipeline",
       description:
         "Full 7-category AI moderation, BullMQ queue, admin review UI with keyboard shortcuts, appeal flow, and IP cluster detection.",
       releaseUrl: `${REPO}/releases/tag/v0.4.0`,
@@ -188,7 +188,7 @@ const seedChangelog: ChangelogData = {
           type: "added",
           items: [
             {
-              html: "Gemini 2.5 Flash moderation pipeline — all 7 detection categories (D1 date fraud, D2 solicitation, D3 multi-account, D4 off-topic, D5 misinformation, D6 harassment, D7 PII) evaluated per submission. Flash → Pro escalation at confidence 0.55–0.75 or &gt;2 prior violations",
+              html: "Automated moderation pipeline — all 7 detection categories (D1 date fraud, D2 solicitation, D3 multi-account, D4 off-topic, D5 misinformation, D6 harassment, D7 PII) evaluated per submission. Light → full review escalation at confidence 0.55–0.75 or &gt;2 prior violations",
               dot: "g",
               issue: { number: 31, url: `${REPO}/issues/31` },
             },
@@ -201,11 +201,11 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Admin review queue at <code>/admin/queue</code> — split-panel UI with Gemini evidence spans highlighted amber, cohort mini-chart, account history, keyboard shortcuts A/R/E/P/N",
+              html: "Admin review queue at <code>/admin/queue</code> — split-panel UI with flagged evidence spans highlighted amber, cohort mini-chart, account history, keyboard shortcuts A/R/E/P/N",
               dot: "g",
             },
             {
-              html: "Appeal flow — 7-day window for REMOVE, 14-day for BAN. Human-only review (no Gemini reinvocation). Upheld appeals restore post to feed",
+              html: "Appeal flow — 7-day window for REMOVE, 14-day for BAN. Human-only review (no automated re-review). Upheld appeals restore post to feed",
               dot: "g",
             },
             {
@@ -217,7 +217,7 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Gemini-unavailable fallback: all submissions shadow-flagged with <code>gemini_unavailable</code> status and routed to human review — no data loss",
+              html: "Moderation service unavailable fallback: all submissions shadow-flagged with <code>moderation_unavailable</code> status and routed to human review — no data loss",
               dot: "g",
             },
           ],
@@ -230,11 +230,11 @@ const seedChangelog: ChangelogData = {
               dot: "a",
             },
             {
-              html: "Gemini system prompt moved to environment secrets. Post body HTML-stripped and truncated to 2,000 chars before prompt to mitigate injection attacks",
+              html: "Moderation prompts moved to environment secrets. Post body HTML-stripped and truncated to 2,000 chars before review to mitigate injection attacks",
               dot: "a",
             },
             {
-              html: "GeminiVerdict JSON schema validation before action-service logic runs — unexpected <code>action</code> field values rejected and shadow-flagged",
+              html: "Moderation verdict JSON schema validation before action-service logic runs — unexpected <code>action</code> field values rejected and shadow-flagged",
               dot: "a",
             },
           ],
@@ -294,7 +294,7 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Helpful / Reply / Save engagement on feed cards. Replies routed through same Gemini pipeline as primary submissions",
+              html: "Helpful / Reply / Save engagement on feed cards. Replies routed through same moderation pipeline as primary submissions",
               dot: "g",
             },
             {
@@ -312,7 +312,7 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Days-to-PPR histogram in 30-day buckets. User estimated window highlighted red. Gemini-verified submissions only",
+              html: "Days-to-PPR histogram in 30-day buckets. User estimated window highlighted red. Community-verified submissions only",
               dot: "g",
             },
             {
@@ -320,7 +320,7 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Community Insights panel — alert cards with 72-hour auto-expiry, Gemini-generated ≤140 char summaries, moderated before display",
+              html: "Community Insights panel — alert cards with 72-hour auto-expiry, auto-generated ≤140 char summaries, moderated before display",
               dot: "g",
             },
           ],

@@ -56,7 +56,7 @@ export function DashboardStreamCompare({
       ))}
       <div className="data-note" style={{ marginTop: 8 }}>
         <IconInfo aria-hidden />
-        Gemini-verified data only · All = median days to PPR
+        Community-verified data only · All = median days to PPR
       </div>
     </div>
   );
