@@ -3,7 +3,9 @@ import { MILESTONE_DEFS, WES_ROW_TEMPLATE } from "@/lib/constants";
 import { fmtDate } from "@/lib/format";
 import { humanizeCohortKey } from "@/lib/cohort";
 import {
+  formatEstDateFromAor,
   milestoneEstimatesFromPace,
+  milestoneIsLogged,
   MIN_SEGMENT_N,
 } from "@/lib/milestone-gap-estimates";
 import type { CohortStats, GlobalMilestonePace, UserProfile } from "@/lib/types";
@@ -49,8 +51,6 @@ export function mergeMilestoneDefsForCohort(
     }));
   }
 
-  let blocked = false;
-
   return MILESTONE_DEFS.map((def) => {
     if (def.key === "aor") {
       return {
@@ -59,26 +59,38 @@ export function mergeMilestoneDefsForCohort(
         desc: def.desc,
       };
     }
-    if (blocked) {
+
+    if (profile && milestoneIsLogged(profile, def.key)) {
+      const logged = profile.milestones[def.key]?.date?.trim() || "";
       return {
         ...def,
-        est: "—",
-        desc: PACE_UNAVAILABLE_DESC,
+        est: fmtDate(logged) || "—",
+        desc: def.desc,
       };
     }
+
     const row = estimates[def.key];
-    if (!row?.available) {
-      blocked = true;
+    if (row?.available) {
       return {
         ...def,
-        est: "—",
-        desc: row?.desc ?? PACE_UNAVAILABLE_DESC,
+        est: row.estLabel,
+        desc: row.desc,
       };
     }
+
+    const cum = pace!.cumulative_avg_days[def.key];
+    if (cum != null && cum > 0) {
+      return {
+        ...def,
+        est: `~${formatEstDateFromAor(aorDate, cum)}`,
+        desc: `Typical ~${cum}d after AOR (avg gaps from ${pace!.seeded_profiles ?? 0} seeded profiles).`,
+      };
+    }
+
     return {
       ...def,
-      est: row.estLabel,
-      desc: row.desc,
+      est: "—",
+      desc: row?.desc ?? PACE_UNAVAILABLE_DESC,
     };
   });
 }
