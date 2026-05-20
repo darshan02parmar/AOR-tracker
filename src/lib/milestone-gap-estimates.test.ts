@@ -106,7 +106,7 @@ describe("computeGlobalSeededMilestonePace", () => {
 });
 
 describe("estimatedIsoForMilestone", () => {
-  it("projects forward from last completed milestone", () => {
+  it("uses cumulative days from AOR even when later milestones are logged", () => {
     const pace = computeGlobalSeededMilestonePace([
       profile({
         biometrics: 10,
@@ -163,22 +163,14 @@ describe("estimatedIsoForMilestone", () => {
       },
     };
 
-    const p2 = estimatedIsoForMilestone(
-      "p2",
-      "2026-03-20",
-      pace,
-      partial,
-    );
-    const ecopr = estimatedIsoForMilestone(
-      "ecopr",
-      "2026-03-20",
-      pace,
-      partial,
-    );
+    const aor = "2026-03-20";
+    const p2 = estimatedIsoForMilestone("p2", aor, pace, partial);
+    const ecopr = estimatedIsoForMilestone("ecopr", aor, pace, partial);
+    assert.equal(p2?.daysAfterAor, pace.cumulative_avg_days.p2);
+    assert.equal(ecopr?.daysAfterAor, pace.cumulative_avg_days.ecopr);
     assert.ok(p2?.iso);
     assert.ok(ecopr?.iso);
     assert.ok(p2.iso < ecopr.iso);
-    assert.equal(p2.source, "pace_forward");
   });
 });
 

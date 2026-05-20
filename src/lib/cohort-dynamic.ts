@@ -24,8 +24,7 @@ const PACE_UNAVAILABLE_DESC = `Milestone estimates need seeded cohort data (run 
 
 /**
  * Merge static milestone labels with est. dates from global seeded gap averages.
- * When `profile` is passed, pending steps project forward from the last logged milestone
- * (same idea as aortrack-backend dashboard timeline).
+ * Pending steps always use AOR + cumulative seeded averages; logged dates are shown as-is.
  */
 export function mergeMilestoneDefsForCohort(
   aorDate: string,

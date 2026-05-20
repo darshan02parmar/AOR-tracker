@@ -117,80 +117,25 @@ export function formatEstDateFromAor(aorDate: string, daysAfter: number): string
   );
 }
 
-function lastCompletedMilestone(
-  profile: Pick<UserProfile, "milestones" | "aorDate">,
-): { key: MilestoneKey | "aor"; date: string; index: number } {
-  const aor = profile.aorDate?.trim() || milestoneDate(profile.milestones, "aor");
-  let bestIdx = 0;
-  let bestDate = aor;
-  let bestKey: MilestoneKey | "aor" = "aor";
-
-  for (let i = 0; i < TIMELINE_ORDER.length; i++) {
-    const key = TIMELINE_ORDER[i]!;
-    const d =
-      key === "aor"
-        ? aor
-        : profile.milestones[key]?.date?.trim() || "";
-    if (d) {
-      bestIdx = i;
-      bestDate = d;
-      bestKey = key;
-    }
-  }
-
-  return { key: bestKey, date: bestDate, index: bestIdx };
-}
-
 /**
- * Estimate ISO date for one milestone: forward from last completed step using segment avgs,
- * or cumulative from AOR when only AOR is logged (aortrack-backend dashboard behaviour).
+ * Estimate ISO date for one pending milestone: AOR + cumulative seeded average only.
+ * Logged milestone dates are not used in the calculation (display-only on the timeline).
  */
 export function estimatedIsoForMilestone(
   targetKey: MilestoneKey,
   aorDate: string,
   pace: GlobalMilestonePace,
   profile?: Pick<UserProfile, "milestones" | "aorDate">,
-): { iso: string; daysAfterAor: number; source: "pace_forward" | "pace_from_aor" } | null {
+): { iso: string; daysAfterAor: number } | null {
   if (targetKey === "aor" || !pace.total_avg_days_to_ecopr) return null;
+  if (profile && milestoneIsLogged(profile, targetKey)) return null;
 
-  const targetIdx = TIMELINE_ORDER.indexOf(targetKey);
-  if (targetIdx < 0) return null;
-
-  const anchor = profile
-    ? lastCompletedMilestone(profile)
-    : { key: "aor" as const, date: aorDate, index: 0 };
-
-  if (targetIdx <= anchor.index) return null;
-
-  if (anchor.index === 0) {
-    const cum = pace.cumulative_avg_days[targetKey];
-    if (cum == null) return null;
-    return {
-      iso: addDaysIso(aorDate, cum),
-      daysAfterAor: cum,
-      source: "pace_from_aor",
-    };
-  }
-
-  let cursor = anchor.date;
-  for (const { key } of MILESTONE_SEGMENT_ORDER) {
-    const keyIdx = TIMELINE_ORDER.indexOf(key);
-    if (keyIdx <= anchor.index) continue;
-    if (keyIdx > targetIdx) break;
-    const seg = pace.segment_avg_days[key];
-    if (seg == null) return null;
-    cursor = addDaysIso(cursor, seg);
-    if (key === targetKey) {
-      const daysAfter = daysBetween(aorDate, cursor);
-      return {
-        iso: cursor,
-        daysAfterAor: Number.isNaN(daysAfter) ? 0 : daysAfter,
-        source: "pace_forward",
-      };
-    }
-  }
-
-  return null;
+  const cum = pace.cumulative_avg_days[targetKey];
+  if (cum == null) return null;
+  return {
+    iso: addDaysIso(aorDate, cum),
+    daysAfterAor: cum,
+  };
 }
 
 export type MilestoneEstimateRow = {
@@ -237,10 +182,7 @@ export function milestoneEstimatesFromPace(
     }
     out[key] = {
       estLabel: `~${formatEstDateFromAor(aorDate, row.daysAfterAor)}`,
-      desc:
-        row.source === "pace_forward"
-          ? `Typical ~${row.daysAfterAor}d after AOR (avg gaps from ${n} seeded profiles; projected from your last logged step).`
-          : `Typical ~${row.daysAfterAor}d after AOR (avg gaps from ${n} seeded profiles).`,
+      desc: `Typical ~${row.daysAfterAor}d after AOR (avg gaps from ${n} seeded profiles).`,
       available: true,
     };
   }

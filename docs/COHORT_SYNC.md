@@ -78,7 +78,7 @@ In MongoDB:
 
 On the dashboard (sign in with a seeded synthetic email):
 
-- **Timeline est. dates** use global average gaps between milestones from `seededData: true` profiles (`milestone_pace` / `paceKey: global_seeded`), recomputed on each cohort sync. Pending steps can project forward from your last logged milestone.
+- **Timeline est. dates** use global average gaps between milestones from `seededData: true` profiles (`milestone_pace` / `paceKey: global_seeded`), recomputed on each cohort sync. Pending steps are always **AOR + cumulative** seeded averages; logged milestone dates are shown on the timeline but not used in estimate math.
 - **Typical wait** (PPR window) uses the v2.0 median.
 - **Journey %** = `days_since_AOR / median`.
 - **Expected approval window** = `AOR + P25` … `AOR + P75`.
