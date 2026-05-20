@@ -144,6 +144,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+  min-width: 0;
 }
 .dashboard-v2-page .dnb-pill {
   display: inline-flex;
@@ -1621,6 +1623,41 @@
   .dashboard-v2-page .prog-labels span:last-child {
     text-align: left;
   }
+
+  /* App bar: icon-only actions so Sync / Share / Log fit narrow screens */
+  .dashboard-v2-page .dnb {
+    height: auto;
+    min-height: 52px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .dashboard-v2-page .dnb-l {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .dashboard-v2-page .dnb-r {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .dashboard-v2-page .dnb-pill,
+  .dashboard-v2-page .dnb-page,
+  .dashboard-v2-page .dnb-sep {
+    display: none;
+  }
+  .dashboard-v2-page .dnb-btn-label {
+    display: none;
+  }
+  .dashboard-v2-page .dnb-btn {
+    padding: 8px 10px;
+    gap: 0;
+  }
+  .dashboard-v2-page .dnb-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .dashboard-v2-page .dnb-btn.red {
+    padding: 8px 11px;
+  }
 }
 @media (max-width: 900px) {
   .dashboard-v2-page .cards-row {
@@ -1631,10 +1668,15 @@
   .dashboard-v2-page .cards-row {
     grid-template-columns: 1fr;
   }
-  .dashboard-v2-page .dnb-pill,
-  .dashboard-v2-page .dnb-page,
-  .dashboard-v2-page .dnb-sep {
-    display: none;
+  .dashboard-v2-page .dnb {
+    padding: 6px 8px;
+    min-height: 48px;
+  }
+  .dashboard-v2-page .dnb-btn {
+    padding: 7px 8px;
+  }
+  .dashboard-v2-page .dnb-btn.red {
+    padding: 7px 9px;
   }
 }
 

@@ -1086,7 +1086,7 @@
   background: rgba(255, 255, 255, 0.08);
 }
 .mkt-track-page .tk-summary .tk-btn-secondary svg {
-  fill: currentColor;
+  fill: currentColor; 
 }
 
 /* Selected stream cards (step 1) — navy background, light text */

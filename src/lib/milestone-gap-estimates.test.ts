@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { mergeMilestoneDefsForCohort } from "./cohort-dynamic";
 import {
   computeGlobalSeededMilestonePace,
   estimatedIsoForMilestone,
   MILESTONE_SEGMENT_ORDER,
 } from "./milestone-gap-estimates";
 import type { ProfileForMilestonePace } from "./milestone-gap-estimates";
+import type { GlobalMilestonePace } from "./types";
 
 function profile(
   gaps: Partial<
@@ -177,5 +179,68 @@ describe("estimatedIsoForMilestone", () => {
     assert.ok(ecopr?.iso);
     assert.ok(p2.iso < ecopr.iso);
     assert.equal(p2.source, "pace_forward");
+  });
+});
+
+/** Pace shaped like a successful cohort sync with 600 seeded profiles. */
+function seededPace600(): GlobalMilestonePace {
+  return {
+    computed_at: "2026-05-20T13:29:14.014Z",
+    segment_avg_days: {
+      biometrics: 63,
+      background: 26,
+      medical: 2,
+      p1: 59,
+      p2: 6,
+      ecopr: 13,
+    },
+    segment_n: {
+      biometrics: 353,
+      background: 172,
+      medical: 277,
+      p1: 276,
+      p2: 270,
+      ecopr: 158,
+    },
+    cumulative_avg_days: {
+      biometrics: 63,
+      background: 89,
+      medical: 91,
+      p1: 150,
+      p2: 156,
+      ecopr: 169,
+    },
+    total_avg_days_to_ecopr: 169,
+    profiles_scanned: 600,
+    seeded_profiles: 600,
+  };
+}
+
+describe("mergeMilestoneDefsForCohort", () => {
+  it("keeps pending estimates after user logs biometrics (no blocked cascade)", () => {
+    const pace = seededPace600();
+    const defs = mergeMilestoneDefsForCohort("2026-03-01", pace, {
+      aorDate: "2026-03-01",
+      milestones: {
+        aor: { date: "2026-03-01", updatedAt: null },
+        biometrics: { date: "2026-03-15", updatedAt: null },
+        background: { date: null, updatedAt: null },
+        medical: { date: null, updatedAt: null },
+        p1: { date: null, updatedAt: null },
+        p2: { date: null, updatedAt: null },
+        ecopr: { date: null, updatedAt: null },
+      },
+    });
+
+    const bio = defs.find((d) => d.key === "biometrics")!;
+    assert.ok(bio.desc.includes("biometrics"), "completed step keeps catalog desc");
+    assert.equal(bio.est, "Mar 15, 2026");
+
+    const bg = defs.find((d) => d.key === "background")!;
+    assert.ok(bg.est.startsWith("~"), `background est should be projected, got ${bg.est}`);
+    assert.ok(!bg.desc.includes("run cohort sync"));
+
+    const ecopr = defs.find((d) => d.key === "ecopr")!;
+    assert.ok(ecopr.est.startsWith("~"), `ecopr est should be projected, got ${ecopr.est}`);
   });
 });

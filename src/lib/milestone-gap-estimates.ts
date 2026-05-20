@@ -199,6 +199,20 @@ export type MilestoneEstimateRow = {
   available: boolean;
 };
 
+/** True when the applicant has already logged this milestone (not an estimate target). */
+export function milestoneIsLogged(
+  profile: Pick<UserProfile, "milestones" | "aorDate"> | undefined,
+  key: MilestoneKey,
+): boolean {
+  if (!profile) return false;
+  if (key === "aor") {
+    return !!(
+      profile.aorDate?.trim() || milestoneDate(profile.milestones, "aor")
+    );
+  }
+  return !!profile.milestones[key]?.date?.trim();
+}
+
 export function milestoneEstimatesFromPace(
   aorDate: string,
   pace: GlobalMilestonePace | null,
@@ -209,6 +223,8 @@ export function milestoneEstimatesFromPace(
 
   for (const key of TIMELINE_ORDER) {
     if (key === "aor") continue;
+    if (milestoneIsLogged(profile, key)) continue;
+
     const row = estimatedIsoForMilestone(key, aorDate, pace, profile);
     const n = pace.segment_n[key] ?? 0;
     if (!row) {

@@ -49,7 +49,13 @@ export function DashboardAppBar({
   return (
     <nav className="dnb" aria-label="Dashboard navigation">
       <div className="dnb-l">
-        <WebsiteLogo href="/" className="dnb-brand" size="sm" aria-label="AORTrack — home" />
+        <WebsiteLogo
+          href="/"
+          className="dnb-brand"
+          layout="nav"
+          size="sm"
+          aria-label="AORTrack — home"
+        />
         <div className="dnb-sep" aria-hidden />
         <div className="dnb-page">Dashboard · {applicantId}</div>
       </div>
@@ -65,18 +71,27 @@ export function DashboardAppBar({
             className="dnb-btn"
             disabled={syncCohortBusy}
             title="Rebuild cohort_stats from all profiles"
+            style={{gap: "4px"}}
+            aria-label={
+              syncCohortBusy ? "Syncing cohorts" : "Sync cohorts"
+            }
             onClick={() => onSyncCohorts()}
           >
             <IconSync
               className={syncCohortBusy ? "dnb-spin" : undefined}
               aria-hidden
             />
-            {syncCohortBusy ? "Syncing…" : "Sync cohorts"}
+            
+              {syncCohortBusy ? "Syncing…" : "Sync cohorts"}
+            
           </button>
         ) : null}
         <button
           type="button"
           className="dnb-btn"
+          title="Share your timeline"
+          aria-label="Share"
+          style={{gap: "4px"}}
           onClick={() => scrollToOrNavigate("share-sec", shareHref)}
         >
           <IconUpload aria-hidden />
@@ -85,10 +100,13 @@ export function DashboardAppBar({
         <button
           type="button"
           className="dnb-btn red"
+          title="Log a milestone"
+          aria-label="Log milestone"
+          style={{gap: "4px"}}
           onClick={() => scrollToOrNavigate("tl-sec", timelineHref)}
         >
           <IconPlus aria-hidden />
-          Log Milestone
+          Log<span className="dnb-btn-label"> Milestone</span>
         </button>
       </div>
     </nav>

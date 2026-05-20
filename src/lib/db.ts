@@ -2,7 +2,7 @@ import { Db, MongoClient } from "mongodb";
 import { ensureIndexes } from "@/lib/seed";
 
 const uri = process.env.MONGODB_URI;
-const dbName = process.env.MONGODB_DB ?? "aor-tracker-dev";
+const dbName = "aor-tracker-dev";
 
 const globalForMongo = globalThis as typeof globalThis & {
   _mongoClientPromise?: Promise<MongoClient>;

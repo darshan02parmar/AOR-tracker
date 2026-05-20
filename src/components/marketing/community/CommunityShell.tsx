@@ -37,7 +37,7 @@ const FILTER_TO_MS: Record<NonNullable<CommunityMsFilter>, string> = {
   medical: "med",
 };
 
-const MAX_PENDING = 50;
+const FEED_REFRESH_DEBOUNCE_MS = 280;
 const TOAST_MS = 3500;
 
 type Props = {
@@ -56,7 +56,7 @@ type GatedAction = "post" | "mark helpful" | "reply";
  *
  * Owns:
  *   - viewer-email hydration (from sessionStorage) + profile fetch
- *   - Socket.IO subscription → drives the new-post bar via `pendingCount`
+ *   - Socket.IO `feed:refresh` → debounced auto refetch (bar is offline fallback)
  *   - live feed state (posts/page/total/msFilter/loading) + re-fetch on
  *     filter / page change
  *   - sign-in prompt overlay for gated actions
@@ -116,6 +116,8 @@ export function CommunityShell({
   const [toast, setToast] = useState<ToastItem | null>(null);
   const toastIdRef = useRef(0);
   const toastTimerRef = useRef<number | null>(null);
+  const feedRefreshTimerRef = useRef<number | null>(null);
+  const socketLiveRef = useRef(false);
 
   /* ─── refs mirroring state for socket / event handlers ─── */
   const pageRef = useRef(page);
@@ -232,6 +234,39 @@ export function CommunityShell({
     );
   }, [viewerEmail, fetchPage]);
 
+  /** Re-fetch feed; new top-level posts use page 1, replies keep the current page. */
+  const refreshFeed = useCallback(
+    (opts?: { goToFirstPage?: boolean }) => {
+      setPendingCount(0);
+      const pageNum = opts?.goToFirstPage ? 1 : pageRef.current;
+      void fetchPage(
+        pageNum,
+        msFilterRef.current,
+        searchQueryRef.current,
+        sortByRef.current,
+      );
+    },
+    [fetchPage],
+  );
+
+  const scheduleFeedRefresh = useCallback(
+    (opts?: { goToFirstPage?: boolean }) => {
+      if (feedRefreshTimerRef.current !== null) {
+        window.clearTimeout(feedRefreshTimerRef.current);
+      }
+      feedRefreshTimerRef.current = window.setTimeout(() => {
+        feedRefreshTimerRef.current = null;
+        refreshFeed(opts);
+        setLiveCount((c) => c + 1);
+      }, FEED_REFRESH_DEBOUNCE_MS);
+    },
+    [refreshFeed],
+  );
+
+  const loadNewPosts = useCallback(() => {
+    refreshFeed({ goToFirstPage: true });
+  }, [refreshFeed]);
+
   /* ─── Socket.IO ─── */
   useEffect(() => {
     const socket: Socket = io({
@@ -239,16 +274,32 @@ export function CommunityShell({
       addTrailingSlash: false,
       transports: ["websocket", "polling"],
     });
-    socket.on("connect", () => setSocketLive(true));
-    socket.on("disconnect", () => setSocketLive(false));
-    socket.on("connect_error", () => setSocketLive(false));
+    socket.on("connect", () => {
+      socketLiveRef.current = true;
+      setSocketLive(true);
+    });
+    socket.on("disconnect", () => {
+      socketLiveRef.current = false;
+      setSocketLive(false);
+    });
+    socket.on("connect_error", () => {
+      socketLiveRef.current = false;
+      setSocketLive(false);
+    });
     socket.on("feed:refresh", () => {
-      setPendingCount((n) => Math.min(n + 1, MAX_PENDING));
+      if (socketLiveRef.current) {
+        scheduleFeedRefresh({ goToFirstPage: true });
+      } else {
+        setPendingCount((n) => n + 1);
+      }
     });
     return () => {
+      if (feedRefreshTimerRef.current !== null) {
+        window.clearTimeout(feedRefreshTimerRef.current);
+      }
       socket.disconnect();
     };
-  }, []);
+  }, [scheduleFeedRefresh]);
 
   /* ─── action dispatchers ─── */
   const requireSignedIn = useCallback(
@@ -365,18 +416,6 @@ export function CommunityShell({
     [fetchPage],
   );
 
-  const loadNewPosts = useCallback(() => {
-    setPendingCount(0);
-    void fetchPage(
-      1,
-      msFilterRef.current,
-      searchQueryRef.current,
-      sortByRef.current,
-    ).then(() => {
-      setLiveCount((c) => c + 1);
-    });
-  }, [fetchPage]);
-
   /* ─── overlay helpers ─── */
   const openSubmit = useCallback(() => requestPost(), [requestPost]);
   const closeSubmit = useCallback(() => setSubmitOpen(false), []);
@@ -395,6 +434,9 @@ export function CommunityShell({
     return () => {
       if (toastTimerRef.current !== null) {
         window.clearTimeout(toastTimerRef.current);
+      }
+      if (feedRefreshTimerRef.current !== null) {
+        window.clearTimeout(feedRefreshTimerRef.current);
       }
     };
   }, []);
@@ -461,7 +503,10 @@ export function CommunityShell({
         email={viewerEmail}
         profile={viewerProfile}
         onClose={closeSubmit}
-        onSuccess={(msg) => showToast(msg, "green")}
+        onSuccess={() => {
+          showToast("Posted to the community feed", "green");
+          scheduleFeedRefresh({ goToFirstPage: true });
+        }}
         onValidationFail={(msg) => showToast(msg, "amber")}
       />
       <ReplyModal
@@ -469,7 +514,10 @@ export function CommunityShell({
         parent={replyTarget}
         email={viewerEmail}
         onClose={closeReply}
-        onSuccess={(msg) => showToast(msg, "green")}
+        onSuccess={() => {
+          showToast("Reply posted", "green");
+          scheduleFeedRefresh();
+        }}
         onValidationFail={(msg) => showToast(msg, "amber")}
       />
       <AppealModal
