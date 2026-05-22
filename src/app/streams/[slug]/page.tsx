@@ -11,6 +11,11 @@ import {
   STREAM_FAQ,
   streamBreadcrumbs,
 } from "@/lib/marketing-seo";
+import {
+  buildStreamMetadata,
+  getWebsiteId,
+  STREAM_RICH_META,
+} from "@/lib/marketing-metadata";
 import { getSiteUrl } from "@/lib/site-url";
 import { STREAM_PAGE_SLUGS, streamLabelFromSitemapSlug } from "@/lib/streams-sitemap-slugs";
 
@@ -50,34 +55,6 @@ export function generateStaticParams() {
 
 const RICH_SLUGS = new Set(["cec", "fsw", "pnp", "fst", "atlantic"]);
 
-const RICH_META: Record<string, Pick<Metadata, "title" | "description">> = {
-  cec: {
-    title: "CEC Processing Time 2026 — Live Community Data | AORTrack",
-    description:
-      "CEC processing time 2026 and Canadian Experience Class wait time from live AORTrack cohorts — median 184 days, P25–P75, histogram. Free.",
-  },
-  fsw: {
-    title: "FSW Processing Time 2026 — Federal Skilled Worker | AORTrack",
-    description:
-      "FSW processing time 2026 — avg 267 days from community data. Full FSW vs CEC comparison, cohort histogram, P25–P75. Free.",
-  },
-  pnp: {
-    title: "PNP Processing Time 2026 — Provincial Nominee Program | AORTrack",
-    description:
-      "PNP processing time 2026 from community data — median ~312 days, P25–P75, vs CEC and FSW. Provincial nominee PR timelines on AORTrack. Free.",
-  },
-  fst: {
-    title: "FST Processing Time 2026 — Federal Skilled Trades | AORTrack",
-    description:
-      "FST processing time 2026 — median 284 days from community data. Federal Skilled Trades vs FSW and CEC comparison, histogram, P25–P75. Free.",
-  },
-  atlantic: {
-    title: "Atlantic Immigration Processing Time 2026 | AORTrack",
-    description:
-      "Atlantic Immigration Program processing time 2026 — median 228 days from community data. NS, NB, NL, PEI federal-stage timelines vs PNP and CEC. Free.",
-  },
-};
-
 const STREAM_BREADCRUMB_LABEL: Record<string, string> = {
   cec: "CEC Processing Time 2026",
   fsw: "FSW Processing Time 2026",
@@ -116,22 +93,11 @@ const RICH_LD: Record<string, { name: string; description: string }> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const rich = buildStreamMetadata(slug);
+  if (rich) return rich;
+
   const base = getSiteUrl();
   const url = `${base}/streams/${slug}`;
-
-  if (RICH_META[slug]) {
-    return {
-      ...RICH_META[slug],
-      alternates: { canonical: url },
-      openGraph: {
-        title: RICH_META[slug].title as string,
-        description: RICH_META[slug].description as string,
-        url,
-        type: "website",
-      },
-    };
-  }
-
   const label = streamLabelFromSitemapSlug(slug);
   if (!label) return { title: "Stream — AORTrack" };
   return {
@@ -154,7 +120,7 @@ export default async function StreamLandingPage({ params }: Props) {
     const siteUrl = getSiteUrl();
     const pageUrl = `${siteUrl}/streams/${slug}`;
     const ldInfo = RICH_LD[slug]!;
-    const crumbLabel = STREAM_BREADCRUMB_LABEL[slug] ?? (RICH_META[slug]!.title as string);
+    const crumbLabel = STREAM_BREADCRUMB_LABEL[slug] ?? STREAM_RICH_META[slug]!.title;
     const ld = buildJsonLdGraph([
       buildStreamDatasetJsonLd({
         url: pageUrl,
@@ -165,11 +131,11 @@ export default async function StreamLandingPage({ params }: Props) {
       buildFaqPageSchema(STREAM_FAQ[slug]!),
       {
         "@type": "WebPage",
-        name: RICH_META[slug]!.title as string,
+        name: STREAM_RICH_META[slug]!.title,
         url: pageUrl,
         description: ldInfo.description,
         dateModified: MARKETING_CONTENT_DATE_MODIFIED,
-        isPartOf: { "@type": "WebSite", name: "AORTrack", url: siteUrl },
+        isPartOf: { "@id": getWebsiteId(siteUrl) },
       },
       buildBreadcrumbList(streamBreadcrumbs(siteUrl, slug, crumbLabel)),
     ]);

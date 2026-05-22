@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "@/styles/marketing-core.css";
 import "@/styles/roadmap.css";
 import { MarketingFooter } from "@/components/marketing/MarketingFooter";
@@ -11,22 +10,18 @@ import { RoadmapMilestones } from "@/components/marketing/roadmap/RoadmapMilesto
 import { RoadmapNav } from "@/components/marketing/roadmap/RoadmapNav";
 import { RoadmapShell } from "@/components/marketing/roadmap/RoadmapShell";
 import { RoadmapStatsBar } from "@/components/marketing/roadmap/RoadmapStatsBar";
+import { buildPageMetadata } from "@/lib/marketing-metadata";
 
-const CANONICAL = "https://track.getnorthpath.com/roadmap";
-
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "Public Roadmap — AORTrack | Canadian PR Tracker",
   description:
     "See what the AORTrack community is building next. Vote on features, claim issues, and track our progress in the open.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    title: "Public Roadmap — AORTrack",
-    description:
-      "Community-driven backlog. Vote on what matters, claim issues, ship code.",
-    url: CANONICAL,
-    type: "website",
-  },
-};
+  path: "/roadmap",
+  ogImage: "home",
+  openGraphTitle: "Public Roadmap — AORTrack",
+  openGraphDescription:
+    "Community-driven backlog. Vote on what matters, claim issues, ship code.",
+});
 
 /**
  * /roadmap
@@ -71,10 +66,7 @@ export default function RoadmapPage() {
           />
           <RoadmapHero hero={data.hero} />
           <RoadmapStatsBar stats={data.stats} />
-          <RoadmapFilterBar
-            filters={data.filters}
-            issuesHref={data.links.issues}
-          />
+          <RoadmapFilterBar filters={data.filters} issuesHref={data.links.issues} />
           <div className="rm-main">
             <RoadmapCtaBand
               feedbackHref={data.links.feedback}

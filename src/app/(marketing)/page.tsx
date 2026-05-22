@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "@/styles/landing.css";
 import { LandingMarketingClient } from "@/components/marketing/LandingMarketingClient";
 import {
@@ -6,26 +5,25 @@ import {
   buildOrganizationSchema,
   buildWebSiteSchema,
 } from "@/lib/marketing-seo";
+import { buildPageMetadata } from "@/lib/marketing-metadata";
 import { getSiteUrl } from "@/lib/site-url";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "AORTrack — Free, Open-Source Canadian PR Processing Time Tracker",
   description:
-    "Track your Canadian permanent residency processing time with real crowd-sourced data from thousands of applicants. Free forever, open-source, no signup.",
-  openGraph: {
-    title: "AORTrack — Free Canadian PR Processing Time Tracker",
-    description:
-      "Real processing timelines from the community — not IRCC's generic estimate.",
-    url: "https://track.getnorthpath.com",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-  alternates: {
-    canonical: "https://track.getnorthpath.com",
-  },
-};
+    "Track Canadian PR processing time with crowd-sourced Express Entry data by stream and cohort. Free, open-source, community medians — not IRCC official.",
+  path: "/",
+  ogImage: "home",
+  openGraphTitle: "AORTrack — Free Canadian PR Processing Time Tracker",
+  openGraphDescription:
+    "Real processing timelines from the community — not IRCC's generic estimate.",
+  keywords: [
+    "AORTrack",
+    "Canada PR processing time",
+    "Express Entry processing time tracker",
+    "AOR to PPR community data",
+  ],
+});
 
 export default function MarketingHomePage() {
   const siteUrl = getSiteUrl();

@@ -5,6 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { getPublicSharePayloadAction } from "@/app/actions/share";
 import { PublicShareDashboardPeek } from "@/components/share/PublicShareDashboardPeek";
 import { WebsiteLogo } from "@/components/WebsiteLogo";
+import { buildPageMetadata } from "@/lib/marketing-metadata";
 
 import "@/styles/dashboard-v2.css";
 import "@/styles/public-share.css";
@@ -14,12 +15,25 @@ type Props = { params: Promise<{ token: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { token } = await params;
   const data = await getPublicSharePayloadAction(token);
-  if (!data) return { title: "Shared timeline — AORTrack" };
-  return {
-    title: `${data.displayName}'s PR timeline — AORTrack`,
-    description: `${data.stream} · ${data.province} — crowd-sourced PR timeline on AORTrack.`,
-    robots: { index: false, follow: true },
+  const path = `/s/${token}`;
+  const baseMeta = {
+    path,
+    ogImage: "guide" as const,
+    robots: { index: false, follow: true } as const,
   };
+  if (!data) {
+    return buildPageMetadata({
+      ...baseMeta,
+      title: "Shared timeline — AORTrack",
+      description: "View a shared Canadian PR processing timeline on AORTrack.",
+    });
+  }
+  return buildPageMetadata({
+    ...baseMeta,
+    title: `${data.displayName}'s PR timeline — AORTrack`,
+    description:
+      "Crowd-sourced PR milestone timeline on AORTrack — read-only shared view.",
+  });
 }
 
 export default async function PublicShareTimelinePage({ params }: Props) {

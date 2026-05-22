@@ -4,6 +4,7 @@ import { DashboardShellV2 } from "@/components/dashboard/v2/DashboardShellV2";
 
 export const metadata: Metadata = {
   title: "Dashboard — AORTrack",
+  robots: { index: false, follow: false },
 };
 
 /**

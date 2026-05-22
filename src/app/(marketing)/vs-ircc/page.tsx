@@ -7,6 +7,7 @@ import {
   homeBreadcrumbs,
   MARKETING_CONTENT_DATE_MODIFIED,
 } from "@/lib/marketing-seo";
+import { buildPageMetadata, getWebsiteId } from "@/lib/marketing-metadata";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const revalidate = 3600;
@@ -49,7 +50,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
         name: "Why does IRCC say ~6 months while many files take longer?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Published figures are often averages or targets across many streams and offices, exclude some complexity categories, and lag operational reality. Individual timelines depend on stream (CEC vs FSW vs PNP), completeness, security or medical flags, and global inventory. Community medians for some streams frequently exceed six months for the federal stage.",
+          text: "Published figures are often averages or targets across many streams and offices, exclude some complexity categories, and lag operational reality. Individual timelines depend on stream (CEC, FSW, PNP, FST, Atlantic, etc.), completeness, security or medical flags, and global inventory. Community medians for some streams frequently exceed six months for the federal stage.",
         },
       },
       {
@@ -69,7 +70,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
     url: pageUrl,
     description:
       "Comparison of IRCC Express Entry service standards and community-reported processing timelines by stream, with methodology and limitations.",
-    isPartOf: { "@type": "WebSite", name: "AORTrack", url: base },
+    isPartOf: { "@id": getWebsiteId(base) },
     about: { "@type": "Thing", name: "Canadian Express Entry processing times" },
     dateModified: MARKETING_CONTENT_DATE_MODIFIED,
   };
@@ -86,14 +87,13 @@ function structuredDataJsonLd(): Record<string, unknown> {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const base = getSiteUrl();
-  const url = `${base}/vs-ircc`;
-  const title = "Real Express Entry Processing Times vs IRCC's Estimate | AORTrack";
-  const description =
-    "IRCC processing time vs real timelines: why generic Express Entry estimates often disagree with community data. Compare CEC, FSW, and PNP federal-stage medians to official service standards — methodology, bias, and how to use both.";
-  return {
-    title,
-    description,
+  return buildPageMetadata({
+    title: "Real Express Entry Processing Times vs IRCC's Estimate | AORTrack",
+    description:
+      "IRCC vs community PR timelines: why generic Express Entry estimates differ from AORTrack medians for CEC, FSW, PNP, FST, and Atlantic — methodology and how to use both.",
+    path: "/vs-ircc",
+    ogImage: "guide",
+    ogType: "article",
     keywords: [
       "IRCC express entry processing time",
       "express entry processing time vs estimate",
@@ -102,14 +102,8 @@ export async function generateMetadata(): Promise<Metadata> {
       "Express Entry 6 months",
       "Canada PR processing time community",
     ],
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: "article",
-    },
-  };
+    includeModifiedTime: true,
+  });
 }
 
 async function readGuideHtml(): Promise<string> {

@@ -9,6 +9,7 @@ import {
   MARKETING_CONTENT_DATE_MODIFIED,
   homeBreadcrumbs,
 } from "@/lib/marketing-seo";
+import { buildPageMetadata, getWebsiteId } from "@/lib/marketing-metadata";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const revalidate = 3600;
@@ -84,7 +85,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
       "How AORTrack builds Express Entry cohort analytics, percentile rank, and trustworthy methodology for finding your position vs peers.",
     about: { "@id": `${cohortUrl}#dataset` },
     mainEntity: { "@id": `${cohortUrl}#dataset` },
-    isPartOf: { "@type": "WebSite", name: "AORTrack", url: base },
+    isPartOf: { "@id": getWebsiteId(base) },
     dateModified: MARKETING_CONTENT_DATE_MODIFIED,
   };
 
@@ -101,14 +102,12 @@ function structuredDataJsonLd(): Record<string, unknown> {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const base = getSiteUrl();
-  const url = `${base}/cohort`;
-  const title = "Express Entry Cohort Analytics — Find Your Rank | AORTrack";
-  const description =
-    "Express Entry cohort tracker and percentile rank: how AORTrack groups applicants by AOR month and stream, computes your rank vs peers, and publishes open methodology — free, community-powered.";
-  return {
-    title,
-    description,
+  return buildPageMetadata({
+    title: "Express Entry Cohort Analytics — Find Your Rank | AORTrack",
+    description:
+      "Express Entry cohort tracker and percentile rank by AOR month and stream. See how your PR timeline compares to peers — free, community-powered, open methodology.",
+    path: "/cohort",
+    ogImage: "guide",
     keywords: [
       "express entry cohort tracker",
       "express entry percentile rank",
@@ -116,14 +115,8 @@ export async function generateMetadata(): Promise<Metadata> {
       "Canada PR cohort",
       "Express Entry rank",
     ],
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: "website",
-    },
-  };
+    includeModifiedTime: true,
+  });
 }
 
 async function readGuideHtml(): Promise<string> {

@@ -1,24 +1,18 @@
-import type { Metadata } from "next";
 import "@/styles/changelog.css";
 import { ChangelogClient } from "@/components/changelog/ChangelogClient";
 import { getChangelog } from "@/components/changelog/data";
+import { buildPageMetadata } from "@/lib/marketing-metadata";
 
-const CANONICAL = "https://track.getnorthpath.com/changelog";
-
-export const metadata: Metadata = {
-  title:
-    "Changelog — AORTrack | Canadian PR Processing Tracker",
+export const metadata = buildPageMetadata({
+  title: "Changelog — AORTrack | Canadian PR Processing Tracker",
   description:
     "AORTrack version history — all notable changes, fixes, and additions per release. Follows Keep a Changelog format.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    title: "Changelog — AORTrack",
-    description:
-      "All notable changes per Keep a Changelog. Versions follow Semantic Versioning.",
-    url: CANONICAL,
-    type: "website",
-  },
-};
+  path: "/changelog",
+  ogImage: "home",
+  openGraphTitle: "Changelog — AORTrack",
+  openGraphDescription:
+    "All notable changes per Keep a Changelog. Versions follow Semantic Versioning.",
+});
 
 /**
  * /changelog

@@ -14,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticEntries: MetadataRoute.Sitemap = [
     { url: abs("/"), lastModified, changeFrequency: "weekly", priority: 1 },
-    { url: abs("/track"), lastModified, changeFrequency: "weekly", priority: 0.95 },
     {
       url: abs("/dashboard/stats"),
       lastModified,

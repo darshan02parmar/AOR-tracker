@@ -1,23 +1,18 @@
-import type { Metadata } from "next";
 import "@/styles/track.css";
 import { TrackPageClient } from "@/components/track/TrackPageClient";
+import { buildPageMetadata } from "@/lib/marketing-metadata";
 
-const CANONICAL = "https://track.getnorthpath.com/track";
-
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "Track My AOR — AORTrack | Canadian PR Processing Tracker",
   description:
     "Enter your AOR date and immigration stream to instantly see your cohort position and estimated PPR window. Free, no account required.",
-  alternates: { canonical: CANONICAL },
+  path: "/track",
+  ogImage: "home",
+  openGraphTitle: "Track My AOR — AORTrack",
+  openGraphDescription:
+    "See your exact cohort position and PPR window. Three steps, takes under two minutes.",
   robots: { index: false, follow: false },
-  openGraph: {
-    title: "Track My AOR — AORTrack",
-    description:
-      "See your exact cohort position and PPR window. Three steps, takes under two minutes.",
-    url: CANONICAL,
-    type: "website",
-  },
-};
+});
 
 /**
  * /track

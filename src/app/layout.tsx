@@ -2,12 +2,14 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { DeferredStylesheet } from "@/components/layout/DeferredStylesheet";
 import { ToastProvider } from "@/components/ToastContext";
+import { getSiteUrl } from "@/lib/site-url";
 
 /** Same families/weights as GetNorthPath + DM Mono for tracker monospace. */
 const GOOGLE_FONT_STYLESHEET_HREF =
   "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800;9..144,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: "AORTrack — Canadian Immigration Timeline",
   description:
     "Crowd-sourced Canadian PR timelines by stream, cohort, and milestone.",

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "@/styles/marketing-core.css";
 import "@/styles/community.css";
 import {
@@ -16,23 +15,19 @@ import {
   type Post,
 } from "@/components/marketing/community/data";
 import { COMMUNITY_FEED_PAGE_SIZE } from "@/lib/community-feed";
+import { buildPageMetadata } from "@/lib/marketing-metadata";
 
-const CANONICAL = "https://track.getnorthpath.com/community";
-
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "Community Feed — AORTrack",
   description:
     "Live feed of crowd-sourced Canadian PR processing milestones — replies, cohort insights, and community moderation flows.",
-  alternates: { canonical: CANONICAL },
+  path: "/community",
+  ogImage: "home",
+  openGraphTitle: "Community Feed — AORTrack",
+  openGraphDescription:
+    "Timelines, replies, and weekly eCOPR pulse from the AORTrack community.",
   robots: { index: false, follow: false },
-  openGraph: {
-    title: "Community Feed — AORTrack",
-    description:
-      "Timelines, replies, and weekly eCOPR pulse from the AORTrack community.",
-    url: CANONICAL,
-    type: "website",
-  },
-};
+});
 
 /**
  * Placeholder: `CommunityComingSoon`. To restore the live feed, uncomment
@@ -49,10 +44,8 @@ export default async function CommunityPage() {
     }),
     getCommunityMsCountsAction(),
   ]);
-  
-  const posts: Post[] = firstPage.posts.map((p) =>
-    communityPostToApproved(p),
-  );
+
+  const posts: Post[] = firstPage.posts.map((p) => communityPostToApproved(p));
   const data = buildCommunityPageData(posts, counts);
 
   return (
