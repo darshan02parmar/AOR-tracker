@@ -8,6 +8,7 @@ import {
   FaPlus,
   FaUserFriends,
 } from "react-icons/fa";
+import { IconArrowRight } from "../landing-icons";
 import { getProfileAction } from "@/app/actions/profile";
 import { daysSinceAor } from "@/lib/ppr-estimate";
 import type { UserProfile } from "@/lib/types";
@@ -69,6 +70,8 @@ function buildCohortMiniFromProfile(p: UserProfile): CohortMini {
   };
 }
 
+const TRACK_HREF = "/track";
+
 function CohortMiniCard({ data }: { data: CohortMini }) {
   return (
     <div className="cohort-mini">
@@ -81,6 +84,25 @@ function CohortMiniCard({ data }: { data: CohortMini }) {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function ProfileOnboardingCard({ hasSessionEmail }: { hasSessionEmail: boolean }) {
+  return (
+    <div className="profile-onboarding">
+      <p className="profile-onboarding-title">
+        {hasSessionEmail ? "Finish your profile" : "Create your profile"}
+      </p>
+      <p className="profile-onboarding-text">
+        {hasSessionEmail
+          ? "Complete the tracker setup to see your stream, AOR day, and milestones here — and to post or reply on the feed."
+          : "Set up a free AORTrack profile (about a minute) to see your cohort stats in this sidebar and contribute to the community."}
+      </p>
+      <Link href={TRACK_HREF} className="profile-onboarding-btn">
+        <span>{hasSessionEmail ? "Continue setup" : "Get started"}</span>
+        <IconArrowRight size={14} aria-hidden />
+      </Link>
     </div>
   );
 }
@@ -127,9 +149,8 @@ function SidebarItem({
 }
 
 /**
- * Sticky left rail: viewer's cohort mini-card + browse / milestone filters
- * + quick actions. Real backend data when a profile is loaded; seeded
- * fallback for anonymous viewers.
+ * Sticky left rail: viewer's cohort mini-card (when onboarded) or a
+ * /track onboarding prompt + browse / milestone filters + quick actions.
  *
  * TODO(real-data, scope-deferred):
  *   - `my-cohort` Browse link: backend doesn't yet support a `cohortKey`
@@ -137,7 +158,7 @@ function SidebarItem({
  *   - "Active Session" / online-presence stat: no presence channel yet.
  */
 export function CommunityLeftSidebar({
-  cohortMini,
+  cohortMini: _cohortMini,
   browseLinks,
   milestoneLinks,
   quickLinks,
@@ -152,28 +173,38 @@ export function CommunityLeftSidebar({
   } = useCommunityUi();
 
   const [profileMini, setProfileMini] = useState<CohortMini | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     if (viewerEmail && isSignedIn) {
+      setProfileLoading(true);
       void getProfileAction(viewerEmail).then((res) => {
         if (cancelled) return;
+        setProfileLoading(false);
         if (res.ok) setProfileMini(buildCohortMiniFromProfile(res.profile));
+        else setProfileMini(null);
       });
+    } else {
+      setProfileLoading(false);
+      setProfileMini(null);
     }
     return () => {
       cancelled = true;
-      setProfileMini(null);
     };
   }, [viewerEmail, isSignedIn]);
-
-  const miniToRender = profileMini ?? cohortMini;
 
   return (
     <aside className="left-sb" aria-label="Community filters">
       <div className="lsb-sec">
         <div className="lsb-label">My Profile</div>
-        <CohortMiniCard data={miniToRender} />
+        {isSignedIn && profileMini ? (
+          <CohortMiniCard data={profileMini} />
+        ) : isSignedIn && profileLoading ? (
+          <p className="profile-onboarding-loading">Loading your profile…</p>
+        ) : (
+          <ProfileOnboardingCard hasSessionEmail={Boolean(viewerEmail)} />
+        )}
       </div>
 
       <div className="lsb-sec">

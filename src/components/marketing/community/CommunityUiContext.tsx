@@ -65,7 +65,7 @@ export type CommunityUi = {
   requestReply: (post: ApprovedPost) => void;
   /** Re-fetch a specific page (filter-aware). */
   loadPage: (n: number) => void;
-  /** Switch active filter and reload page 1. */
+  /** Switch milestone filter and reload (keeps current page, clamped server-side). */
   setMsFilter: (ms: CommunityMsFilter) => void;
   /** Update search text (debounced re-fetch in shell). */
   setSearchQuery: (q: string) => void;

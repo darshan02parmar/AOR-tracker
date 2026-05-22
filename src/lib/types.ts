@@ -29,6 +29,8 @@ export type UserProfile = {
   username?: string;
   /** Team label: Excel import vs live /track submissions. */
   seededData?: boolean;
+  /** Data-quality / batch score (e.g. purity-50 JSON import). */
+  purity?: number;
   currentStatus?: string;
 };
 

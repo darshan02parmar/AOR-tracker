@@ -1,7 +1,7 @@
 "use client";
 
-import { FaChevronDown } from "react-icons/fa";
 import { CommunityFilterBar } from "./CommunityFilterBar";
+import { FeedPagination } from "./FeedPagination";
 import { useCommunityUi } from "./CommunityUiContext";
 import { FeedCard } from "./FeedCard";
 import { SubmitCtaCard } from "./SubmitCtaCard";
@@ -15,16 +15,11 @@ type Props = {
 };
 
 /**
- * Middle column: filter bar + submit CTA card + posts + load-more.
+ * Middle column: filter bar + submit CTA card + posts + numbered pagination.
  *
  * Posts and pagination state come from `useCommunityUi()` — the shell owns
- * the canonical list, refetches on filter/page change, and broadcasts
- * Socket.IO `feed:refresh` events via the NewPostBar.
- *
- * TODO(real-data): the "Load more posts" button currently jumps to the
- *   next page (replacing the visible list). An infinite-scroll mode (append
- *   instead of replace) lives behind the same `loadPage` dispatcher — just
- *   accumulate into a `pages` array in the shell.
+ * the canonical list (25 per request), refetches on filter/page change, and
+ * broadcasts Socket.IO `feed:refresh` events via the NewPostBar.
  */
 export function CommunityFeed({
   filterChips,
@@ -32,8 +27,8 @@ export function CommunityFeed({
   defaultSort,
   submitCta,
 }: Props) {
-  const { posts, page, totalPages, loading, loadPage } = useCommunityUi();
-  const canLoadMore = page < totalPages;
+  const { posts, page, totalPages, total, loading, loadPage } =
+    useCommunityUi();
 
   return (
     <div className="feed-main">
@@ -43,7 +38,11 @@ export function CommunityFeed({
         defaultSort={defaultSort}
       />
 
-      <div className="feed-list" id="feed-list">
+      <div
+        className={`feed-list${loading ? " is-loading" : ""}`}
+        id="feed-list"
+        aria-busy={loading}
+      >
         <SubmitCtaCard cta={submitCta} />
 
         {posts.length === 0 && !loading ? (
@@ -64,21 +63,13 @@ export function CommunityFeed({
           <FeedCard post={post} key={post.id} />
         ))}
 
-        <div className="load-more">
-          <button
-            type="button"
-            className="load-more-btn"
-            onClick={() => loadPage(page + 1)}
-            disabled={!canLoadMore || loading}
-          >
-            <FaChevronDown aria-hidden />
-            {loading
-              ? "Loading…"
-              : canLoadMore
-                ? "Load more posts"
-                : "All caught up"}
-          </button>
-        </div>
+        <FeedPagination
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          loading={loading}
+          onPageChange={loadPage}
+        />
       </div>
     </div>
   );

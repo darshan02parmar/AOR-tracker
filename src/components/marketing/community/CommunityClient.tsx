@@ -1,6 +1,5 @@
 import { CommunityFeed } from "./CommunityFeed";
 import { CommunityLeftSidebar } from "./CommunityLeftSidebar";
-import { CommunityRightPanel } from "./CommunityRightPanel";
 import type { CommunityPageData } from "./data";
 
 type Props = {
@@ -37,13 +36,6 @@ export function CommunityClient({ data }: Props) {
         defaultSort={data.defaultSort}
         submitCta={data.submitCta}
       />
-
-      {/* <CommunityRightPanel
-        insights={data.insights}
-        pulse={data.pulse}
-        contributors={data.contributors}
-        discord={data.discord}
-      /> */}
     </div>
   );
 }

@@ -26,8 +26,9 @@ const CHIP_TO_MS: Record<string, CommunityMsFilter> = {
 };
 
 /**
- * Top filter row: milestone chips, search, and sort all re-fetch page 1
- * via `CommunityShell` (server-backed).
+ * Top filter row: milestone chips, search, and sort re-fetch via
+ * `CommunityShell` (server-backed, 25 posts per page). Milestone filters keep
+ * the current page; search and sort reset to page 1.
  */
 export function CommunityFilterBar({
   chips,
