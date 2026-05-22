@@ -292,12 +292,18 @@ export async function createCommunityPostAction(
   const prof = await getProfileAction(email);
   if (!prof.ok) return { ok: false, error: "Profile not found" };
 
-  const milestoneKey = MS_TO_MILESTONE_KEY[input.ms];
-  if (!milestoneDate(prof.profile.milestones, milestoneKey)) {
-    return {
-      ok: false,
-      error: "Add this milestone date on your dashboard before posting.",
-    };
+  const rawReply = input.replyToId?.trim();
+  const isReply = Boolean(rawReply);
+
+  // Milestone dates are required only for top-level posts, not replies.
+  if (!isReply) {
+    const milestoneKey = MS_TO_MILESTONE_KEY[input.ms];
+    if (!milestoneDate(prof.profile.milestones, milestoneKey)) {
+      return {
+        ok: false,
+        error: "Add this milestone date on your dashboard before posting.",
+      };
+    }
   }
 
   const norm = normalizeEmail(email);
@@ -309,8 +315,6 @@ export async function createCommunityPostAction(
   let replyToPreview:
     | { initials: string; name: string; snippet: string }
     | undefined;
-
-  const rawReply = input.replyToId?.trim();
   if (rawReply) {
     let parentOid: ObjectId;
     try {
