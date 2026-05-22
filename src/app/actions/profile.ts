@@ -30,6 +30,10 @@ function iso(v: unknown): string {
 }
 
 function docToProfile(doc: Record<string, unknown>): UserProfile {
+  const purity =
+    typeof doc.purity === "number" && !Number.isNaN(doc.purity)
+      ? doc.purity
+      : undefined;
   return {
     email: doc.emailNorm as string,
     createdAt: iso(doc.createdAt),
@@ -39,6 +43,17 @@ function docToProfile(doc: Record<string, unknown>): UserProfile {
     type: (doc.type as string) ?? "Inland",
     province: (doc.province as string) ?? "Ontario",
     milestones: normalizeMilestonesFromDoc(doc.milestones),
+    ...(typeof doc.caseNo === "string" && doc.caseNo
+      ? { caseNo: doc.caseNo }
+      : {}),
+    ...(typeof doc.username === "string" && doc.username
+      ? { username: doc.username }
+      : {}),
+    ...(doc.seededData === true ? { seededData: true } : {}),
+    ...(purity != null ? { purity } : {}),
+    ...(typeof doc.currentStatus === "string" && doc.currentStatus
+      ? { currentStatus: doc.currentStatus }
+      : {}),
   };
 }
 
