@@ -20,7 +20,7 @@ export function LandingStreamsSection() {
           as applicants log milestones.
         </p>
         <div className="stream-grid">
-          <Link href="/track" className="stream-card featured reveal">
+          <Link href="/streams/cec" className="stream-card featured reveal">
             <div className="sc-head green-bg">
               <div>
                 <div className="sc-title">CEC — Canadian Experience Class</div>
@@ -45,7 +45,7 @@ export function LandingStreamsSection() {
             </div>
           </Link>
 
-          <Link href="/track" className="stream-card reveal">
+          <Link href="/streams/fsw" className="stream-card reveal">
             <div className="sc-head navy-bg">
               <div>
                 <div className="sc-title">FSW — Federal Skilled Worker</div>
@@ -70,7 +70,7 @@ export function LandingStreamsSection() {
             </div>
           </Link>
 
-          <Link href="/track" className="stream-card reveal">
+          <Link href="/streams/pnp" className="stream-card reveal">
             <div className="sc-head blue-bg">
               <div>
                 <div className="sc-title">PNP — Provincial Nominee</div>
@@ -95,7 +95,7 @@ export function LandingStreamsSection() {
             </div>
           </Link>
 
-          <Link href="/track" className="stream-card reveal">
+          <Link href="/streams/fst" className="stream-card reveal">
             <div className="sc-head teal-bg">
               <div>
                 <div className="sc-title">FST — Federal Skilled Trades</div>
@@ -119,7 +119,7 @@ export function LandingStreamsSection() {
             </div>
           </Link>
 
-          <Link href="/track" className="stream-card reveal">
+          <Link href="/streams/atlantic" className="stream-card reveal">
             <div className="sc-head amber-bg">
               <div>
                 <div className="sc-title">Atlantic Immigration</div>

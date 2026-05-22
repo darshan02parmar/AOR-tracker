@@ -3,9 +3,11 @@ import path from "node:path";
 import type { Metadata } from "next";
 import { MarketingHtmlContent } from "@/components/marketing/MarketingHtmlContent";
 import {
+  buildBreadcrumbList,
   buildFaqPageSchema,
   COHORT_FAQ,
   MARKETING_CONTENT_DATE_MODIFIED,
+  homeBreadcrumbs,
 } from "@/lib/marketing-seo";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -87,10 +89,14 @@ function structuredDataJsonLd(): Record<string, unknown> {
   };
 
   const faq = buildFaqPageSchema(COHORT_FAQ);
+  const breadcrumbs = buildBreadcrumbList([
+    ...homeBreadcrumbs(base),
+    { name: "Cohort Analytics", url: cohortUrl },
+  ]);
 
   return {
     "@context": "https://schema.org",
-    "@graph": [software, dataset, webPage, faq],
+    "@graph": [software, dataset, webPage, faq, breadcrumbs],
   };
 }
 

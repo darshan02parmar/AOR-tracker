@@ -24,7 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: abs("/community"), lastModified, changeFrequency: "weekly", priority: 0.75 },
     { url: abs("/roadmap"), lastModified, changeFrequency: "weekly", priority: 0.7 },
     { url: abs("/changelog"), lastModified, changeFrequency: "weekly", priority: 0.65 },
-    { url: abs("/wiki"), lastModified, changeFrequency: "monthly", priority: 0.6 },
     {
       url: abs("/aor-to-ppr"),
       lastModified,

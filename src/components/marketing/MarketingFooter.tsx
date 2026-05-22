@@ -33,6 +33,8 @@ function streamFooterLabel(slug: string): string {
   if (slug === "cec") return "CEC";
   if (slug === "fsw") return "FSW";
   if (slug === "pnp") return "PNP";
+  if (slug === "fst") return "FST";
+  if (slug === "atlantic") return "Atlantic";
   return slug.toUpperCase();
 }
 

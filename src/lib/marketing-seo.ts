@@ -4,7 +4,75 @@ export const MARKETING_CONTENT_DATE_MODIFIED = "2026-05-22";
 /** Human label for hero meta rows, e.g. "Last updated: May 22, 2026". */
 export const MARKETING_CONTENT_DATE_LABEL = "May 22, 2026";
 
+export const GH_REPO_URL = "https://github.com/Get-North-Path/AOR-tracker";
+
+/** Community median days (AOR → eCOPR-style) for homepage table and copy. */
+export const STREAM_MEDIANS_2026 = {
+  cec: 184,
+  fsw: 267,
+  pnp: 312,
+  fst: 284,
+  atlantic: 228,
+} as const;
+
+export const GET_NORTHPATH_ORG = {
+  name: "GetNorthPath",
+  url: "https://www.getnorthpath.com",
+  sameAs: [GH_REPO_URL, "https://www.getnorthpath.com"] as string[],
+};
+
 export type FaqEntry = { name: string; text: string };
+
+export type BreadcrumbItem = { name: string; url: string };
+
+export function buildOrganizationSchema(): Record<string, unknown> {
+  return {
+    "@type": "Organization",
+    "@id": `${GET_NORTHPATH_ORG.url}/#organization`,
+    name: GET_NORTHPATH_ORG.name,
+    url: GET_NORTHPATH_ORG.url,
+    sameAs: GET_NORTHPATH_ORG.sameAs,
+  };
+}
+
+export function buildWebSiteSchema(siteUrl: string): Record<string, unknown> {
+  return {
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    name: "AORTrack",
+    url: siteUrl,
+    description:
+      "Free, open-source Canadian permanent residency processing time tracker with community-sourced cohort medians by Express Entry stream.",
+    publisher: { "@id": `${GET_NORTHPATH_ORG.url}/#organization` },
+  };
+}
+
+export function buildBreadcrumbList(crumbs: BreadcrumbItem[]): Record<string, unknown> {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.name,
+      item: c.url,
+    })),
+  };
+}
+
+export function homeBreadcrumbs(siteUrl: string): BreadcrumbItem[] {
+  return [{ name: "Home", url: siteUrl }];
+}
+
+export function streamBreadcrumbs(
+  siteUrl: string,
+  slug: string,
+  pageLabel: string,
+): BreadcrumbItem[] {
+  return [
+    { name: "Home", url: siteUrl },
+    { name: pageLabel, url: `${siteUrl}/streams/${slug}` },
+  ];
+}
 
 export function buildFaqPageSchema(
   mainEntity: FaqEntry[],
@@ -96,6 +164,50 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     {
       name: "Where can I compare CEC, FSW, and PNP side by side?",
       text: "Use the processing stats dashboard, or open the CEC and FSW stream pages for the same layout with stream-specific copy.",
+    },
+  ],
+  fst: [
+    {
+      name: "What is the current FST processing time in 2026?",
+      text: "Based on AORTrack community data, the median Federal Skilled Trades (FST) processing time (AOR to eCOPR) is approximately 284 days. The P25–P75 window spans roughly 210–340 days. This is community-sourced and not an official IRCC figure.",
+    },
+    {
+      name: "How does FST compare to FSW and CEC?",
+      text: "FST timelines often sit between CEC and FSW on the community median — longer than typical CEC inland files, somewhat closer to FSW outland patterns. Use stream pages and your cohort dashboard for apples-to-apples comparisons.",
+    },
+    {
+      name: "How does AORTrack track FST processing time?",
+      text: "Applicants voluntarily submit their AOR date, stream, type (inland/outland), and milestone dates. Data is anonymous and aggregated by cohort month. Medians come from verified FST-tagged profiles in the community dataset.",
+    },
+    {
+      name: "Are FST medicals requested later than CEC?",
+      text: "Community timelines often show medicals in the Day 90–140 range for FST — later than many CEC medians. Individual files vary; treat this as a pattern, not a rule.",
+    },
+    {
+      name: "Is this official IRCC processing time?",
+      text: "No. All numbers are crowd-sourced from AORTrack users. They help set expectations and compare cohorts — not legal advice or a government guarantee.",
+    },
+  ],
+  atlantic: [
+    {
+      name: "What is Atlantic Immigration processing time on AORTrack?",
+      text: "We report federal-stage timelines from AOR after your PR application as an Atlantic nominee through to eCOPR. Provincial endorsement and employer steps before AOR are separate.",
+    },
+    {
+      name: "Why is Atlantic often faster than PNP on the median?",
+      text: "Atlantic Immigration Program cohorts in our data often cluster around shorter federal-stage medians than broad PNP pools — but variance by province (NS, NB, NL, PEI) remains high.",
+    },
+    {
+      name: "Does AORTrack split Atlantic by province?",
+      text: "Where sample size allows, cohort keys include province and AOR month. Headline figures pool Atlantic federal-stage timelines; track your file to see your province cohort.",
+    },
+    {
+      name: "How is Atlantic different from Express Entry CEC or FSW?",
+      text: "Atlantic pathways include employer and provincial program steps before the federal stage. This page focuses on federal processing after AOR — compare with CEC and FSW stream pages for other programs.",
+    },
+    {
+      name: "Is this official IRCC processing time?",
+      text: "No. Figures are community-sourced medians from AORTrack applicants. Use IRCC for policy and case status; use AORTrack for peer context.",
     },
   ],
 };

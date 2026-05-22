@@ -2,7 +2,11 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
 import { MarketingHtmlContent } from "@/components/marketing/MarketingHtmlContent";
-import { MARKETING_CONTENT_DATE_MODIFIED } from "@/lib/marketing-seo";
+import {
+  buildBreadcrumbList,
+  homeBreadcrumbs,
+  MARKETING_CONTENT_DATE_MODIFIED,
+} from "@/lib/marketing-seo";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const revalidate = 3600;
@@ -91,6 +95,12 @@ function structuredDataJsonLd(): Record<string, unknown> {
     ],
   };
 
+  const pageUrl = `${base}/aor-to-ppr`;
+  const breadcrumbs = buildBreadcrumbList([
+    ...homeBreadcrumbs(base),
+    { name: "AOR to PPR Guide", url: pageUrl },
+  ]);
+
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -99,10 +109,11 @@ function structuredDataJsonLd(): Record<string, unknown> {
       {
         "@type": "WebPage",
         name: "AOR to PPR timeline — Canada PR guide",
-        url: `${base}/aor-to-ppr`,
+        url: pageUrl,
         dateModified: MARKETING_CONTENT_DATE_MODIFIED,
         isPartOf: { "@type": "WebSite", name: "AORTrack", url: base },
       },
+      breadcrumbs,
     ],
   };
 }

@@ -2,7 +2,11 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
 import { MarketingHtmlContent } from "@/components/marketing/MarketingHtmlContent";
-import { MARKETING_CONTENT_DATE_MODIFIED } from "@/lib/marketing-seo";
+import {
+  buildBreadcrumbList,
+  homeBreadcrumbs,
+  MARKETING_CONTENT_DATE_MODIFIED,
+} from "@/lib/marketing-seo";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const revalidate = 3600;
@@ -70,9 +74,14 @@ function structuredDataJsonLd(): Record<string, unknown> {
     dateModified: MARKETING_CONTENT_DATE_MODIFIED,
   };
 
+  const breadcrumbs = buildBreadcrumbList([
+    ...homeBreadcrumbs(base),
+    { name: "Processing Times vs IRCC", url: pageUrl },
+  ]);
+
   return {
     "@context": "https://schema.org",
-    "@graph": [software, faq, webPage],
+    "@graph": [software, faq, webPage, breadcrumbs],
   };
 }
 

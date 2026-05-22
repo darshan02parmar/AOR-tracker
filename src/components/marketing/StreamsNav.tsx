@@ -16,6 +16,11 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/streams/cec", label: "CEC" },
   { href: "/streams/fsw", label: "FSW" },
   { href: "/streams/pnp", label: "PNP" },
+  { href: "/streams/fst", label: "FST" },
+  { href: "/streams/atlantic", label: "Atlantic" },
+  { href: "/cohort", label: "Cohort" },
+  { href: "/vs-ircc", label: "vs IRCC" },
+  { href: "/aor-to-ppr", label: "AOR → PPR" },
   { href: "/community", label: "Community" },
   { href: "/roadmap", label: "Roadmap" },
 ];

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "@/styles/landing.css";
 import { LandingMarketingClient } from "@/components/marketing/LandingMarketingClient";
+import {
+  buildJsonLdGraph,
+  buildOrganizationSchema,
+  buildWebSiteSchema,
+} from "@/lib/marketing-seo";
+import { getSiteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "AORTrack — Free, Open-Source Canadian PR Processing Time Tracker",
@@ -22,5 +28,19 @@ export const metadata: Metadata = {
 };
 
 export default function MarketingHomePage() {
-  return <LandingMarketingClient />;
+  const siteUrl = getSiteUrl();
+  const ld = buildJsonLdGraph([
+    buildOrganizationSchema(),
+    buildWebSiteSchema(siteUrl),
+  ]);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      />
+      <LandingMarketingClient />
+    </>
+  );
 }

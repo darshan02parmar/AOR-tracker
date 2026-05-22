@@ -4,10 +4,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MarketingHtmlContent } from "@/components/marketing/MarketingHtmlContent";
 import {
+  buildBreadcrumbList,
   buildFaqPageSchema,
   buildJsonLdGraph,
   MARKETING_CONTENT_DATE_MODIFIED,
   STREAM_FAQ,
+  streamBreadcrumbs,
 } from "@/lib/marketing-seo";
 import { getSiteUrl } from "@/lib/site-url";
 import { STREAM_PAGE_SLUGS, streamLabelFromSitemapSlug } from "@/lib/streams-sitemap-slugs";
@@ -46,7 +48,7 @@ export function generateStaticParams() {
   return STREAM_PAGE_SLUGS.map((slug) => ({ slug }));
 }
 
-const RICH_SLUGS = new Set(["cec", "fsw", "pnp"]);
+const RICH_SLUGS = new Set(["cec", "fsw", "pnp", "fst", "atlantic"]);
 
 const RICH_META: Record<string, Pick<Metadata, "title" | "description">> = {
   cec: {
@@ -64,6 +66,24 @@ const RICH_META: Record<string, Pick<Metadata, "title" | "description">> = {
     description:
       "PNP processing time 2026 from community data — median ~312 days, P25–P75, vs CEC and FSW. Provincial nominee PR timelines on AORTrack. Free.",
   },
+  fst: {
+    title: "FST Processing Time 2026 — Federal Skilled Trades | AORTrack",
+    description:
+      "FST processing time 2026 — median 284 days from community data. Federal Skilled Trades vs FSW and CEC comparison, histogram, P25–P75. Free.",
+  },
+  atlantic: {
+    title: "Atlantic Immigration Processing Time 2026 | AORTrack",
+    description:
+      "Atlantic Immigration Program processing time 2026 — median 228 days from community data. NS, NB, NL, PEI federal-stage timelines vs PNP and CEC. Free.",
+  },
+};
+
+const STREAM_BREADCRUMB_LABEL: Record<string, string> = {
+  cec: "CEC Processing Time 2026",
+  fsw: "FSW Processing Time 2026",
+  pnp: "PNP Processing Time 2026",
+  fst: "FST Processing Time 2026",
+  atlantic: "Atlantic Immigration Processing Time 2026",
 };
 
 const RICH_LD: Record<string, { name: string; description: string }> = {
@@ -81,6 +101,16 @@ const RICH_LD: Record<string, { name: string; description: string }> = {
     name: "Provincial Nominee Program (PNP) PR processing timelines 2026",
     description:
       "Crowd-sourced PNP federal-stage processing times with histogram, P25–P75, and comparison to CEC and FSW on AORTrack.",
+  },
+  fst: {
+    name: "Federal Skilled Trades (FST) PR processing timelines 2026",
+    description:
+      "Crowd-sourced FST processing times with cohort histogram, P25–P75, and comparison to FSW and CEC on AORTrack.",
+  },
+  atlantic: {
+    name: "Atlantic Immigration Program PR processing timelines 2026",
+    description:
+      "Crowd-sourced Atlantic federal-stage processing times with histogram, P25–P75, and comparison to PNP and CEC on AORTrack.",
   },
 };
 
@@ -121,8 +151,10 @@ export default async function StreamLandingPage({ params }: Props) {
 
   if (RICH_SLUGS.has(slug)) {
     const html = await readHtml(slug);
-    const pageUrl = `${getSiteUrl()}/streams/${slug}`;
+    const siteUrl = getSiteUrl();
+    const pageUrl = `${siteUrl}/streams/${slug}`;
     const ldInfo = RICH_LD[slug]!;
+    const crumbLabel = STREAM_BREADCRUMB_LABEL[slug] ?? (RICH_META[slug]!.title as string);
     const ld = buildJsonLdGraph([
       buildStreamDatasetJsonLd({
         url: pageUrl,
@@ -137,8 +169,9 @@ export default async function StreamLandingPage({ params }: Props) {
         url: pageUrl,
         description: ldInfo.description,
         dateModified: MARKETING_CONTENT_DATE_MODIFIED,
-        isPartOf: { "@type": "WebSite", name: "AORTrack", url: getSiteUrl() },
+        isPartOf: { "@type": "WebSite", name: "AORTrack", url: siteUrl },
       },
+      buildBreadcrumbList(streamBreadcrumbs(siteUrl, slug, crumbLabel)),
     ]);
 
     return (

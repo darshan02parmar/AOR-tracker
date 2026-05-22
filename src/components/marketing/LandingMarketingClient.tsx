@@ -8,6 +8,7 @@ import { LandingCtaSection } from "@/components/marketing/landing/LandingCtaSect
 import { LandingFeaturesSection } from "@/components/marketing/landing/LandingFeaturesSection";
 import { LandingGrowthSection } from "@/components/marketing/landing/LandingGrowthSection";
 import { LandingHeroSection } from "@/components/marketing/landing/LandingHeroSection";
+import { LandingSeoIntroSection } from "@/components/marketing/landing/LandingSeoIntroSection";
 import { LandingHowItWorksSection } from "@/components/marketing/landing/LandingHowItWorksSection";
 import { LandingLoadingAnimation } from "@/components/landing/LandingLoadingAnimation";
 import { LandingMessagingSection } from "@/components/marketing/landing/LandingMessagingSection";
@@ -60,6 +61,7 @@ export function LandingMarketingClient() {
     <div className="mkt-landing-page">
       <LandingLoadingAnimation />
       <LandingHeroSection profileCount={profileCount} />
+      <LandingSeoIntroSection profileCount={profileCount} />
       <LandingStatsBar profileCount={profileCount} medianSample={medianSample} />
       <LandingHowItWorksSection />
       <LandingFeaturesSection />
