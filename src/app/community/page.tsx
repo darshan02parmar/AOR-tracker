@@ -26,7 +26,6 @@ export const metadata = buildPageMetadata({
   openGraphTitle: "Community Feed — AORTrack",
   openGraphDescription:
     "Timelines, replies, and weekly eCOPR pulse from the AORTrack community.",
-  robots: { index: false, follow: false },
 });
 
 /**

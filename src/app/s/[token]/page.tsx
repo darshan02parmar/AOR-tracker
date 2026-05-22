@@ -5,7 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { getPublicSharePayloadAction } from "@/app/actions/share";
 import { PublicShareDashboardPeek } from "@/components/share/PublicShareDashboardPeek";
 import { WebsiteLogo } from "@/components/WebsiteLogo";
-import { buildPageMetadata } from "@/lib/marketing-metadata";
+import { buildNoIndexMetadata } from "@/lib/marketing-metadata";
 
 import "@/styles/dashboard-v2.css";
 import "@/styles/public-share.css";
@@ -19,16 +19,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const baseMeta = {
     path,
     ogImage: "guide" as const,
-    robots: { index: false, follow: true } as const,
   };
   if (!data) {
-    return buildPageMetadata({
+    return buildNoIndexMetadata({
       ...baseMeta,
       title: "Shared timeline — AORTrack",
       description: "View a shared Canadian PR processing timeline on AORTrack.",
     });
   }
-  return buildPageMetadata({
+  return buildNoIndexMetadata({
     ...baseMeta,
     title: `${data.displayName}'s PR timeline — AORTrack`,
     description:

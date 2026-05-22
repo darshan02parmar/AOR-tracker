@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MARKETING_CONTENT_DATE_MODIFIED } from "@/lib/marketing-seo";
+import { NOINDEX_ROBOTS } from "@/lib/sitemap-paths";
 import { getSiteUrl } from "@/lib/site-url";
 
 export type OgImageTemplate = "home" | "stream" | "guide";
@@ -110,6 +111,13 @@ function twitterImages(template: OgImageTemplate): NonNullable<Metadata["twitter
     creator: TWITTER_SITE,
     images: [ogImageUrl(template)],
   };
+}
+
+/** Metadata for app/private routes that are not in sitemap.xml. */
+export function buildNoIndexMetadata(
+  opts: Omit<BuildPageMetadataOpts, "robots">,
+): Metadata {
+  return buildPageMetadata({ ...opts, robots: NOINDEX_ROBOTS });
 }
 
 export function buildPageMetadata(opts: BuildPageMetadataOpts): Metadata {

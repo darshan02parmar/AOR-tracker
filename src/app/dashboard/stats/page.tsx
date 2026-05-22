@@ -1,7 +1,7 @@
 import { DashboardStatsTabV2 } from "@/components/dashboard/v2/DashboardStatsTabV2";
-import { buildPageMetadata } from "@/lib/marketing-metadata";
+import { buildNoIndexMetadata } from "@/lib/marketing-metadata";
 
-export const metadata = buildPageMetadata({
+export const metadata = buildNoIndexMetadata({
   title: "Live PR Processing Stats by Stream — CEC, FSW, PNP, FST, Atlantic | AORTrack",
   description:
     "Live Express Entry processing stats: community medians, P25–P75, and histograms by stream (CEC, FSW, PNP, FST, Atlantic). Crowd-sourced — not IRCC official.",
@@ -14,7 +14,6 @@ export const metadata = buildPageMetadata({
     "AOR cohort statistics",
     "community PR processing data",
   ],
-  robots: { index: true, follow: true },
   includeModifiedTime: true,
 });
 

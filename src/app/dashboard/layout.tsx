@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "@/styles/dashboard-v2.css";
 import { DashboardShellV2 } from "@/components/dashboard/v2/DashboardShellV2";
+import { NOINDEX_ROBOTS } from "@/lib/sitemap-paths";
 
 export const metadata: Metadata = {
   title: "Dashboard — AORTrack",
-  robots: { index: false, follow: false },
+  robots: NOINDEX_ROBOTS,
 };
 
 /**

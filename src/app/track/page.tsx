@@ -1,8 +1,8 @@
 import "@/styles/track.css";
 import { TrackPageClient } from "@/components/track/TrackPageClient";
-import { buildPageMetadata } from "@/lib/marketing-metadata";
+import { buildNoIndexMetadata } from "@/lib/marketing-metadata";
 
-export const metadata = buildPageMetadata({
+export const metadata = buildNoIndexMetadata({
   title: "Track My AOR — AORTrack | Canadian PR Processing Tracker",
   description:
     "Enter your AOR date and immigration stream to instantly see your cohort position and estimated PPR window. Free, no account required.",
@@ -11,7 +11,6 @@ export const metadata = buildPageMetadata({
   openGraphTitle: "Track My AOR — AORTrack",
   openGraphDescription:
     "See your exact cohort position and PPR window. Three steps, takes under two minutes.",
-  robots: { index: false, follow: false },
 });
 
 /**

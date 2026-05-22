@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { STREAM_PAGE_SLUGS } from "@/lib/streams-sitemap-slugs";
+
+/** Use on every route in {@link NON_SITEMAP_DISALLOW_PATHS} (not listed in sitemap.xml). */
+export const NOINDEX_ROBOTS: NonNullable<Metadata["robots"]> = {
+  index: false,
+  follow: false,
+};
 
 /** Marketing / SEO paths included in sitemap.xml (and allowed for AI crawlers). */
 export const SITEMAP_STATIC_PATHS = [
