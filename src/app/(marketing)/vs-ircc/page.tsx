@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
 import { MarketingHtmlContent } from "@/components/marketing/MarketingHtmlContent";
+import { MARKETING_CONTENT_DATE_MODIFIED } from "@/lib/marketing-seo";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const revalidate = 3600;
@@ -66,6 +67,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
       "Comparison of IRCC Express Entry service standards and community-reported processing timelines by stream, with methodology and limitations.",
     isPartOf: { "@type": "WebSite", name: "AORTrack", url: base },
     about: { "@type": "Thing", name: "Canadian Express Entry processing times" },
+    dateModified: MARKETING_CONTENT_DATE_MODIFIED,
   };
 
   return {

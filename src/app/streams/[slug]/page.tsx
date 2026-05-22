@@ -3,8 +3,15 @@ import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MarketingHtmlContent } from "@/components/marketing/MarketingHtmlContent";
+import {
+  buildFaqPageSchema,
+  buildJsonLdGraph,
+  MARKETING_CONTENT_DATE_MODIFIED,
+  STREAM_FAQ,
+} from "@/lib/marketing-seo";
 import { getSiteUrl } from "@/lib/site-url";
 import { STREAM_PAGE_SLUGS, streamLabelFromSitemapSlug } from "@/lib/streams-sitemap-slugs";
+
 function buildStreamDatasetJsonLd(opts: {
   url: string;
   name: string;
@@ -12,7 +19,6 @@ function buildStreamDatasetJsonLd(opts: {
   dateModified: string;
 }): Record<string, unknown> {
   return {
-    "@context": "https://schema.org",
     "@type": "Dataset",
     name: opts.name,
     description: opts.description,
@@ -117,12 +123,23 @@ export default async function StreamLandingPage({ params }: Props) {
     const html = await readHtml(slug);
     const pageUrl = `${getSiteUrl()}/streams/${slug}`;
     const ldInfo = RICH_LD[slug]!;
-    const ld = buildStreamDatasetJsonLd({
-      url: pageUrl,
-      name: ldInfo.name,
-      description: ldInfo.description,
-      dateModified: new Date().toISOString(),
-    });
+    const ld = buildJsonLdGraph([
+      buildStreamDatasetJsonLd({
+        url: pageUrl,
+        name: ldInfo.name,
+        description: ldInfo.description,
+        dateModified: MARKETING_CONTENT_DATE_MODIFIED,
+      }),
+      buildFaqPageSchema(STREAM_FAQ[slug]!),
+      {
+        "@type": "WebPage",
+        name: RICH_META[slug]!.title as string,
+        url: pageUrl,
+        description: ldInfo.description,
+        dateModified: MARKETING_CONTENT_DATE_MODIFIED,
+        isPartOf: { "@type": "WebSite", name: "AORTrack", url: getSiteUrl() },
+      },
+    ]);
 
     return (
       <>

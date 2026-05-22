@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description:
     "Single-page contributor docs: sessionStorage identity, Community, Track, and Dashboard server actions and MongoDB.",
   alternates: { canonical: CANONICAL },
+  robots: { index: false, follow: false },
   openGraph: {
     title: "Wiki — Backend & data flow",
     description:

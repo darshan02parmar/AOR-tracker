@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
 import { MarketingHtmlContent } from "@/components/marketing/MarketingHtmlContent";
+import { MARKETING_CONTENT_DATE_MODIFIED } from "@/lib/marketing-seo";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const revalidate = 3600;
@@ -13,6 +14,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
     name: "Express Entry: from ITA to CoPR (Canada PR)",
     description:
       "Step-by-step overview of the Canadian Express Entry permanent residence timeline after invitation, through AOR, biometrics, medicals, background check, PPR, and electronic CoPR.",
+    dateModified: MARKETING_CONTENT_DATE_MODIFIED,
     step: [
       {
         "@type": "HowToStep",
@@ -98,6 +100,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
         "@type": "WebPage",
         name: "AOR to PPR timeline — Canada PR guide",
         url: `${base}/aor-to-ppr`,
+        dateModified: MARKETING_CONTENT_DATE_MODIFIED,
         isPartOf: { "@type": "WebSite", name: "AORTrack", url: base },
       },
     ],
