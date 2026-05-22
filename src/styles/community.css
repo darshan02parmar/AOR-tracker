@@ -1261,7 +1261,7 @@
  */
 .mkt-community-page .new-post-bar {
   position: fixed;
-  top: 68px;
+  top: 85px;
   left: 50%;
   transform: translateX(-50%) translateY(-80px);
   background: var(--navy);

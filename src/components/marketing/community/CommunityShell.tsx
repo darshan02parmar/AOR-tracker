@@ -101,7 +101,8 @@ export function CommunityShell({
   /* ─── socket / live signals ─── */
   const [liveCount, setLiveCount] = useState(data.liveCount);
   const [socketLive, setSocketLive] = useState(false);
-  const [pendingCount, setPendingCount] = useState(0);
+  /** Polled feed total when server count exceeds `total` (see NewPostBar). */
+  const [aheadTotal, setAheadTotal] = useState<number | null>(null);
 
   /* ─── overlays ─── */
   const [submitOpen, setSubmitOpen] = useState(false);
@@ -121,6 +122,7 @@ export function CommunityShell({
 
   /* ─── refs mirroring state for socket / event handlers ─── */
   const pageRef = useRef(page);
+  const totalRef = useRef(total);
   const msFilterRef = useRef(msFilter);
   const searchQueryRef = useRef(searchQuery);
   const sortByRef = useRef(sortBy);
@@ -128,6 +130,9 @@ export function CommunityShell({
   useEffect(() => {
     pageRef.current = page;
   }, [page]);
+  useEffect(() => {
+    totalRef.current = total;
+  }, [total]);
   useEffect(() => {
     msFilterRef.current = msFilter;
   }, [msFilter]);
@@ -166,6 +171,7 @@ export function CommunityShell({
       sort: CommunityFeedSort,
     ) => {
       setLoading(true);
+      setAheadTotal(null);
       setPage(pageNum);
       try {
         const ms = filter ? FILTER_TO_MS[filter] : null;
@@ -241,10 +247,37 @@ export function CommunityShell({
     );
   }, [viewerEmail, fetchPage]);
 
+  /** Poll server total; show NewPostBar when it exceeds the loaded feed total. */
+  const checkForNewPosts = useCallback(async () => {
+    const ms = msFilterRef.current ? FILTER_TO_MS[msFilterRef.current] : null;
+    const result = await getCommunityFeedAction(viewerEmailRef.current, {
+      page: 1,
+      pageSize: 1,
+      msFilter: ms,
+      searchQuery: searchQueryRef.current.trim() || null,
+      sortBy: sortByRef.current,
+    });
+    if (result.total > totalRef.current) {
+      setAheadTotal(result.total);
+    } else {
+      setAheadTotal(null);
+    }
+  }, []);
+
+  const scheduleNewPostCheck = useCallback(() => {
+    if (feedRefreshTimerRef.current !== null) {
+      window.clearTimeout(feedRefreshTimerRef.current);
+    }
+    feedRefreshTimerRef.current = window.setTimeout(() => {
+      feedRefreshTimerRef.current = null;
+      void checkForNewPosts();
+    }, FEED_REFRESH_DEBOUNCE_MS);
+  }, [checkForNewPosts]);
+
   /** Re-fetch feed; new top-level posts use page 1, replies keep the current page. */
   const refreshFeed = useCallback(
     (opts?: { goToFirstPage?: boolean }) => {
-      setPendingCount(0);
+      setAheadTotal(null);
       const pageNum = opts?.goToFirstPage ? 1 : pageRef.current;
       void fetchPage(
         pageNum,
@@ -294,11 +327,7 @@ export function CommunityShell({
       setSocketLive(false);
     });
     socket.on("feed:refresh", () => {
-      if (socketLiveRef.current) {
-        scheduleFeedRefresh({ goToFirstPage: true });
-      } else {
-        setPendingCount((n) => n + 1);
-      }
+      scheduleNewPostCheck();
     });
     return () => {
       if (feedRefreshTimerRef.current !== null) {
@@ -306,7 +335,7 @@ export function CommunityShell({
       }
       socket.disconnect();
     };
-  }, [scheduleFeedRefresh]);
+  }, [scheduleNewPostCheck]);
 
   /* ─── action dispatchers ─── */
   const requireSignedIn = useCallback(
@@ -508,7 +537,11 @@ export function CommunityShell({
     <CommunityUiProvider value={ctxValue}>
       {children}
 
-      <NewPostBar count={pendingCount} onLoad={loadNewPosts} />
+      <NewPostBar
+        currentTotal={total}
+        serverTotal={aheadTotal}
+        onLoad={loadNewPosts}
+      />
 
       <SubmitMilestoneModal
         open={submitOpen}
