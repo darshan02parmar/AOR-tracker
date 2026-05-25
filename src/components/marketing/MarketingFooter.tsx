@@ -325,7 +325,7 @@ export function MarketingFooter() {
       <div className="footer-bottom">
         <div>
           <div className="fb-left">
-            © {year} GetNorthPath Inc. · AORTrack is free &amp; open source (MIT License)
+            © {year} {" "} GetNorthPath Inc. · AORTrack is free &amp; open source (MIT License)
           </div>
           <div className="fb-disclaimer">
             Not affiliated with IRCC. Community data only. Processing times are estimates based on
