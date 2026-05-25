@@ -3404,6 +3404,7 @@
 .mkt-landing-page .seo-intro-caption {
   caption-side: top;
   text-align: left;
+  margin-left: 4px;
   font-size: 0.72rem;
   font-family: var(--fm);
   color: var(--muted);
