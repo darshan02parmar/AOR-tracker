@@ -13,14 +13,14 @@ type Props = Omit<ComponentProps<typeof Link>, "children"> & {
 
 /**
  * Logo mark + wordmark linking home. Shared across marketing, track,
- * dashboard, and landing top bars — styles live in `website-logo.css`.
+ * dashboard, and landing top bars   styles live in `website-logo.css`.
  */
 export function WebsiteLogo({
   href = "/",
   className = "",
   layout = "nav",
   size = "md",
-  "aria-label": ariaLabel = "AORTrack — home",
+  "aria-label": ariaLabel = "AORTrack   home",
   ...rest
 }: Props) {
   const rootClass = [

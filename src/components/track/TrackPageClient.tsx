@@ -64,17 +64,17 @@ function blankDates(): Record<PostAorKey, string> {
  * Top-level client for `/track`.
  *
  * Three phases:
- *   1. `gate` — `TrackGate` asks for the user's email, checks if a profile
+ *   1. `gate`   `TrackGate` asks for the user's email, checks if a profile
  *      already exists via `getProfileAction`. Found → CTA to `/dashboard`.
  *      Not found → drops the user into the onboarding flow.
- *   2. `onboarding` — the 3-step form (Application → Milestones → Review).
+ *   2. `onboarding`   the 3-step form (Application → Milestones → Review).
  *      Step 3's email field is pre-populated with the email the user
  *      entered in the gate (still editable).
- *   3. `success` — `TrackSuccess` after `saveProfileAction` lands.
+ *   3. `success`   `TrackSuccess` after `saveProfileAction` lands.
  *
  * After a successful save we call `writeSessionEmail` so the dashboard can
  * hydrate from the same email without re-asking. We no longer auto-hydrate
- * the form on mount from `sessionStorage` — the gate is the canonical entry
+ * the form on mount from `sessionStorage`   the gate is the canonical entry
  * point. We also dropped the previous anonymous / cookie-only save path:
  * every profile is now backed by an email in MongoDB.
  */
@@ -274,7 +274,7 @@ export function TrackPageClient() {
         province: province || "Ontario",
       });
       if (!draft.ok) {
-        toast.show("Couldn't create your profile — please try again.");
+        toast.show("Couldn't create your profile   please try again.");
         setSubmitting(false);
         return;
       }
@@ -295,7 +295,7 @@ export function TrackPageClient() {
       toast.show("Profile saved! Welcome to AORTrack");
     } catch (err) {
       console.error(err);
-      toast.show("Something went wrong — please try again.");
+      toast.show("Something went wrong   please try again.");
       setSubmitting(false);
     }
   };

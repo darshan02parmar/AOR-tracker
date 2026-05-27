@@ -1,4 +1,4 @@
-/** ISO date for schema.org dateModified — bump when YMYL copy changes. */
+/** ISO date for schema.org dateModified   bump when YMYL copy changes. */
 export const MARKETING_CONTENT_DATE_MODIFIED = "2026-05-22";
 
 /** Human label for hero meta rows, e.g. "Last updated: May 22, 2026". */
@@ -107,19 +107,19 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "How does CEC processing time compare to FSW?",
-      text: "CEC applicants typically receive PPR significantly faster than FSW. Our data shows CEC averaging ~184 days vs FSW averaging ~267 days — roughly an 83-day difference.",
+      text: "CEC applicants typically receive PPR significantly faster than FSW. Our data shows CEC averaging ~184 days vs FSW averaging ~267 days   roughly an 83-day difference.",
     },
     {
       name: 'What counts as "Day 1" in CEC processing?',
-      text: "AORTrack uses the AOR (Acknowledgement of Receipt) date as Day 0. All milestone days are measured from that date — the day IRCC confirms receipt of your complete application.",
+      text: "AORTrack uses the AOR (Acknowledgement of Receipt) date as Day 0. All milestone days are measured from that date   the day IRCC confirms receipt of your complete application.",
     },
     {
       name: "Does province affect CEC processing time?",
-      text: "Yes — AORTrack tracks inland vs outland separately. Pure CEC processing times tend to be more consistent across provinces than PNP pathways, but individual results still vary.",
+      text: "Yes   AORTrack tracks inland vs outland separately. Pure CEC processing times tend to be more consistent across provinces than PNP pathways, but individual results still vary.",
     },
     {
       name: "How is this data collected?",
-      text: "Applicants voluntarily submit their AOR date, stream, and milestone dates to AORTrack. All data is anonymous — no PII stored. It's aggregated by cohort month, stream, and type to produce the medians shown here.",
+      text: "Applicants voluntarily submit their AOR date, stream, and milestone dates to AORTrack. All data is anonymous   no PII stored. It's aggregated by cohort month, stream, and type to produce the medians shown here.",
     },
   ],
   fsw: [
@@ -129,7 +129,7 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "Why does FSW take longer than CEC?",
-      text: "CEC applicants are Canadian residents (inland), while FSW applicants are typically outside Canada (outland). IRCC processing workflows differ — outland applications involve additional verification steps that add to the overall time. Community data shows a consistent 80+ day gap in 2026.",
+      text: "CEC applicants are Canadian residents (inland), while FSW applicants are typically outside Canada (outland). IRCC processing workflows differ   outland applications involve additional verification steps that add to the overall time. Community data shows a consistent 80+ day gap in 2026.",
     },
     {
       name: "How does AORTrack track FSW processing time?",
@@ -137,7 +137,7 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "Does inland vs outland affect FSW times on AORTrack?",
-      text: "Yes — AORTrack tracks inland and outland separately. The headline figures represent the overall FSW pool. Sign up free to compare your specific inland or outland application against your exact cohort.",
+      text: "Yes   AORTrack tracks inland and outland separately. The headline figures represent the overall FSW pool. Sign up free to compare your specific inland or outland application against your exact cohort.",
     },
     {
       name: "Can I compare my FSW application against CEC applicants?",
@@ -151,7 +151,7 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "Why is PNP slower than CEC or FSW on the median?",
-      text: "Nominees often need extra verification (employment, nomination conditions, documents from two governments). Variance by province and stream is high — which is why the P25–P75 window is wider than for CEC or FSW in our community data.",
+      text: "Nominees often need extra verification (employment, nomination conditions, documents from two governments). Variance by province and stream is high   which is why the P25–P75 window is wider than for CEC or FSW in our community data.",
     },
     {
       name: "Does AORTrack split PNP by province?",
@@ -173,7 +173,7 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "How does FST compare to FSW and CEC?",
-      text: "FST timelines often sit between CEC and FSW on the community median — longer than typical CEC inland files, somewhat closer to FSW outland patterns. Use stream pages and your cohort dashboard for apples-to-apples comparisons.",
+      text: "FST timelines often sit between CEC and FSW on the community median   longer than typical CEC inland files, somewhat closer to FSW outland patterns. Use stream pages and your cohort dashboard for apples-to-apples comparisons.",
     },
     {
       name: "How does AORTrack track FST processing time?",
@@ -181,11 +181,11 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "Are FST medicals requested later than CEC?",
-      text: "Community timelines often show medicals in the Day 90–140 range for FST — later than many CEC medians. Individual files vary; treat this as a pattern, not a rule.",
+      text: "Community timelines often show medicals in the Day 90–140 range for FST   later than many CEC medians. Individual files vary; treat this as a pattern, not a rule.",
     },
     {
       name: "Is this official IRCC processing time?",
-      text: "No. All numbers are crowd-sourced from AORTrack users. They help set expectations and compare cohorts — not legal advice or a government guarantee.",
+      text: "No. All numbers are crowd-sourced from AORTrack users. They help set expectations and compare cohorts   not legal advice or a government guarantee.",
     },
   ],
   atlantic: [
@@ -195,7 +195,7 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "Why is Atlantic often faster than PNP on the median?",
-      text: "Atlantic Immigration Program cohorts in our data often cluster around shorter federal-stage medians than broad PNP pools — but variance by province (NS, NB, NL, PEI) remains high.",
+      text: "Atlantic Immigration Program cohorts in our data often cluster around shorter federal-stage medians than broad PNP pools   but variance by province (NS, NB, NL, PEI) remains high.",
     },
     {
       name: "Does AORTrack split Atlantic by province?",
@@ -203,7 +203,7 @@ export const STREAM_FAQ: Record<string, FaqEntry[]> = {
     },
     {
       name: "How is Atlantic different from Express Entry CEC or FSW?",
-      text: "Atlantic pathways include employer and provincial program steps before the federal stage. This page focuses on federal processing after AOR — compare with CEC and FSW stream pages for other programs.",
+      text: "Atlantic pathways include employer and provincial program steps before the federal stage. This page focuses on federal processing after AOR   compare with CEC and FSW stream pages for other programs.",
     },
     {
       name: "Is this official IRCC processing time?",
@@ -219,7 +219,7 @@ export const COHORT_FAQ: FaqEntry[] = [
   },
   {
     name: "Can competitors copy this concept?",
-    text: "Anyone can describe cohorts — the differentiator is consistent methodology, open data pipeline, and community trust. Our source code and issue tracker are public so improvements are debated in the open.",
+    text: "Anyone can describe cohorts   the differentiator is consistent methodology, open data pipeline, and community trust. Our source code and issue tracker are public so improvements are debated in the open.",
   },
   {
     name: "Do I need an account?",

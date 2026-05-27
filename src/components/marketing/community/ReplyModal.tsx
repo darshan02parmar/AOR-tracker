@@ -85,7 +85,7 @@ export function ReplyModal({
     }
     const trimmed = body.trim();
     if (trimmed.length < 3) {
-      onValidationFail("Your reply is too short — add a bit more context.");
+      onValidationFail("Your reply is too short   add a bit more context.");
       return;
     }
     setSubmitting(true);
@@ -101,7 +101,7 @@ export function ReplyModal({
         return;
       }
       onSuccess(
-        "Reply posted — others will see it once the new-post bar refreshes",
+        "Reply posted   others will see it once the new-post bar refreshes",
       );
       onClose();
     } finally {
@@ -180,7 +180,7 @@ export function ReplyModal({
             <textarea
               id={`${labelId}-body`}
               className="m-textarea"
-              placeholder="Share follow-up context — your stream, dates, WES timing, anything useful…"
+              placeholder="Share follow-up context   your stream, dates, WES timing, anything useful…"
               maxLength={2000}
               value={body}
               onChange={(e) => setBody(e.target.value)}

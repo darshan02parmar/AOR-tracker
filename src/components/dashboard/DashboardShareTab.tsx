@@ -28,7 +28,7 @@ export function DashboardShareTab() {
           <div className="sptit">{email.split("@")[0]}&apos;s PR Timeline</div>
           <div className="spsub">
             {profile.stream} · {profile.province} ·{" "}
-            {fmtDate(profile.aorDate) || "—"} AOR · Day {days}
+            {fmtDate(profile.aorDate) || " "} AOR · Day {days}
             {median > 0 ? ` of ~${median}` : ""}
           </div>
           <div className="spstats">
@@ -37,7 +37,7 @@ export function DashboardShareTab() {
               <div className="spsl">Days elapsed</div>
             </div>
             <div>
-              <div className="spsv red">{ppr?.p50Approx ?? "—"}</div>
+              <div className="spsv red">{ppr?.p50Approx ?? " "}</div>
               <div className="spsl">Est. PPR</div>
             </div>
             <div>
@@ -70,7 +70,7 @@ export function DashboardShareTab() {
           </button>
         </div>
         <p className="mt-2 text-center text-[10px] text-[var(--t3)]">
-          Anyone with the link can view this read-only snapshot — no sign-in
+          Anyone with the link can view this read-only snapshot   no sign-in
           required.
         </p>
         <div className="shopts">

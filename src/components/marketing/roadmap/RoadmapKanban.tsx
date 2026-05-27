@@ -20,7 +20,7 @@ type Props = {
  * `useRoadmapUi().filter` so changing the chip in `RoadmapFilterBar` instantly
  * filters all visible cards by category.
  *
- * Note: filter narrowing applies to ALL columns, including Done — matching
+ * Note: filter narrowing applies to ALL columns, including Done   matching
  * the sample HTML's behaviour of filtering the whole board.
  */
 export function RoadmapKanban({ data }: Props) {

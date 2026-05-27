@@ -8,7 +8,7 @@
  * Keeping these here (vs inside the section components) means:
  *   - The section components stay framework-agnostic and props-driven, so
  *     the seed preview and live dashboard share one implementation.
- *   - All cohort-stats → UI math lives in one place — easy to audit when
+ *   - All cohort-stats → UI math lives in one place   easy to audit when
  *     swapping the data pipeline (e.g. once histogram bucket sizes change).
  *
  * Naming follows the seed structure (`Dn*`) so the v2 components don't need
@@ -47,9 +47,9 @@ import type {
 export function profileVM(email: string, profile: UserProfile): DnProfile {
   return {
     applicantId: applicantIdFromEmail(email),
-    stream: normalizeStreamLabel(profile.stream) || "—",
-    typeLabel: profile.type || "—",
-    province: profile.province || "—",
+    stream: normalizeStreamLabel(profile.stream) || " ",
+    typeLabel: profile.type || " ",
+    province: profile.province || " ",
     aorDateLabel: fmtDate(profile.aorDate) || "Not set",
     cohortLabel: humanizeCohortKey(cohortKeyFromProfile(profile)),
   };
@@ -77,7 +77,7 @@ export function heroStatsVM(
   return {
     daysSinceAor: days,
     typicalWait: {
-      value: journey != null ? `${journey} days` : "—",
+      value: journey != null ? `${journey} days` : " ",
       note:
         journey != null
           ? journeyFromSeededPace
@@ -93,14 +93,14 @@ export function heroStatsVM(
       tone: atTop ? "good" : queueAhead <= 5 ? "good" : "warn",
     },
     expectedApproval: {
-      value: ppr?.windowLabel ?? "—",
+      value: ppr?.windowLabel ?? " ",
       note: ppr?.limitedData
         ? journeyFromSeededPace
-          ? "Early estimate — limited milestone timing data"
-          : "Early estimate — limited cohort data"
+          ? "Early estimate   limited milestone timing data"
+          : "Early estimate   limited cohort data"
         : journeyFromSeededPace
           ? "Typical eCOPR month from community milestone timing (matches your timeline)"
-          : "v2.0 cohort P25–P75 window — not guaranteed",
+          : "v2.0 cohort P25–P75 window   not guaranteed",
     },
   };
 }
@@ -125,20 +125,20 @@ export function infoCardsVM(
   const journeyExplain =
     ctx.journeyDays > 0
       ? ctx.journeyFromSeededPace
-        ? `You've passed ${ctx.pct}% of the typical timeline. Community milestone timing suggests a full journey of about ${ctx.journeyDays} days from AOR — you're on Day ${ctx.days}.`
-        : `You've passed ${ctx.pct}% of the typical timeline. Most people in your group finish in about ${ctx.journeyDays} days — you're on Day ${ctx.days}.`
+        ? `You've passed ${ctx.pct}% of the typical timeline. Community milestone timing suggests a full journey of about ${ctx.journeyDays} days from AOR   you're on Day ${ctx.days}.`
+        : `You've passed ${ctx.pct}% of the typical timeline. Most people in your group finish in about ${ctx.journeyDays} days   you're on Day ${ctx.days}.`
       : `You're on Day ${ctx.days}. Journey length appears once cohort or milestone timing data is available.`;
 
   const cohortExplain =
     cohortPct === 0
-      ? "Nobody in your group has received final approval yet. This is normal — you're all early in the process. Check back weekly for updates."
+      ? "Nobody in your group has received final approval yet. This is normal   you're all early in the process. Check back weekly for updates."
       : `${cohortPct}% of your group has received final approval. Check back weekly for updates as more people complete their journey.`;
 
   const weeklyExplain =
     weeklyDelta > 0
-      ? `Great news — approvals are picking up! ${weeklyDelta}% more than last week. This suggests IRCC is processing files faster.`
+      ? `Great news   approvals are picking up! ${weeklyDelta}% more than last week. This suggests IRCC is processing files faster.`
       : weeklyDelta < 0
-        ? `Approvals slowed slightly this week — ${Math.abs(weeklyDelta)}% fewer than last week. Weekly counts often fluctuate.`
+        ? `Approvals slowed slightly this week   ${Math.abs(weeklyDelta)}% fewer than last week. Weekly counts often fluctuate.`
         : "Approval volume is steady compared to last week. Check back for updates as the week progresses.";
 
   return [
@@ -204,27 +204,27 @@ export function journeyProgressVM(
   const pctDisplay =
     med != null
       ? (Math.round((days / med) * 1000) / 10).toFixed(1)
-      : "—";
+      : " ";
 
   const finishLabel =
     med != null && aorIso ? fmtDate(addDaysToIso(aorIso, med)) : null;
   const finishPrefix = journeyFromSeededPace ? "Typical finish" : "Median finish";
 
   const startLabel = aorIso
-    ? `Start — ${aorLabel} (Day 0)`
-    : `Start — ${aorLabel}`;
+    ? `Start   ${aorLabel} (Day 0)`
+    : `Start   ${aorLabel}`;
 
   const endLabel =
     med != null && finishLabel
-      ? `${finishPrefix} — ${finishLabel} (Day ${med})`
+      ? `${finishPrefix}   ${finishLabel} (Day ${med})`
       : med != null
-        ? `${finishPrefix} — Day ${med}`
-        : "Typical finish — pending data";
+        ? `${finishPrefix}   Day ${med}`
+        : "Typical finish   pending data";
 
   const centerLabel =
     med != null
-      ? `You are here — Day ${days} of ${med} — ${pctDisplay}% through your journey`
-      : `You are here — Day ${days} — journey length pending`;
+      ? `You are here   Day ${days} of ${med}   ${pctDisplay}% through your journey`
+      : `You are here   Day ${days}   journey length pending`;
 
   const atTop = queueAhead === 0;
 
@@ -243,13 +243,13 @@ export function journeyProgressVM(
       },
       {
         label: "Remaining",
-        value: remaining != null ? `~${remaining} days` : "—",
+        value: remaining != null ? `~${remaining} days` : " ",
         sub: journeyFromSeededPace ? "to typical eCOPR" : "to median",
         tone: "amber",
       },
       {
         label: "Journey",
-        value: med != null ? `${pctDisplay}%` : "—",
+        value: med != null ? `${pctDisplay}%` : " ",
         sub: med != null ? `${days} ÷ ${med} × 100` : "pending",
         tone: "default",
       },
@@ -428,7 +428,7 @@ export function streamCompareVM(
  * Produce the four sidebar sections for the live dashboard.
  *
  * The Dashboard section uses in-page anchor links (`#tl-sec`, `#cohort-sec`,
- * `#share-sec`) — when the user is on `/dashboard` these scroll smoothly;
+ * `#share-sec`)   when the user is on `/dashboard` these scroll smoothly;
  * on sub-routes (`/dashboard/share`, `/dashboard/stats`) they navigate to
  * `/dashboard#…`. The Share section links to the two real sub-routes
  * (`/dashboard/stats`, `/dashboard/share`).

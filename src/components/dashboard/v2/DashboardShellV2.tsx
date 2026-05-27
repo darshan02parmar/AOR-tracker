@@ -68,12 +68,12 @@ import {
 } from "./scroll-spy";
 
 /**
- * Live `/dashboard` shell — owns auth/session/profile/cohort loading and the
+ * Live `/dashboard` shell   owns auth/session/profile/cohort loading and the
  * server-action plumbing, then renders the v2 chrome (`.dashboard-v2-page`).
  *
  * This is the production counterpart of the seed-data `DashboardV2Client`
  * that powers the `/dashboard-new` preview route. The two share the same
- * presentational components in `src/components/dashboard/v2/` — the
+ * presentational components in `src/components/dashboard/v2/`   the
  * difference is which data they pass through props.
  *
  * Drop-in replacement for the old `DashboardShell.tsx`. Wrapped at
@@ -517,7 +517,7 @@ export function DashboardShellV2({ children }: { children: ReactNode }) {
             <main ref={mainRef} className="dmain">
               {/*
                * Scroll anchor for the sidebar's "Overview" item. Must live
-               * inside `.dmain` because that's the actual scroll container —
+               * inside `.dmain` because that's the actual scroll container  
                * putting `id="top"` on the outer page wrapper would target an
                * element whose ancestor (the page, `overflow: hidden`) cannot
                * scroll, so the click would be a no-op.

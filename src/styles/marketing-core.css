@@ -1,4 +1,4 @@
-/* Shared marketing shell: tokens, North brand, nav, footer — scoped to .marketing-site */
+/* Shared marketing shell: tokens, North brand, nav, footer   scoped to .marketing-site */
 .marketing-site {
   --cream: #fffcf5;
   --cream2: #f5f0e6;
@@ -215,7 +215,7 @@ html {
   flex-shrink: 0;
 }
 
-/* Hamburger toggle — hidden on desktop, shown at ≤1221px. Sits in `.nav-start`
+/* Hamburger toggle   hidden on desktop, shown at ≤1221px. Sits in `.nav-start`
    next to the brand so logo + menu stay grouped on the left with a gap. */
 .marketing-site .nav-menu-btn {
   display: none;
@@ -250,7 +250,7 @@ html {
   flex-shrink: 0;
 }
 
-/* Dropdown panel — sits absolutely below the sticky nav. Hidden until
+/* Dropdown panel   sits absolutely below the sticky nav. Hidden until
    `.open` is added by `MarketingNav`. */
 .marketing-site .nav-mobile-panel {
   position: absolute;
@@ -333,7 +333,7 @@ html {
   margin-top: auto;
 }
 
-/* Home: fixed bottom CTA (#mkt-sticky) — keep footer content clear when bar is visible */
+/* Home: fixed bottom CTA (#mkt-sticky)   keep footer content clear when bar is visible */
 .marketing-site:has(#mkt-sticky) .footer {
   padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
 }

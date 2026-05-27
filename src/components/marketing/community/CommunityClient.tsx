@@ -11,7 +11,7 @@ type Props = {
  * breakpoint the feed stays first and the left/right rails stack beneath it
  * (see `community.css`).
  * The page-level wrapper (`.mkt-community-page`) and the community-specific
- * top nav live in `src/app/community/page.tsx` — this component only renders
+ * top nav live in `src/app/community/page.tsx`   this component only renders
  * the layout grid.
  *
  * Posts and pagination state live in `CommunityShell` via

@@ -21,7 +21,7 @@ const ACTION_COPY: Record<NonNullable<Props["action"]>, string> = {
 /**
  * Shown when an anonymous viewer tries to use any gated action
  * (`requestPost`, `requestHelpful`, `requestReply`). Offers a primary
- * CTA that drops the user into the `/track` onboarding flow — once they
+ * CTA that drops the user into the `/track` onboarding flow   once they
  * finish the flow, their session email is written to `sessionStorage`
  * and they return to `/community` ready to use the gated actions.
  *
@@ -79,11 +79,11 @@ export function SignInPromptModal({ open, action = "post", onClose }: Props) {
         <div className="modal-body">
           <p style={{ margin: 0, lineHeight: 1.6 }}>
             To {ACTION_COPY[action]} we need your AORTrack profile. It only
-            takes a minute — share your stream, AOR date and a few milestones,
+            takes a minute   share your stream, AOR date and a few milestones,
             and you&apos;ll be able to contribute back to the community.
           </p>
           <p style={{ marginTop: 12, marginBottom: 0, lineHeight: 1.6 }}>
-            You stay anonymous on the feed — only your initials and stream are
+            You stay anonymous on the feed   only your initials and stream are
             shown.
           </p>
         </div>

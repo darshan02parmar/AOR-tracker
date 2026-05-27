@@ -17,7 +17,7 @@ import {
 import { humanizeCohortKey } from "@/lib/cohort";
 
 /**
- * `/dashboard/stats` — cohort visualizations in the v2 design.
+ * `/dashboard/stats`   cohort visualizations in the v2 design.
  *
  * Shares the same four sub-cards as the on-page `#cohort-sec` block on
  * `/dashboard` (cohort milestone bars, days-to-PPR histogram, applicant
@@ -42,7 +42,7 @@ export function DashboardStatsTabV2() {
         <div className="sec-head">
           <div>
             <div className="sec-title">
-              Processing Stats — {humanizeCohortKey(ctx.activeCohortKey)}
+              Processing Stats   {humanizeCohortKey(ctx.activeCohortKey)}
             </div>
             <div className="sec-sub">
               {ctx.cohortTotal} verified applicants

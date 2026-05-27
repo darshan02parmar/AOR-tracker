@@ -4,12 +4,12 @@ import { DashboardShellV2 } from "@/components/dashboard/v2/DashboardShellV2";
 import { NOINDEX_ROBOTS } from "@/lib/sitemap-paths";
 
 export const metadata: Metadata = {
-  title: "Dashboard — AORTrack",
+  title: "Dashboard   AORTrack",
   robots: NOINDEX_ROBOTS,
 };
 
 /**
- * `/dashboard` layout — wraps every sub-route in `DashboardShellV2`, which
+ * `/dashboard` layout   wraps every sub-route in `DashboardShellV2`, which
  * loads the user profile + cohort data, mounts the v2 chrome (app-bar,
  * sidebar, toaster) and provides both `DashboardContext` and
  * `DashboardV2UiContext` to its children.

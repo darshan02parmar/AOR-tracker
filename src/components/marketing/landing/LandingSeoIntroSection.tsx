@@ -2,10 +2,10 @@ import Link from "next/link";
 import { MARKETING_CONTENT_DATE_LABEL, STREAM_MEDIANS_2026 } from "@/lib/marketing-seo";
 
 const STREAM_ROWS = [
-  { slug: "cec", label: "CEC — Canadian Experience Class", days: STREAM_MEDIANS_2026.cec },
-  { slug: "fsw", label: "FSW — Federal Skilled Worker", days: STREAM_MEDIANS_2026.fsw },
-  { slug: "pnp", label: "PNP — Provincial Nominee Program", days: STREAM_MEDIANS_2026.pnp },
-  { slug: "fst", label: "FST — Federal Skilled Trades", days: STREAM_MEDIANS_2026.fst },
+  { slug: "cec", label: "CEC   Canadian Experience Class", days: STREAM_MEDIANS_2026.cec },
+  { slug: "fsw", label: "FSW   Federal Skilled Worker", days: STREAM_MEDIANS_2026.fsw },
+  { slug: "pnp", label: "PNP   Provincial Nominee Program", days: STREAM_MEDIANS_2026.pnp },
+  { slug: "fst", label: "FST   Federal Skilled Trades", days: STREAM_MEDIANS_2026.fst },
   {
     slug: "atlantic",
     label: "Atlantic Immigration Program",
@@ -30,14 +30,14 @@ export function LandingSeoIntroSection({ profileCount }: Props) {
         <p className="seo-intro-lead reveal">
           AORTrack is a free, open-source Canadian permanent residency processing time tracker.
           {countPhrase} Medians below measure community-reported days from Acknowledgement of Receipt
-          (AOR) to eCOPR-style milestones by Express Entry and related stream —{" "}
+          (AOR) to eCOPR-style milestones by Express Entry and related stream  {" "}
           <strong>not official IRCC processing times</strong>. Use them for cohort context and
           peer comparison; check IRCC for your case status.
         </p>
         <div className="seo-intro-table-wrap reveal">
           <table className="seo-intro-table">
             <caption className="seo-intro-caption">
-              Community median processing days (AOR → eCOPR-style) — updated{" "}
+              Community median processing days (AOR → eCOPR-style)   updated{" "}
               {MARKETING_CONTENT_DATE_LABEL}
             </caption>
             <thead>

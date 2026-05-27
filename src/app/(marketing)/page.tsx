@@ -9,14 +9,14 @@ import { buildPageMetadata } from "@/lib/marketing-metadata";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const metadata = buildPageMetadata({
-  title: "AORTrack — Free, Open-Source Canadian PR Processing Time Tracker",
+  title: "AORTrack   Free, Open-Source Canadian PR Processing Time Tracker",
   description:
-    "Track Canadian PR processing time with crowd-sourced Express Entry data by stream and cohort. Free, open-source, community medians — not IRCC official.",
+    "Track Canadian PR processing time with crowd-sourced Express Entry data by stream and cohort. Free, open-source, community medians   not IRCC official.",
   path: "/",
   ogImage: "home",
-  openGraphTitle: "AORTrack — Free Canadian PR Processing Time Tracker",
+  openGraphTitle: "AORTrack   Free Canadian PR Processing Time Tracker",
   openGraphDescription:
-    "Real processing timelines from the community — not IRCC's generic estimate.",
+    "Real processing timelines from the community   not IRCC's generic estimate.",
   keywords: [
     "AORTrack",
     "Canada PR processing time",

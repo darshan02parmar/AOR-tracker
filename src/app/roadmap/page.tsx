@@ -13,12 +13,12 @@ import { RoadmapStatsBar } from "@/components/marketing/roadmap/RoadmapStatsBar"
 import { buildPageMetadata } from "@/lib/marketing-metadata";
 
 export const metadata = buildPageMetadata({
-  title: "Public Roadmap — AORTrack | Canadian PR Tracker",
+  title: "Public Roadmap   AORTrack | Canadian PR Tracker",
   description:
     "See what the AORTrack community is building next. Vote on features, claim issues, and track our progress in the open.",
   path: "/roadmap",
   ogImage: "home",
-  openGraphTitle: "Public Roadmap — AORTrack",
+  openGraphTitle: "Public Roadmap   AORTrack",
   openGraphDescription:
     "Community-driven backlog. Vote on what matters, claim issues, ship code.",
 });
@@ -26,7 +26,7 @@ export const metadata = buildPageMetadata({
 /**
  * /roadmap
  *
- * Lives OUTSIDE the (marketing) route group on purpose — the roadmap page
+ * Lives OUTSIDE the (marketing) route group on purpose   the roadmap page
  * has its own top nav (RoadmapNav) mirroring the sample HTML, distinct from
  * the shared MarketingNav used on /, /changelog, /track, etc.
  *

@@ -11,7 +11,7 @@ const GOOGLE_FONT_STYLESHEET_HREF =
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
-  title: "AORTrack — Canadian Immigration Timeline",
+  title: "AORTrack   Canadian Immigration Timeline",
   description:
     "Crowd-sourced Canadian PR timelines by stream, cohort, and milestone.",
 };

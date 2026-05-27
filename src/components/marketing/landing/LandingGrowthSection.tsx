@@ -11,7 +11,7 @@ export function LandingGrowthSection({ profileCount }: LandingGrowthSectionProps
     <section className="growth-section growth-section--v2">
       <div className="growth-inner">
         <p className="section-eye reveal" style={{ color: "rgba(255,255,255,.35)" }}>
-          Built in Public — Growth Goals
+          Built in Public   Growth Goals
         </p>
         <h2 className="section-h2 reveal" style={{ color: "#fff" }}>
           Our 6-month targets are public and tracked.

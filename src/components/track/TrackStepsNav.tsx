@@ -3,7 +3,7 @@
 import { IconCheck } from "./track-icons";
 
 type Props = {
-  /** 1, 2, or 3 — the currently-active step. */
+  /** 1, 2, or 3   the currently-active step. */
   current: 1 | 2 | 3;
 };
 
@@ -16,7 +16,7 @@ const NODES: { id: 1 | 2 | 3; label: string }[] = [
 const PROGRESS_PCT: Record<1 | 2 | 3, number> = { 1: 33, 2: 66, 3: 100 };
 
 /**
- * Top progress bar + 3 step nodes. Owned by the orchestrator — receives
+ * Top progress bar + 3 step nodes. Owned by the orchestrator   receives
  * `current` and renders the cosmetic state (active / done / future).
  */
 export function TrackStepsNav({ current }: Props) {

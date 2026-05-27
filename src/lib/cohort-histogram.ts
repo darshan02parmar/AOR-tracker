@@ -1,5 +1,5 @@
 /**
- * Days-to-eCOPR histogram buckets — shared by cohort sync and live dashboard reads.
+ * Days-to-eCOPR histogram buckets   shared by cohort sync and live dashboard reads.
  */
 
 import { daysBetween, milestoneDate } from "@/lib/cohort-algorithm-v2";

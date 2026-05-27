@@ -18,7 +18,7 @@ export function LandingCtaSection({ countLabel }: LandingCtaSectionProps) {
             It&apos;s free. It always will be.
           </h2>
           <p className="cta-sub">
-            Join {countLabel} applicants using real community data — not IRCC&apos;s generic estimate.
+            Join {countLabel} applicants using real community data   not IRCC&apos;s generic estimate.
             Open source, no signup, no ads.
           </p>
           <div className="cta-note">
@@ -34,7 +34,7 @@ export function LandingCtaSection({ countLabel }: LandingCtaSectionProps) {
         </div>
         <div className="cta-btns">
           <Link href="/track" className="btn-white">
-            Track My AOR — Free <IconArrowRight />
+            Track My AOR   Free <IconArrowRight />
           </Link>
           <a href={GH} target="_blank" rel="noopener noreferrer" className="btn-ghost-w mkt-btn-github-secondary">
             <FaStar size={16} aria-hidden />

@@ -368,7 +368,7 @@ export function CommunityShell({
       const email = viewerEmail;
       if (!email) return;
 
-      /* Optimistic update — flip the local state immediately so the count
+      /* Optimistic update   flip the local state immediately so the count
          increments without a network roundtrip. Roll back on failure. */
       let prev: ApprovedPost | undefined;
       setPosts((all) =>

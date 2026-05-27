@@ -149,11 +149,11 @@ function buildStreamMedians(
     const mid = sorted[Math.floor(sorted.length / 2)] ?? 0;
     const label =
       group === "CEC"
-        ? "CEC — Canadian Experience Class"
+        ? "CEC   Canadian Experience Class"
         : group === "FSW"
-          ? "FSW — Federal Skilled Worker"
+          ? "FSW   Federal Skilled Worker"
           : group === "PNP"
-            ? "PNP — Provincial Nominee"
+            ? "PNP   Provincial Nominee"
             : group;
     out.set(group, [{ name: label, median: mid }]);
   }

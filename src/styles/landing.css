@@ -1,5 +1,5 @@
 /*
- * Landing page styles — scoped to the marketing home (.marketing-site / .mkt-landing-page).
+ * Landing page styles   scoped to the marketing home (.marketing-site / .mkt-landing-page).
  * Loaded after marketing-core.css from src/app/(marketing)/page.tsx.
  *
  * Order matters: base section rules come first, then the .mkt-landing-page-scoped
@@ -3372,7 +3372,7 @@
   }
 }
 
-/* SEO intro — definition + processing-times table (homepage) */
+/* SEO intro   definition + processing-times table (homepage) */
 .mkt-landing-page .seo-intro {
   background: var(--cream2);
   border-top: 1px solid var(--border);

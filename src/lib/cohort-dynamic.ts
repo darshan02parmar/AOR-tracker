@@ -45,7 +45,7 @@ export function mergeMilestoneDefsForCohort(
   if (!paceReady) {
     return MILESTONE_DEFS.map((def) => ({
       ...def,
-      est: def.key === "aor" ? fmtDate(aorDate) || "—" : "—",
+      est: def.key === "aor" ? fmtDate(aorDate) || " " : " ",
       desc: def.key === "aor" ? def.desc : PACE_UNAVAILABLE_DESC,
     }));
   }
@@ -63,7 +63,7 @@ export function mergeMilestoneDefsForCohort(
       const logged = profile.milestones[def.key]?.date?.trim() || "";
       return {
         ...def,
-        est: fmtDate(logged) || "—",
+        est: fmtDate(logged) || " ",
         desc: def.desc,
       };
     }
@@ -88,7 +88,7 @@ export function mergeMilestoneDefsForCohort(
 
     return {
       ...def,
-      est: "—",
+      est: " ",
       desc: row?.desc ?? PACE_UNAVAILABLE_DESC,
     };
   });
@@ -108,7 +108,7 @@ export function buildCohortInsights(
     const ecoprN = live.perMilestoneFilled.ecopr ?? 0;
     out.push({
       t: "g",
-      txt: `<strong>Your cohort on AOR Track</strong> — <strong>${live.profileCount}</strong> saved profile${live.profileCount === 1 ? "" : "s"} for <strong>${humanizeCohortKey(cohort.cohortKey)}</strong>. <strong>${bio}</strong> logged biometrics · <strong>${ecoprN}</strong> eCOPR.`,
+      txt: `<strong>Your cohort on AOR Track</strong>   <strong>${live.profileCount}</strong> saved profile${live.profileCount === 1 ? "" : "s"} for <strong>${humanizeCohortKey(cohort.cohortKey)}</strong>. <strong>${bio}</strong> logged biometrics · <strong>${ecoprN}</strong> eCOPR.`,
     });
   }
 
@@ -116,21 +116,21 @@ export function buildCohortInsights(
   if (n < 30) {
     out.push({
       t: "a",
-      txt: `<strong>Sample size</strong> — cohort curve uses <strong>${n}</strong> eligible timelines (v2.0); confidence grows as more data is added.`,
+      txt: `<strong>Sample size</strong>   cohort curve uses <strong>${n}</strong> eligible timelines (v2.0); confidence grows as more data is added.`,
     });
   }
 
   if (cohort.algorithm_version === "v2.0") {
     out.push({
       t: "b",
-      txt: `<strong>v2.0 estimate</strong> — recency-weighted median with survival bias correction${cohort.n_imputed ? `; <strong>${cohort.n_imputed}</strong> still-waiting profiles imputed` : ""}.`,
+      txt: `<strong>v2.0 estimate</strong>   recency-weighted median with survival bias correction${cohort.n_imputed ? `; <strong>${cohort.n_imputed}</strong> still-waiting profiles imputed` : ""}.`,
     });
   }
 
   const cr = Math.round((cohort.completion_rate ?? 0) * 100);
   out.push({
     t: "b",
-    txt: `<strong>Completion rate</strong> — about <strong>${cr}%</strong> with eCOPR logged in this cohort (eligible window).`,
+    txt: `<strong>Completion rate</strong>   about <strong>${cr}%</strong> with eCOPR logged in this cohort (eligible window).`,
   });
 
   const per = cohort.per_milestone_n;
@@ -139,7 +139,7 @@ export function buildCohortInsights(
   if (n > 0 && (bio > 0 || bg > 0)) {
     out.push({
       t: "b",
-      txt: `<strong>Milestone spread</strong> — <strong>${bio}</strong> past biometrics · <strong>${bg}</strong> past background check (of <strong>${n}</strong>).`,
+      txt: `<strong>Milestone spread</strong>   <strong>${bio}</strong> past biometrics · <strong>${bg}</strong> past background check (of <strong>${n}</strong>).`,
     });
   }
 
@@ -161,6 +161,6 @@ export function buildWesRowsForCohort(cohort: CohortStats): WesRow[] {
       r.n +
       (cohort.median_days_to_ppr > 0
         ? ` (scaled ~${Math.round(f * 100)}% vs baseline for a ${cohort.median_days_to_ppr}d median cohort).`
-        : " (baseline pacing — cohort median not available yet)."),
+        : " (baseline pacing   cohort median not available yet)."),
   }));
 }

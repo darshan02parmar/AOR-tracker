@@ -17,7 +17,7 @@ type Props = {
 /**
  * Middle column: filter bar + submit CTA card + posts + numbered pagination.
  *
- * Posts and pagination state come from `useCommunityUi()` — the shell owns
+ * Posts and pagination state come from `useCommunityUi()`   the shell owns
  * the canonical list (25 per request), refetches on filter/page change, and
  * broadcasts Socket.IO `feed:refresh` events via the NewPostBar.
  */
@@ -55,7 +55,7 @@ export function CommunityFeed({
               fontSize: "0.9rem",
             }}
           >
-            No posts match this filter yet — be the first to share!
+            No posts match this filter yet   be the first to share!
           </div>
         ) : null}
 

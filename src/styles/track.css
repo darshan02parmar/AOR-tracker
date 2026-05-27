@@ -1,5 +1,5 @@
 /*
- * /track page styles — scoped under `.mkt-track-page`.
+ * /track page styles   scoped under `.mkt-track-page`.
  *
  * Mirrors the new design in `samples/aortrack-track-updated.html`.
  *
@@ -12,13 +12,13 @@
  * provide.
  *
  * All emoji and inline SVGs from the sample are replaced by react-icons in
- * the components — the rules below size them via `fill: currentColor`.
+ * the components   the rules below size them via `fill: currentColor`.
  */
 
 /* ─── DESIGN TOKENS + BASE RESET (standalone shell) ──────────────────── */
 
 .mkt-track-page {
-  /* Palette — mirrors marketing-core.css so visuals match the rest of
+  /* Palette   mirrors marketing-core.css so visuals match the rest of
      the marketing site without depending on it. */
   --cream: #fffcf5;
   --cream2: #f5f0e6;
@@ -41,7 +41,7 @@
   --muted: #7a7060;
   --muted2: #9a8e7e;
 
-  /* Font stacks — read from the global next/font CSS vars when present,
+  /* Font stacks   read from the global next/font CSS vars when present,
      fall back to system fonts otherwise so the page still renders if
      this file is loaded outside the app shell. */
   --fh: var(--font-fraunces), Georgia, serif;
@@ -433,7 +433,7 @@
  *
  * Each `.tk-node` is a flex item that takes `flex: 1` of the row. The
  * connector is an absolutely-positioned `::after` on every step except
- * the last one — it starts to the right of the current step's circle
+ * the last one   it starts to the right of the current step's circle
  * and stretches to the left of the next step's circle, with a small
  * gap on each side (`--tk-conn-gap`).
  */
@@ -657,7 +657,7 @@
   display: block;
 }
 
-/* STREAM GRID — CEC full width, then FSW + PNP on one row */
+/* STREAM GRID   CEC full width, then FSW + PNP on one row */
 .mkt-track-page .tk-stream-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1084,7 +1084,7 @@
   fill: currentColor; 
 }
 
-/* Selected stream cards (step 1) — navy background, light text */
+/* Selected stream cards (step 1)   navy background, light text */
 .mkt-track-page .tk-stream-opt.selected,
 .mkt-track-page .tk-stream-opt.selected .tk-so-name,
 .mkt-track-page .tk-stream-opt.selected .tk-so-sub,

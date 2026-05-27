@@ -1,5 +1,5 @@
 /*
- * Public share `/s/[token]` — aligns with:
+ * Public share `/s/[token]`   aligns with:
  *   - `.marketing-site` + marketing-core.css (cream canvas, navy type)
  *   - `.dashboard-v2-page` app bar (`.dnb`) + v2 timeline embed
  */
@@ -26,7 +26,7 @@
   gap: clamp(28px, 4vw, 40px);
 }
 
-/* Hero summary — same vocabulary as community cards (cream, border, Fraunces) */
+/* Hero summary   same vocabulary as community cards (cream, border, Fraunces) */
 .marketing-site .share-hero {
   width: 100%;
   max-width: 520px;

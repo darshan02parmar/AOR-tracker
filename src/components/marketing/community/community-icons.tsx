@@ -25,7 +25,7 @@ import type { Insight, MilestoneChipColor } from "./data";
  * Single source of truth for the community page's icon set.
  *
  * Replaces every loose emoji and inline `<svg>` that used to live in the
- * community components — the sample HTML had a mix of strokes, fills, and
+ * community components   the sample HTML had a mix of strokes, fills, and
  * picture-character emojis ("🍁", "⚠️", etc.). Centralising here means:
  *
  *   - components stay free of icon-import noise,
@@ -66,7 +66,7 @@ type MilestoneIconProps = {
 
 /**
  * Renders the milestone-specific icon, or `null` if we don't have a mapping
- * for the supplied key (forwards-compatible — unknown keys won't crash).
+ * for the supplied key (forwards-compatible   unknown keys won't crash).
  */
 export function MilestoneIcon({ milestone, className }: MilestoneIconProps) {
   const Icon = MILESTONE_ICON[milestone as MilestoneIconKey];

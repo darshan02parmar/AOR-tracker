@@ -44,7 +44,7 @@ export function estimateEcoprFromSeededPace(
     const today = new Date();
     return {
       windowLabel: "Insufficient milestone timing data",
-      p50Approx: "—",
+      p50Approx: " ",
       windowStart: today,
       windowEnd: today,
       limitedData: true,
@@ -80,7 +80,7 @@ export function estimatePprWindow(
     const today = new Date();
     return {
       windowLabel: "Insufficient cohort data",
-      p50Approx: "—",
+      p50Approx: " ",
       windowStart: today,
       windowEnd: today,
       limitedData: true,

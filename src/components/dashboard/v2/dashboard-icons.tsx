@@ -57,7 +57,7 @@ export const IconCheck = FaCheck;
 export const IconCheckCircle = FaCheckCircle;
 export const IconClose = FaTimes;
 export const IconInfo = FaInfoCircle;
-export const IconSync = FaSyncAlt; // "⟳" — in-progress dot
+export const IconSync = FaSyncAlt; // "⟳"   in-progress dot
 
 /* ─── Timeline ─── */
 export const IconEdit = FaPencilAlt;

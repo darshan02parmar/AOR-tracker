@@ -11,7 +11,7 @@ type Props = {
 
 /**
  * Sticky filter bar that sits below the stats. Chips read/write
- * `useRoadmapUi().filter` — the kanban subscribes to the same context to
+ * `useRoadmapUi().filter`   the kanban subscribes to the same context to
  * decide which cards to render.
  */
 export function RoadmapFilterBar({ filters, issuesHref }: Props) {

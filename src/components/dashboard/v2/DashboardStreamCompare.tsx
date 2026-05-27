@@ -44,7 +44,7 @@ export function DashboardStreamCompare({
       <div className="sec-head" style={{ marginBottom: 10 }}>
         <div>
           <div className="sec-title" style={{ fontSize: ".92rem" }}>
-            Stream Comparison — Median Days to PPR
+            Stream Comparison   Median Days to PPR
           </div>
           <div className="sec-sub">
             Your stream highlighted · Updated weekly

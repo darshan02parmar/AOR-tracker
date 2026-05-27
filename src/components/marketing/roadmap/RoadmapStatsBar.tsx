@@ -12,7 +12,7 @@ type Props = {
 };
 
 /**
- * Cream stats grid that sits directly under the dark hero — 4 columns on
+ * Cream stats grid that sits directly under the dark hero   4 columns on
  * desktop, 2x2 on mobile (see media query in roadmap.css).
  */
 export function RoadmapStatsBar({ stats }: Props) {

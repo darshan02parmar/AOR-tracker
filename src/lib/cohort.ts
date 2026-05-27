@@ -47,7 +47,7 @@ export function streamSlugFromLabel(stream: string): string {
   return STREAM_SLUG[stream] ?? "CEC";
 }
 
-/** Normalize stored/display stream — all CEC variants → `CEC`. */
+/** Normalize stored/display stream   all CEC variants → `CEC`. */
 export function normalizeStreamLabel(stream: string): string {
   const t = stream?.trim();
   if (!t) return CEC_STREAM_LABEL;
@@ -75,7 +75,7 @@ export function escapeRegex(s: string): string {
 }
 
 /**
- * Regex matching peer cohorts: same stats stream group + inland/outland — any AOR month/year.
+ * Regex matching peer cohorts: same stats stream group + inland/outland   any AOR month/year.
  */
 export function peerCohortKeyPattern(profileCohortKey: string): string {
   const parts = profileCohortKey.split(":");
@@ -100,7 +100,7 @@ export function humanizeCohortKey(key: string): string {
     const year = parts[2] ?? "";
     const kind = parts[3] === "outland" ? "Outland" : "Inland";
     const mo =
-      !mi || Number.isNaN(mi) ? "—" : (MONTH_SHORT[mi] ?? parts[1]);
+      !mi || Number.isNaN(mi) ? " " : (MONTH_SHORT[mi] ?? parts[1]);
     return `${mo} ${year} · ${streamLabel} · ${kind}`;
   }
   if (parts.length >= 2) {
@@ -113,7 +113,7 @@ export function pulseTitleFromAor(aorDate: string): string {
   const d = new Date(`${aorDate}T12:00:00`);
   if (Number.isNaN(d.getTime())) return "Weekly eCOPR pulse";
   const label = d.toLocaleDateString("en-CA", { month: "long", year: "numeric" });
-  return `Weekly eCOPR pulse — ${label} cohorts`;
+  return `Weekly eCOPR pulse   ${label} cohorts`;
 }
 
 /**
@@ -130,7 +130,7 @@ export function buildStatsCohortKey(
   return `${group}:${month}:${year}:${kind}`;
 }
 
-/** When AOR is missing — month 0 = unspecified. */
+/** When AOR is missing   month 0 = unspecified. */
 export function streamFallbackKey(stream: string, type?: string): string {
   const group = streamGroupForStats(stream);
   const y = new Date().getFullYear();
@@ -147,7 +147,7 @@ export function cohortKeyFromProfile(
   return streamFallbackKey(profile.stream, profile.type);
 }
 
-/** @deprecated Use buildStatsCohortKey — kept for callers migrating off province keys. */
+/** @deprecated Use buildStatsCohortKey   kept for callers migrating off province keys. */
 export function buildCohortKey(
   profile: Pick<UserProfile, "aorDate" | "stream" | "type" | "province">,
 ): string {

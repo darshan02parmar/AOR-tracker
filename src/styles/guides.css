@@ -57,7 +57,7 @@
   outline-offset: 3px;
 }
 
-/* Primary — main conversion (red, matches marketing nav CTA) */
+/* Primary   main conversion (red, matches marketing nav CTA) */
 .g-btn-primary {
   background: var(--red);
   color: #fff !important;
@@ -73,7 +73,7 @@
   box-shadow: 0 6px 16px rgba(200, 40, 30, 0.22);
 }
 
-/* Secondary — outline on dark hero / navy bands */
+/* Secondary   outline on dark hero / navy bands */
 .g-btn-secondary {
   background: transparent;
   color: #fff !important;
@@ -100,7 +100,7 @@
   color: var(--g-text) !important;
 }
 
-/* CTA band primary — high contrast on navy or green footer */
+/* CTA band primary   high contrast on navy or green footer */
 .g-btn-cta {
   background: #fff;
   color: var(--navy) !important;
@@ -239,7 +239,7 @@
   font-size: 0.95em;
 }
 
-/* Dark timeline strip — numeric dots already use color:#fff in inline CSS */
+/* Dark timeline strip   numeric dots already use color:#fff in inline CSS */
 .guide .tl-wrap i {
   color: rgba(255, 255, 255, 0.9);
 }

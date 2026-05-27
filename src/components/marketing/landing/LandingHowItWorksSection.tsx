@@ -3,7 +3,7 @@ export function LandingHowItWorksSection() {
     <section className="hiw-section" id="how">
       <div className="hiw-inner">
         <p className="section-eye">How It Works</p>
-        <h2 className="section-h2">From AOR to PPR — tracked every step.</h2>
+        <h2 className="section-h2">From AOR to PPR   tracked every step.</h2>
         <p className="section-sub">
           No account needed. 30 seconds to set up. Your anonymised data automatically improves
           estimates for your whole cohort.
@@ -14,7 +14,7 @@ export function LandingHowItWorksSection() {
             <div className="hs-title">Enter your AOR date</div>
             <div className="hs-body">
               Input your Acknowledgement of Receipt date and immigration stream. No account, no
-              email, no password — 30 seconds flat.
+              email, no password   30 seconds flat.
             </div>
             <span className="hs-tag hs-free">Free · No account</span>
           </div>

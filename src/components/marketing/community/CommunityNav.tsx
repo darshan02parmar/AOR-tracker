@@ -20,7 +20,7 @@ type Props = {
  * in `marketing-core.css` (which the page also pulls in for footer
  * styling).
  *
- * Live count + "+ Submit Milestone" both wire into `useCommunityUi()` —
+ * Live count + "+ Submit Milestone" both wire into `useCommunityUi()`  
  * the shell owns the auto-ticking counter and the submit-modal state.
  */
 export function CommunityNav({

@@ -14,7 +14,7 @@ export function LandingStatsBar({ profileCount, medianSample }: LandingStatsBarP
     <div className="stats-bar stats-bar--five">
       <div className="stats-inner">
         <div className="">
-          <div className="stat-num">{profileCount != null ? fmtCompactK(profileCount) : "—"}</div>
+          <div className="stat-num">{profileCount != null ? fmtCompactK(profileCount) : " "}</div>
           <div className="stat-desc">Active timelines tracked</div>
         </div>
         <div className="">

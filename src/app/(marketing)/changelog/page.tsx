@@ -4,12 +4,12 @@ import { getChangelog } from "@/components/changelog/data";
 import { buildPageMetadata } from "@/lib/marketing-metadata";
 
 export const metadata = buildPageMetadata({
-  title: "Changelog — AORTrack | Canadian PR Processing Tracker",
+  title: "Changelog   AORTrack | Canadian PR Processing Tracker",
   description:
-    "AORTrack version history — all notable changes, fixes, and additions per release. Follows Keep a Changelog format.",
+    "AORTrack version history   all notable changes, fixes, and additions per release. Follows Keep a Changelog format.",
   path: "/changelog",
   ogImage: "home",
-  openGraphTitle: "Changelog — AORTrack",
+  openGraphTitle: "Changelog   AORTrack",
   openGraphDescription:
     "All notable changes per Keep a Changelog. Versions follow Semantic Versioning.",
 });

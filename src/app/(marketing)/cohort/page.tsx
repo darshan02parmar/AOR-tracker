@@ -79,7 +79,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
 
   const webPage: Record<string, unknown> = {
     "@type": "WebPage",
-    name: "Express Entry Cohort Analytics — Find Your Rank",
+    name: "Express Entry Cohort Analytics   Find Your Rank",
     url: cohortUrl,
     description:
       "How AORTrack builds Express Entry cohort analytics, percentile rank, and trustworthy methodology for finding your position vs peers.",
@@ -103,9 +103,9 @@ function structuredDataJsonLd(): Record<string, unknown> {
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata({
-    title: "Express Entry Cohort Analytics — Find Your Rank | AORTrack",
+    title: "Express Entry Cohort Analytics   Find Your Rank | AORTrack",
     description:
-      "Express Entry cohort tracker and percentile rank by AOR month and stream. See how your PR timeline compares to peers — free, community-powered, open methodology.",
+      "Express Entry cohort tracker and percentile rank by AOR month and stream. See how your PR timeline compares to peers   free, community-powered, open methodology.",
     path: "/cohort",
     ogImage: "guide",
     keywords: [

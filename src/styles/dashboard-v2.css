@@ -10,11 +10,11 @@
  * not interact with the marketing layout or any other page chrome.
  *
  * Source design: `samples/aortrack-dashboard.html`.
- * Iconography: react-icons (.fa) — SVGs styled via `currentColor`.
+ * Iconography: react-icons (.fa)   SVGs styled via `currentColor`.
  * ────────────────────────────────────────────────────────────────────────*/
 
 .dashboard-v2-page {
-  /* Lock the page to a single viewport screen — same pattern as the
+  /* Lock the page to a single viewport screen   same pattern as the
      community page (`.mkt-community-page .cm-layout` uses
      `height: calc(100vh - 60px)`). This way the sidebar and main column
      each scroll independently inside their grid cell and the BODY itself
@@ -22,8 +22,8 @@
      right-column content.
 
      Works in both mount points:
-       - `/dashboard`         — page sits directly under <body min-h-full>
-       - `/dashboard-new`     — page sits inside `.marketing-site` (flex col)
+       - `/dashboard`           page sits directly under <body min-h-full>
+       - `/dashboard-new`       page sits inside `.marketing-site` (flex col)
      `overflow: hidden` traps any internal overflow so nothing leaks into
      the body scroll. */
   display: flex;
@@ -32,7 +32,7 @@
   overflow: hidden;
   background: var(--cream);
 
-  /* design tokens (sample HTML's :root) — declared locally so the page is
+  /* design tokens (sample HTML's :root)   declared locally so the page is
      self-contained no matter where it is mounted in the route tree. */
   --cream: #fffcf5;
   --cream2: #f5f0e6;
@@ -53,7 +53,7 @@
   --pbg: #ede9fe;
   --border: #d5cfbf;
   --border2: #c8c0af;
-  /* Secondary copy on cream / white cards — navy-tinted (not warm grey) */
+  /* Secondary copy on cream / white cards   navy-tinted (not warm grey) */
   --muted: #2a3544;
   --muted2: #3d4d62;
   /* Readable copy on navy / dark chrome (avoid grey-on-navy) */
@@ -292,7 +292,7 @@
  * visible no matter how far the user scrolls the main column.
  *
  * Once the user scrolls past `.dlay` (via outer body scroll) the marketing
- * footer slides up below it — see the @media (max-width: 960px) override at
+ * footer slides up below it   see the @media (max-width: 960px) override at
  * the bottom of the file for the mobile fallback (single column, natural
  * scrolling).
  */
@@ -310,7 +310,7 @@
   border-right: 2px solid var(--border);
   padding: 16px 0;
   /* Match the community pattern (`.mkt-community-page .left-sb`):
-     fill the grid cell vertically and scroll the sidebar internally —
+     fill the grid cell vertically and scroll the sidebar internally  
      never with the right-column content. */
   height: 100%;
   min-height: 0;
@@ -465,13 +465,13 @@
 .dashboard-v2-page .dmain {
   padding: clamp(18px, 2.5vw, 32px) clamp(18px, 2.5vw, 36px);
   min-width: 0;
-  /* Same pattern as `.dsb` — the main column owns its own scroll so the
+  /* Same pattern as `.dsb`   the main column owns its own scroll so the
      sidebar (sibling grid column) stays fixed in place. */
   height: 100%;
   min-height: 0;
   overflow-y: auto;
   /* Sidebar anchor links (#tl-sec, #cohort-sec, #alerts-sec, #share-sec,
-     #top) target elements inside this column — smoothing the scroll lives
+     #top) target elements inside this column   smoothing the scroll lives
      on the scroll container itself. Respects user `prefers-reduced-motion`
      automatically via `scroll-behavior: smooth`'s spec. */
   scroll-behavior: smooth;
@@ -1558,7 +1558,7 @@
   }
   .dashboard-v2-page .dlay {
     grid-template-columns: 1fr;
-    /* Drop the height lock on mobile — the layout flows in document order,
+    /* Drop the height lock on mobile   the layout flows in document order,
        sidebar becomes a horizontal scroll row above the main column. */
     grid-template-rows: auto;
     flex: initial;

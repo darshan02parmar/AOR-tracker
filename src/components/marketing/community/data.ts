@@ -9,7 +9,7 @@
  *
  * This file is now the source of truth for:
  *   - the marketing-side TypeScript shapes (`Post`, `CommunityPageData`,
- *     etc.) — UI components consume these regardless of where the data
+ *     etc.)   UI components consume these regardless of where the data
  *     actually came from.
  *   - the seeded scaffolding that still has no backend: insights, pulse,
  *     contributors, discord card, browseLinks / quickLinks / sortOptions /
@@ -17,7 +17,7 @@
  *     (moderation pipeline TODO).
  *
  * `buildCommunityPageData(posts, counts)` merges the live feed into the
- * seeded scaffolding — see the bottom of this file.
+ * seeded scaffolding   see the bottom of this file.
  */
 
 import type { CommunityMsCounts } from "@/app/actions/community";
@@ -168,7 +168,7 @@ export type PulseWeek = {
 };
 
 export type Pulse = {
-  /** Headline e.g. "Weekly PPR Pulse — CEC General". */
+  /** Headline e.g. "Weekly PPR Pulse   CEC General". */
   label: string;
   weeks: PulseWeek[];
   thisWeekValue: number;
@@ -252,8 +252,8 @@ export const seedCommunity: CommunityPageData = {
 
   milestoneLinks: [
     { id: "ecopr", label: "eCOPR received", badge: "482" },
-    { id: "p1", label: "P1 — PR Portal", badge: "120" },
-    { id: "p2", label: "P2 — PR Portal", badge: "95" },
+    { id: "p1", label: "P1   PR Portal", badge: "120" },
+    { id: "p2", label: "P2   PR Portal", badge: "95" },
     { id: "bil", label: "BIL", badge: "318" },
     { id: "bgc", label: "Background Check", badge: "241" },
     { id: "medical", label: "Medical Passed", badge: "199" },
@@ -282,14 +282,14 @@ export const seedCommunity: CommunityPageData = {
 
   submitCta: {
     heading: "Got a milestone? Share it.",
-    sub: "Your BIL, BGC, portal steps (P1/P2), eCOPR — every date you log helps 1,240 applicants in your cohort predict their timeline.",
+    sub: "Your BIL, BGC, portal steps (P1/P2), eCOPR   every date you log helps 1,240 applicants in your cohort predict their timeline.",
     buttonLabel: "Submit Milestone",
     href: SUBMIT_HREF,
   },
 
   /**
    * Replaced wholesale by `buildCommunityPageData(...)` with live approved
-   * rows from MongoDB. Empty here on purpose — the previous seed cards
+   * rows from MongoDB. Empty here on purpose   the previous seed cards
    * have moved out of the way for the real feed.
    *
    * TODO(moderation): once the moderation queue exists, surface the
@@ -303,7 +303,7 @@ export const seedCommunity: CommunityPageData = {
     {
       id: "ins-1",
       tone: "amber",
-      title: "WES Tracker Lag — CEC",
+      title: "WES Tracker Lag   CEC",
       body: "12 applicants report WES results showing up 7–14 days after the IRCC tracker reflects them. May delay your BGC initiation.",
       reporters: "12 reporters",
       age: "3 days ago",
@@ -313,7 +313,7 @@ export const seedCommunity: CommunityPageData = {
       id: "ins-2",
       tone: "green",
       title: "eCOPR velocity up this week",
-      body: "18 eCOPR issuances logged in the Feb 2026 CEC cohort this week — highest since tracking began.",
+      body: "18 eCOPR issuances logged in the Feb 2026 CEC cohort this week   highest since tracking began.",
       reporters: "18 reporters",
       age: "1 day ago",
     },
@@ -328,7 +328,7 @@ export const seedCommunity: CommunityPageData = {
   ],
 
   pulse: {
-    label: "Weekly eCOPR pulse — CEC",
+    label: "Weekly eCOPR pulse   CEC",
     weeks: [
       { label: "Apr 7", value: 8 },
       { label: "Apr 14", value: 11 },

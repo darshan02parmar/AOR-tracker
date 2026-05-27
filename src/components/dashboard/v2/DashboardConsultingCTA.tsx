@@ -4,7 +4,7 @@ import { DN_CONSULTING_CTA } from "./data";
 import { IconArrowRight } from "./dashboard-icons";
 
 /**
- * Bottom red CTA bar — GetNorthPath consulting upsell.
+ * Bottom red CTA bar   GetNorthPath consulting upsell.
  *
  * Sample reference: `.cta-bar` block in `aortrack-dashboard.html`.
  */

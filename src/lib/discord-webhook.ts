@@ -148,7 +148,7 @@ function baseDescriptionLines(payload: {
 }): string[] {
   const human = humanizeCohortKey(payload.cohortKey);
   const lines = [
-    `**Seeded:** ${payload.seededData === true ? "Yes" : payload.seededData === false ? "No" : "—"}`,
+    `**Seeded:** ${payload.seededData === true ? "Yes" : payload.seededData === false ? "No" : " "}`,
     `**Email:** ${payload.email}`,
   ];
   if (payload.caseNo?.trim()) lines.push(`**Case #:** ${payload.caseNo.trim()}`);
@@ -176,7 +176,7 @@ function embedDescription(payload: DiscordNotifyPayload): string {
   const lines = baseDescriptionLines(payload);
   if (payload.kind === "profile_saved") {
     const aor = payload.aorDate?.trim();
-    lines.push(`**AOR date:** ${aor || "—"}`);
+    lines.push(`**AOR date:** ${aor || " "}`);
   }
   if (payload.kind === "milestone") {
     const dateLine = payload.date?.trim() ? payload.date : "cleared";
@@ -235,7 +235,7 @@ export async function notifyDiscordCecSeedSummary(
       : `${p.cohortKeysTouched.slice(0, 12).map((k) => `\`${k}\``).join(", ")} … (+${p.cohortKeysTouched.length - 12} more)`;
 
   const description = [
-    "**CEC Excel import finished** (`seededData: true` — team tracking label).",
+    "**CEC Excel import finished** (`seededData: true`   team tracking label).",
     "",
     `**File:** \`${p.excelPath}\``,
     `**Rows read:** ${p.rowsRead}`,
@@ -248,7 +248,7 @@ export async function notifyDiscordCecSeedSummary(
       ? `**Calibration median (days):** ${Math.round(p.calibrationMedian)}`
       : "",
     "",
-    `**Cohort keys:** ${cohortList || "—"}`,
+    `**Cohort keys:** ${cohortList || " "}`,
     p.discordEach
       ? "_Per-row profile webhooks were also sent (`discord=each`)._"
       : "_Per-row webhooks omitted (default). Use `?cec=1&discord=each` only for small tests._",
@@ -275,21 +275,21 @@ export async function notifyDiscordNewCohortPlaceholder(
   const description = [
     "A **placeholder** `cohort_stats` document was inserted because this cohort key did not exist yet.",
     "",
-    `**Seeded:** ${p.seededData === true ? "Yes" : p.seededData === false ? "No" : "—"}`,
+    `**Seeded:** ${p.seededData === true ? "Yes" : p.seededData === false ? "No" : " "}`,
     `**Cohort key:** \`${p.cohortKey}\``,
     `**Cohort:** ${human}`,
     `**Profile (trigger):** ${p.triggerEmail}`,
     p.caseNo?.trim() ? `**Case #:** ${p.caseNo.trim()}` : "",
     p.username?.trim() ? `**Username:** ${p.username.trim()}` : "",
     `**Stream / type / province:** ${p.stream} · ${p.type} · ${p.province}`,
-    `**AOR date:** ${p.aorDate?.trim() || "—"}`,
+    `**AOR date:** ${p.aorDate?.trim() || " "}`,
     "",
     "**Next step:** run the cohort stats sync / aggregation job so medians, `n_verified`, and charts reflect real profiles.",
   ].join("\n");
 
   await postDiscordEmbeds([
     {
-      title: "New cohort — placeholder stats row",
+      title: "New cohort   placeholder stats row",
       description,
       color: COLOR_COHORT_OPS,
     },
@@ -313,7 +313,7 @@ export type DiscordCommunityPostPayload = {
   replyTo?: { name: string; snippet: string };
 };
 
-/** Public community feed — separate webhook (`COMMUNITY_DISCORD_WEBHOOK_URL`). */
+/** Public community feed   separate webhook (`COMMUNITY_DISCORD_WEBHOOK_URL`). */
 export async function notifyDiscordCommunityPost(
   payload: DiscordCommunityPostPayload,
 ): Promise<void> {
@@ -340,7 +340,7 @@ export async function notifyDiscordCommunityPost(
     },
     {
       name: "📋 Cohort meta",
-      value: truncateForDiscord(payload.meta || "—", 256),
+      value: truncateForDiscord(payload.meta || " ", 256),
       inline: true,
     },
   ];
@@ -368,7 +368,7 @@ export async function notifyDiscordCommunityPost(
     },
     {
       name: "✉️ Message",
-      value: message ? `\`\`\`\n${message}\n\`\`\`` : "_—_",
+      value: message ? `\`\`\`\n${message}\n\`\`\`` : "_ _",
       inline: false,
     },
   );

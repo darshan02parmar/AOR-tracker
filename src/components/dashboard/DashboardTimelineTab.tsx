@@ -57,13 +57,13 @@ export function DashboardTimelineTab() {
         <div className="sc hi">
           <div className="slbl">Days since AOR</div>
           <div className="sval">{days}</div>
-          <div className="ssub">{fmtDate(profile.aorDate) || "—"}</div>
+          <div className="ssub">{fmtDate(profile.aorDate) || " "}</div>
         </div>
         <div className="sc">
           <div className="slbl">
             {journeyFromSeededPace ? "Typical journey" : "Median PPR (cohort)"}
           </div>
-          <div className="sval">{journeyDays > 0 ? journeyDays : "—"}</div>
+          <div className="sval">{journeyDays > 0 ? journeyDays : " "}</div>
           <div className="ssub">
             days · {profile.stream}
             {journeyFromSeededPace && median > 0
@@ -74,7 +74,7 @@ export function DashboardTimelineTab() {
         <div className="sc">
           <div className="slbl">Est. eCOPR</div>
           <div className="sval mt-1 text-base leading-tight">
-            {ppr?.windowLabel ?? "—"}
+            {ppr?.windowLabel ?? " "}
           </div>
           <div className="ssub">
             {cohortDisplay.n_verified} similar profiles
@@ -88,7 +88,7 @@ export function DashboardTimelineTab() {
           </div>
           <div className="ssub text-[#5de494]">
             {cohortDataSparse ? (
-              "Low sample — sync cohorts"
+              "Low sample   sync cohorts"
             ) : (
               <span className="inline-flex items-center gap-1">
                 <FaArrowUp aria-hidden />
@@ -137,7 +137,7 @@ export function DashboardTimelineTab() {
             <span className="text-[10px] leading-snug text-[var(--t3)] sm:hidden">
               Estimates from cohort median{" "}
               <strong className="text-[var(--t2)]">
-                {median > 0 ? `${median}d` : "—"}
+                {median > 0 ? `${median}d` : " "}
               </strong>{" "}
               PPR.
             </span>
@@ -240,7 +240,7 @@ export function DashboardTimelineTab() {
                       </div>
                       <span className="tlctxt">
                         {cohortTotal === 0 ? (
-                          <>No cohort data yet — more verified profiles will fill this in.</>
+                          <>No cohort data yet   more verified profiles will fill this in.</>
                         ) : (
                           <>
                             <b>{n}</b> of {cohortTotal} ({cp}%) past this
@@ -309,11 +309,11 @@ export function DashboardTimelineTab() {
                     : "rgba(255,255,255,.08)";
                 title =
                   i === pos
-                    ? `You — Day ${days} (sparse cohort)`
+                    ? `You   Day ${days} (sparse cohort)`
                     : "Awaiting data";
               } else if (i === pos) {
                 bg = "var(--red)";
-                title = `You — Day ${days}`;
+                title = `You   Day ${days}`;
               } else if (i < 94) {
                 bg = "var(--red)";
                 title = "PPR received";

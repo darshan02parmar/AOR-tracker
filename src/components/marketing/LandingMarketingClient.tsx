@@ -74,7 +74,7 @@ export function LandingMarketingClient() {
 
       <div className="sticky" id="mkt-sticky">
         <div>
-          <div className="sticky-text">AORTrack — Free PR Tracker</div>
+          <div className="sticky-text">AORTrack   Free PR Tracker</div>
           <div className="sticky-sub">Open source · Community powered · No signup</div>
         </div>
         <Link href="/track" className="btn-hero btn-red" style={{ fontSize: "0.84rem", padding: "10px 22px" }}>

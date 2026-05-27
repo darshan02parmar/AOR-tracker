@@ -27,7 +27,7 @@ export function LandingCohortSection() {
             <em style={{ fontStyle: "italic", color: "#4ade80" }}>in your cohort.</em>
           </h2>
           <p className="section-sub reveal" style={{ color: "rgba(255,255,255,.5)" }}>
-            Don&apos;t just know your day count. Understand your position in the full distribution —
+            Don&apos;t just know your day count. Understand your position in the full distribution  
             who&apos;s ahead, who&apos;s behind, and what the real processing curve looks like for your
             stream and month.
           </p>
@@ -49,7 +49,7 @@ export function LandingCohortSection() {
                 <FaBullseye size={16} aria-hidden />
               </div>
               <div className="cp-body">
-                <div className="cp-title">Your percentile rank — visualised</div>
+                <div className="cp-title">Your percentile rank   visualised</div>
                 <div className="cp-desc">
                   A colour-coded gradient bar from fastest to slowest, with your marker pinned to your
                   exact position. &quot;Top 28%&quot; becomes something you can see.
@@ -73,7 +73,7 @@ export function LandingCohortSection() {
                 <FaSync size={16} aria-hidden />
               </div>
               <div className="cp-body">
-                <div className="cp-title">Live KPIs — updated as data arrives</div>
+                <div className="cp-title">Live KPIs   updated as data arrives</div>
                 <div className="cp-desc">
                   Median PPR day, fastest PPR, cohort % complete, and your rank all update in real time
                   as community members log new milestones.
@@ -85,7 +85,7 @@ export function LandingCohortSection() {
 
         <div className="cohort-card reveal">
           <div className="cc-nav">
-            <span className="cc-nav-title">Cohort Deep Dive — CEC · Jan 2024</span>
+            <span className="cc-nav-title">Cohort Deep Dive   CEC · Jan 2024</span>
             <span className="cc-tag cc-tag-cec">CEC</span>
             <span className="cc-tag cc-tag-cnt">14,847</span>
           </div>
@@ -140,7 +140,7 @@ export function LandingCohortSection() {
             </div>
             <div className="cc-pct">
               <div className="cc-pct-hd">
-                <span className="cc-pct-title">Your Percentile Rank — Jan 2024 Cohort</span>
+                <span className="cc-pct-title">Your Percentile Rank   Jan 2024 Cohort</span>
                 <span className="cc-pct-badge">Top 28%</span>
               </div>
               <div className="cc-rank-bar">

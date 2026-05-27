@@ -1,4 +1,4 @@
-/** Font Awesome 6.5.1 — used by marketing HTML content under `src/content/`. */
+/** Font Awesome 6.5.1   used by marketing HTML content under `src/content/`. */
 export function FontAwesomeStylesheet() {
   return (
     <link

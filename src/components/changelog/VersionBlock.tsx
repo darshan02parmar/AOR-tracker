@@ -9,12 +9,12 @@ type Props = {
 };
 
 /**
- * Single version block — header (badge, title, GitHub release link) followed
+ * Single version block   header (badge, title, GitHub release link) followed
  * by its change sections, contributor row, and optional "What came next"
  * inline box.
  *
  * TODO(github-integration): when GitHub becomes the source, this component
- * stays the same — it only consumes the `Version` shape. The work moves to
+ * stays the same   it only consumes the `Version` shape. The work moves to
  * `data.ts`' loader, which will map a GitHub release into this shape.
  */
 export function VersionBlock({ version }: Props) {

@@ -8,7 +8,7 @@ export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
 
 /**
  * Initializes Microsoft Clarity for session recordings and heatmaps.
- * Mount once in the root layout — applies to every App Router page.
+ * Mount once in the root layout   applies to every App Router page.
  */
 export function MicrosoftClarity() {
   useEffect(() => {

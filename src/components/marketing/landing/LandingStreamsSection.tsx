@@ -16,14 +16,14 @@ export function LandingStreamsSection() {
         <p className="section-eye reveal">Immigration Streams</p>
         <h2 className="section-h2 reveal">Track any Canadian PR pathway.</h2>
         <p className="section-sub reveal">
-          Community data across all major Express Entry and provincial streams — updated in real time
+          Community data across all major Express Entry and provincial streams   updated in real time
           as applicants log milestones.
         </p>
         <div className="stream-grid">
           <Link href="/streams/cec" className="stream-card featured reveal">
             <div className="sc-head green-bg">
               <div>
-                <div className="sc-title">CEC — Canadian Experience Class</div>
+                <div className="sc-title">CEC   Canadian Experience Class</div>
                 <div className="sc-sub">General &amp; STEM streams</div>
               </div>
               <span className="sc-icon">
@@ -48,7 +48,7 @@ export function LandingStreamsSection() {
           <Link href="/streams/fsw" className="stream-card reveal">
             <div className="sc-head navy-bg">
               <div>
-                <div className="sc-title">FSW — Federal Skilled Worker</div>
+                <div className="sc-title">FSW   Federal Skilled Worker</div>
                 <div className="sc-sub">International applicants</div>
               </div>
               <span className="sc-icon">
@@ -73,7 +73,7 @@ export function LandingStreamsSection() {
           <Link href="/streams/pnp" className="stream-card reveal">
             <div className="sc-head blue-bg">
               <div>
-                <div className="sc-title">PNP — Provincial Nominee</div>
+                <div className="sc-title">PNP   Provincial Nominee</div>
                 <div className="sc-sub">Province-backed nominees</div>
               </div>
               <span className="sc-icon">
@@ -98,7 +98,7 @@ export function LandingStreamsSection() {
           <Link href="/streams/fst" className="stream-card reveal">
             <div className="sc-head teal-bg">
               <div>
-                <div className="sc-title">FST — Federal Skilled Trades</div>
+                <div className="sc-title">FST   Federal Skilled Trades</div>
                 <div className="sc-sub">Skilled tradespeople</div>
               </div>
               <span className="sc-icon">
@@ -149,7 +149,7 @@ export function LandingStreamsSection() {
             </div>
             <div className="mkt-stream-add-title">More streams coming</div>
             <div className="mkt-stream-add-sub">
-              Rural &amp; Northern, Agri-Food, RNIP — vote on our roadmap
+              Rural &amp; Northern, Agri-Food, RNIP   vote on our roadmap
             </div>
             <Link href="/roadmap" className="mkt-stream-add-link">
               View Roadmap

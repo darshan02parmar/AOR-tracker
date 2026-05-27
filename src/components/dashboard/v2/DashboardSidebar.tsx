@@ -101,7 +101,7 @@ function SidebarRow({
  *
  * Differences from the sample:
  *   - Iconography uses react-icons instead of inline SVGs/emojis.
- *   - A "Share" section is added (per spec) — the production `/dashboard`
+ *   - A "Share" section is added (per spec)   the production `/dashboard`
  *     sidebar exposes a Share link, so the new design mirrors it.
  *   - The icon next to the type label uses `IconHome` instead of 🏠.
  *
@@ -110,7 +110,7 @@ function SidebarRow({
  * wire `deleteProfileAction`; the default (used by the preview) just toasts.
  *
  * When `noEmailWarn` is explicitly `null`, the amber "Add email" banner is
- * hidden — handy on the live dashboard once the user has an email on file.
+ * hidden   handy on the live dashboard once the user has an email on file.
  */
 export function DashboardSidebar({
   profile = DN_PROFILE,
@@ -134,7 +134,7 @@ export function DashboardSidebar({
       onConfirmDelete();
       return;
     }
-    showToast("Deletion requested — you will receive a confirmation email");
+    showToast("Deletion requested   you will receive a confirmation email");
   };
 
   return (

@@ -9,7 +9,7 @@ export type WikiNavGroup = {
   children?: WikiNavItem[];
 };
 
-/** Sidebar / scroll-spy structure — ids must match section elements in WikiFullPage. */
+/** Sidebar / scroll-spy structure   ids must match section elements in WikiFullPage. */
 export const WIKI_NAV: WikiNavGroup[] = [
   {
     id: "session-identity",

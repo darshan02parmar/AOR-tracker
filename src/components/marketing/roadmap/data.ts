@@ -1,5 +1,5 @@
 /**
- * Roadmap data — static seed.
+ * Roadmap data   static seed.
  *
  * TODO(github-projects-integration): Today this file is the single source of
  *   truth for everything rendered on `/roadmap`. In the future we want the
@@ -63,7 +63,7 @@ export type RoadmapAvatarTone =
 
 export type RoadmapAssignee = {
   initials: string;
-  /** e.g. "@community-dev" — optional handle. */
+  /** e.g. "@community-dev"   optional handle. */
   handle?: string;
   tone: RoadmapAvatarTone;
 };
@@ -104,7 +104,7 @@ export type RoadmapMilestone = {
   version: string;
   /** e.g. "May 1, 2026". */
   date: string;
-  /** "Reached" / "In Progress" / "Planned" / "Target" — purely cosmetic. */
+  /** "Reached" / "In Progress" / "Planned" / "Target"   purely cosmetic. */
   status: string;
   state: RoadmapMilestoneState;
   title: string;
@@ -153,7 +153,7 @@ export type RoadmapData = {
     issues: string;
     feedback: string;
     changelog: string;
-    /** Base URL of an individual issue page — append `/${number}` to it. */
+    /** Base URL of an individual issue page   append `/${number}` to it. */
     issueBase: string;
   };
 };
@@ -170,7 +170,7 @@ const seedRoadmap: RoadmapData = {
       { label: "Last synced", value: "3 min ago" },
       { label: "Open issues", value: "24" },
       { label: "Contributors", value: "8" },
-      // "GitHub stars" pill carries a trailing star icon — see RoadmapHero.
+      // "GitHub stars" pill carries a trailing star icon   see RoadmapHero.
       { label: "GitHub stars", value: "147" },
     ],
   },
@@ -197,7 +197,7 @@ const seedRoadmap: RoadmapData = {
       issue: 47,
       title: "Add OINP stream processing data",
       description:
-        "Ontario Immigrant Nominee Program — most requested stream. Requires new cohort key, stream rollout, and province-based cohort grouping.",
+        "Ontario Immigrant Nominee Program   most requested stream. Requires new cohort key, stream rollout, and province-based cohort grouping.",
       status: "planned",
       priority: "high",
       categories: ["feat", "data"],
@@ -256,7 +256,7 @@ const seedRoadmap: RoadmapData = {
       votes: 12,
       voted: true,
       progress: 70,
-      note: "PR #66 open — native input fallback fix",
+      note: "PR #66 open   native input fallback fix",
       assignee: { initials: "cd", handle: "@community-dev", tone: "blue" },
     },
     {
@@ -269,7 +269,7 @@ const seedRoadmap: RoadmapData = {
       categories: ["seo", "feat"],
       votes: 18,
       progress: 85,
-      note: "All stream pages built — schema validation in QA",
+      note: "All stream pages built   schema validation in QA",
       assignee: { initials: "sc", tone: "purple" },
     },
     {
@@ -283,7 +283,7 @@ const seedRoadmap: RoadmapData = {
       votes: 14,
       voted: true,
       progress: 95,
-      note: "PR #64 merged — deploying to staging today",
+      note: "PR #64 merged   deploying to staging today",
       assignee: { initials: "dd", tone: "amber" },
     },
     {
@@ -309,7 +309,7 @@ const seedRoadmap: RoadmapData = {
       categories: ["feat", "perf"],
       votes: 9,
       progress: 60,
-      note: "Dot grid rendering complete — legend in progress",
+      note: "Dot grid rendering complete   legend in progress",
     },
     {
       issue: 53,

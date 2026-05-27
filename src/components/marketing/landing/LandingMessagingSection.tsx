@@ -36,7 +36,7 @@ export function LandingMessagingSection() {
               </div>
               <div className="ma-body">
                 <div className="ma-title">
-                  Your cohort just hit 40% PPR&apos;d — you&apos;re entering the next wave
+                  Your cohort just hit 40% PPR&apos;d   you&apos;re entering the next wave
                 </div>
                 <div className="ma-sub">
                   CEC Jan 2024 accelerating. Window narrows to Aug–Sep 2025 based on cohort velocity.
@@ -65,7 +65,7 @@ export function LandingMessagingSection() {
               <div className="ma-body">
                 <div className="ma-title">3 people from your exact cohort got PPR today</div>
                 <div className="ma-sub">
-                  Day 244, 247, 251 — all CEC Jan 2024. You&apos;re in the same window.
+                  Day 244, 247, 251   all CEC Jan 2024. You&apos;re in the same window.
                 </div>
                 <div className="ma-time">Yesterday</div>
               </div>
@@ -119,7 +119,7 @@ export function LandingMessagingSection() {
             something changes.
           </h2>
           <p className="section-sub reveal">
-            The PR process is opaque. AORTrack makes it transparent — by telling you in real time when
+            The PR process is opaque. AORTrack makes it transparent   by telling you in real time when
             your cohort accelerates, when processing times shift, and when your PPR window narrows.
           </p>
           <div className="msg-points reveal">
@@ -130,7 +130,7 @@ export function LandingMessagingSection() {
               <div>
                 <div className="mpp-title">Cohort milestone alerts</div>
                 <div className="mpp-desc">
-                  Get notified when your cohort hits 25%, 50%, or 75% PPR&apos;d — so you know when the
+                  Get notified when your cohort hits 25%, 50%, or 75% PPR&apos;d   so you know when the
                   wave is coming before it arrives.
                 </div>
               </div>
@@ -143,7 +143,7 @@ export function LandingMessagingSection() {
                 <div className="mpp-title">PPR window updates</div>
                 <div className="mpp-desc">
                   When new community data shifts your estimated PPR window by 7+ days, you&apos;ll know
-                  immediately — not when you remember to check.
+                  immediately   not when you remember to check.
                 </div>
               </div>
             </div>
@@ -154,7 +154,7 @@ export function LandingMessagingSection() {
               <div>
                 <div className="mpp-title">Real-time cohort signals</div>
                 <div className="mpp-desc">
-                  See when people in your exact cohort — same stream, same month — are getting PPR.
+                  See when people in your exact cohort   same stream, same month   are getting PPR.
                   Understand where the momentum is building.
                 </div>
               </div>
@@ -166,7 +166,7 @@ export function LandingMessagingSection() {
               <div>
                 <div className="mpp-title">Your channel, your choice</div>
                 <div className="mpp-desc">
-                  Receive alerts where you actually read them — in-app notification, email digest, or a
+                  Receive alerts where you actually read them   in-app notification, email digest, or a
                   ping in our Discord community.
                 </div>
               </div>

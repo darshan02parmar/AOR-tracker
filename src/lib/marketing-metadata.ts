@@ -59,29 +59,29 @@ export const STREAM_RICH_META: Record<
   { title: string; description: string }
 > = {
   cec: {
-    title: "CEC Processing Time 2026 — Live Community Data | AORTrack",
+    title: "CEC Processing Time 2026   Live Community Data | AORTrack",
     description:
-      "CEC processing time 2026 and Canadian Experience Class wait time from live AORTrack cohorts — median 184 days, P25–P75, histogram. Free.",
+      "CEC processing time 2026 and Canadian Experience Class wait time from live AORTrack cohorts   median 184 days, P25–P75, histogram. Free.",
   },
   fsw: {
-    title: "FSW Processing Time 2026 — Federal Skilled Worker | AORTrack",
+    title: "FSW Processing Time 2026   Federal Skilled Worker | AORTrack",
     description:
-      "FSW processing time 2026 — median 267 days from community data. Full FSW vs CEC comparison, cohort histogram, P25–P75. Free.",
+      "FSW processing time 2026   median 267 days from community data. Full FSW vs CEC comparison, cohort histogram, P25–P75. Free.",
   },
   pnp: {
-    title: "PNP Processing Time 2026 — Provincial Nominee Program | AORTrack",
+    title: "PNP Processing Time 2026   Provincial Nominee Program | AORTrack",
     description:
-      "PNP processing time 2026 from community data — median ~312 days, P25–P75, vs CEC and FSW. Provincial nominee PR timelines on AORTrack. Free.",
+      "PNP processing time 2026 from community data   median ~312 days, P25–P75, vs CEC and FSW. Provincial nominee PR timelines on AORTrack. Free.",
   },
   fst: {
-    title: "FST Processing Time 2026 — Federal Skilled Trades | AORTrack",
+    title: "FST Processing Time 2026   Federal Skilled Trades | AORTrack",
     description:
-      "FST processing time 2026 — median 284 days from community data. Federal Skilled Trades vs FSW and CEC comparison, histogram, P25–P75. Free.",
+      "FST processing time 2026   median 284 days from community data. Federal Skilled Trades vs FSW and CEC comparison, histogram, P25–P75. Free.",
   },
   atlantic: {
     title: "Atlantic Immigration Program Processing Time 2026 | AORTrack",
     description:
-      "Atlantic Immigration Program processing time 2026 — median 228 days from community data. NS, NB, NL, PEI federal-stage timelines vs PNP and CEC. Free.",
+      "Atlantic Immigration Program processing time 2026   median 228 days from community data. NS, NB, NL, PEI federal-stage timelines vs PNP and CEC. Free.",
   },
 };
 

@@ -1,5 +1,5 @@
 /**
- * v2.0 cohort algorithm — recency-weighted distribution with survival bias correction.
+ * v2.0 cohort algorithm   recency-weighted distribution with survival bias correction.
  * Spec: analyze.md (§2, §6, §8b).
  */
 

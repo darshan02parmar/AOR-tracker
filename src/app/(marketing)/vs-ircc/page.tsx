@@ -42,7 +42,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
         name: "Is IRCC wrong about Express Entry processing times?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "IRCC publishes service standards and inventory-based estimates that describe typical targets and backlogs — not a personal guarantee for your file. Community trackers measure realized timelines (for example AOR to PPR or eCOPR) for self-selected cohorts. Both can be “right” for different definitions; the gap is usually definitional, not a conspiracy.",
+          text: "IRCC publishes service standards and inventory-based estimates that describe typical targets and backlogs   not a personal guarantee for your file. Community trackers measure realized timelines (for example AOR to PPR or eCOPR) for self-selected cohorts. Both can be “right” for different definitions; the gap is usually definitional, not a conspiracy.",
         },
       },
       {
@@ -58,7 +58,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
         name: "How does AORTrack compare to IRCC processing times?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "AORTrack aggregates anonymized milestone dates volunteered by applicants to show cohort medians and percentiles by AOR month and stream. IRCC publishes official service standards and tools. Use IRCC for authoritative policy and status; use community statistics for expectation-setting and peer context — never as legal advice.",
+          text: "AORTrack aggregates anonymized milestone dates volunteered by applicants to show cohort medians and percentiles by AOR month and stream. IRCC publishes official service standards and tools. Use IRCC for authoritative policy and status; use community statistics for expectation-setting and peer context   never as legal advice.",
         },
       },
     ],
@@ -90,7 +90,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata({
     title: "Real Express Entry Processing Times vs IRCC's Estimate | AORTrack",
     description:
-      "IRCC vs community PR timelines: why generic Express Entry estimates differ from AORTrack medians for CEC, FSW, PNP, FST, and Atlantic — methodology and how to use both.",
+      "IRCC vs community PR timelines: why generic Express Entry estimates differ from AORTrack medians for CEC, FSW, PNP, FST, and Atlantic   methodology and how to use both.",
     path: "/vs-ircc",
     ogImage: "guide",
     ogType: "article",

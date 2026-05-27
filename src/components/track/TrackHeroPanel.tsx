@@ -10,19 +10,19 @@ import { IconArrowLeft, TrustIcon } from "./track-icons";
 type Props = {
   /** Live counter label rendered in the eyebrow chip (e.g. "14,827 timelines live"). */
   liveCount: string;
-  /** Selected stream — used for histogram title when known. */
+  /** Selected stream   used for histogram title when known. */
   stream?: StreamId | null;
   /** Typical AOR → eCOPR days (seeded pace or cohort median) for the red marker. */
   estimatedDays?: number | null;
 };
 
 /**
- * Left dark column on `/track` — purely presentational marketing reassurance:
+ * Left dark column on `/track`   purely presentational marketing reassurance:
  * eyebrow with the live counter, headline, preview stats, cohort mini-chart,
  * and the trust list.
  *
  * No interactive state of its own, so this is a regular server-renderable
- * component — `liveCount` is passed in as a prop and updated by the
+ * component   `liveCount` is passed in as a prop and updated by the
  * parent client orchestrator.
  */
 export function TrackHeroPanel({
@@ -32,8 +32,8 @@ export function TrackHeroPanel({
 }: Props) {
   const cohortBars = cohortPreviewForEstimate(estimatedDays ?? null);
   const chartTitle = stream
-    ? `${stream} — Days to eCOPR distribution`
-    : "CEC — Days to eCOPR distribution";
+    ? `${stream}   Days to eCOPR distribution`
+    : "CEC   Days to eCOPR distribution";
 
   return (
     <div className="tk-left">
@@ -48,7 +48,7 @@ export function TrackHeroPanel({
         </h1>
         <p className="tk-left-sub">
           Real data from applicants like you. Community-verified submissions only.
-          No guesswork — your cohort, your stream, your actual estimate.
+          No guesswork   your cohort, your stream, your actual estimate.
         </p>
 
         <div className="tk-ps-grid">

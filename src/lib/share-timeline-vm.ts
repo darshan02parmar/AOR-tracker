@@ -9,7 +9,7 @@ import { fmtDate } from "@/lib/format";
 import type { UserProfile } from "@/lib/types";
 
 /**
- * Stable short id ("#4821") — same algorithm as the signed-in dashboard chrome.
+ * Stable short id ("#4821")   same algorithm as the signed-in dashboard chrome.
  */
 export function applicantIdFromEmail(email: string): string {
   let h = 0;
@@ -42,7 +42,7 @@ function rowStateFor(
 function dayLabel(aorDate: string, milestoneDate: string): string {
   const aor = new Date(`${aorDate}T12:00:00`);
   const m = new Date(`${milestoneDate}T12:00:00`);
-  if (Number.isNaN(aor.getTime()) || Number.isNaN(m.getTime())) return "—";
+  if (Number.isNaN(aor.getTime()) || Number.isNaN(m.getTime())) return " ";
   const d = Math.round((m.getTime() - aor.getTime()) / 86_400_000);
   return `Day ${d}`;
 }

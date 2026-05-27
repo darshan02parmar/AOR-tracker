@@ -174,7 +174,7 @@ export function milestoneEstimatesFromPace(
     const n = pace.segment_n[key] ?? 0;
     if (!row) {
       out[key] = {
-        estLabel: "—",
+        estLabel: " ",
         desc: `Not enough community milestone dates for this step (need at least ${MIN_SEGMENT_N} paired timelines).`,
         available: false,
       };

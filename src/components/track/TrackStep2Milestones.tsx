@@ -38,7 +38,7 @@ function formatStored(date: string): string {
 }
 
 /**
- * Step 2 — post-AOR milestones (BIL, biometrics, BGC, medical, PPR).
+ * Step 2   post-AOR milestones (BIL, biometrics, BGC, medical, PPR).
  *
  * Each row is a checkbox header that toggles a collapsible date input
  * below. When `ecopr` is checked but `biometrics` is not, a warning callout
@@ -62,7 +62,7 @@ export function TrackStep2Milestones({
         <div className="tk-step-title">Completed milestones</div>
         <div className="tk-step-desc">
           Check any milestones you&apos;ve already received and enter the date.
-          All optional — skip any you haven&apos;t reached yet.
+          All optional   skip any you haven&apos;t reached yet.
         </div>
       </div>
 
@@ -135,7 +135,7 @@ export function TrackStep2Milestones({
         onClick={onSkip}
         style={{ color: "var(--muted2)" }}
       >
-        Skip — I haven&apos;t reached any milestones yet
+        Skip   I haven&apos;t reached any milestones yet
       </button>
     </div>
   );

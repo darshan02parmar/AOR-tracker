@@ -147,8 +147,8 @@ export async function getPublicSharePayloadAction(
   const journeyDays = journeyTargetDays(pace, median);
   const pct = pctThroughMedian(days, journeyDays);
 
-  let pprP50 = "—";
-  let pprWindow = "—";
+  let pprP50 = " ";
+  let pprWindow = " ";
   if (aorDate) {
     const est = resolveApprovalEstimate(aorDate, cohort, pace, profile);
     pprP50 = est.p50Approx;
@@ -183,7 +183,7 @@ export async function getPublicSharePayloadAction(
     pprWindow,
     applicantId: applicantIdFromEmail(profile.email),
     aorDateLabel: aorDate ? fmtDate(aorDate) : "Not set",
-    typeLabel: profile.type || "—",
+    typeLabel: profile.type || " ",
     timelineRows,
     timelineNote,
   };

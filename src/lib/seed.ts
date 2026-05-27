@@ -10,7 +10,7 @@ const EMPTY_DIST: CohortStats["dist"] = [
   { range: "> 240d", count: 0, pct: 0, you: false },
 ];
 
-/** Cohort stats when Mongo has no document — no synthetic medians or histograms. */
+/** Cohort stats when Mongo has no document   no synthetic medians or histograms. */
 export function emptyCohortStats(cohortKey: string): CohortStats {
   return {
     cohortKey,
@@ -135,7 +135,7 @@ const SEED_POSTS: Omit<
   },
 ];
 
-/** Idempotent indexes — invoked from `getDb()` on first use. */
+/** Idempotent indexes   invoked from `getDb()` on first use. */
 export async function ensureIndexes(db: Db): Promise<void> {
   const posts = db.collection("community_posts");
   await db.collection("profiles").createIndex({ emailNorm: 1 }, { unique: true });

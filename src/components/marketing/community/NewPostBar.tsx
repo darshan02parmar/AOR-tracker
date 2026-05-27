@@ -22,7 +22,7 @@ export function NewPostBar({ currentTotal, serverTotal, onLoad }: Props) {
       ? serverTotal - currentTotal
       : 0;
   const isVisible = newCount > 0;
-  const label = `${newCount} new post${newCount > 1 ? "s" : ""} — click to load`;
+  const label = `${newCount} new post${newCount > 1 ? "s" : ""}   click to load`;
 
   if (!isVisible) return null;
 

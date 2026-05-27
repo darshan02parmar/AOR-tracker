@@ -27,7 +27,7 @@ export function DashboardDotMap({
     const { total, pprUpTo, midUpTo, youIndex } = map;
     return Array.from({ length: total }, (_, i) => {
       if (i === youIndex) {
-        return { cls: "dm you", title: `You — Applicant ${applicantId}` };
+        return { cls: "dm you", title: `You   Applicant ${applicantId}` };
       }
       if (i < pprUpTo) return { cls: "dm ecopr", title: "eCOPR received" };
       if (i < midUpTo) return { cls: "dm mid", title: "BGC / Medical" };
@@ -47,7 +47,7 @@ export function DashboardDotMap({
       <div className="sec-head" style={{ marginBottom: 0 }}>
         <div>
           <div className="sec-title" style={{ fontSize: ".92rem" }}>
-            Cohort Dot Map — 500 sampled
+            Cohort Dot Map   500 sampled
           </div>
           <div className="sec-sub">
             <span style={{ color: "var(--red)", fontWeight: 700 }}>

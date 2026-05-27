@@ -18,7 +18,7 @@ type Props = {
   email: string;
   onEmail: (v: string) => void;
   /**
-   * Called when the gate concludes "this email is new — start onboarding".
+   * Called when the gate concludes "this email is new   start onboarding".
    * The orchestrator switches to the 3-step flow with the email pre-filled.
    */
   onStartOnboarding: () => void;
@@ -35,7 +35,7 @@ type Props = {
  *     drops the user into Step 1 of the onboarding flow (email carried
  *     forward to Step 3).
  *
- * The lookup is performed by `getProfileAction` — same server action the
+ * The lookup is performed by `getProfileAction`   same server action the
  * dashboard uses, so the answer here matches what `/dashboard` will see.
  */
 export function TrackGate({ email, onEmail, onStartOnboarding }: Props) {
@@ -61,7 +61,7 @@ export function TrackGate({ email, onEmail, onStartOnboarding }: Props) {
         setPhase("new");
       }
     } catch {
-      setError("Couldn't check that email — please try again.");
+      setError("Couldn't check that email   please try again.");
     } finally {
       setChecking(false);
     }
@@ -76,7 +76,7 @@ export function TrackGate({ email, onEmail, onStartOnboarding }: Props) {
     <div
       className="tk-panel active"
       role="tabpanel"
-      aria-label="Track gate — sign in or start a new profile"
+      aria-label="Track gate   sign in or start a new profile"
     >
       <div className="tk-step-head">
         <div className="tk-step-num">Welcome</div>
@@ -130,7 +130,7 @@ export function TrackGate({ email, onEmail, onStartOnboarding }: Props) {
               onClick={handleStartFresh}
               disabled={checking}
             >
-              I&apos;m new — start fresh
+              I&apos;m new   start fresh
             </button>
             <button
               type="button"
@@ -200,7 +200,7 @@ export function TrackGate({ email, onEmail, onStartOnboarding }: Props) {
         </div>
       ) : null}
 
-      {/* ── Email not registered — invite to start onboarding ───── */}
+      {/* ── Email not registered   invite to start onboarding ───── */}
       {phase === "new" ? (
         <div
           className="tk-field-note warn"
@@ -216,7 +216,7 @@ export function TrackGate({ email, onEmail, onStartOnboarding }: Props) {
                 : "Starting a new profile"}
             </strong>
             <div style={{ marginTop: 4 }}>
-              Let&apos;s create one — it only takes a few steps. We&apos;ll
+              Let&apos;s create one   it only takes a few steps. We&apos;ll
               carry {trimmed ? "this email" : "your email"}{" "} forward to the
               last step so you don&apos;t have to retype it.
             </div>

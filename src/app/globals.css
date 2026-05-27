@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "../styles/aortrack.css";
 
-/* Google Fonts (loaded via DeferredStylesheet in root layout — matches GetNorthPath) */
+/* Google Fonts (loaded via DeferredStylesheet in root layout   matches GetNorthPath) */
 :root {
   --font-fraunces: "Fraunces", Georgia, serif;
   --font-dm-sans: "DM Sans", system-ui, sans-serif;

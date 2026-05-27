@@ -62,7 +62,7 @@ export const DN_HERO_STATS: DnHeroStats = {
   },
   expectedApproval: {
     value: "Aug – Oct 2026",
-    note: "Not guaranteed — estimate only",
+    note: "Not guaranteed   estimate only",
   },
 };
 
@@ -88,7 +88,7 @@ export const DN_INFO_CARDS: DnInfoCard[] = [
     valueTone: "teal",
     note: "of the typical journey complete",
     explain:
-      "You've passed 38% of the typical timeline. Most people in your group finish their journey in about 184 days — you're on Day 70.",
+      "You've passed 38% of the typical timeline. Most people in your group finish their journey in about 184 days   you're on Day 70.",
   },
   {
     id: "cohort-ppr",
@@ -98,7 +98,7 @@ export const DN_INFO_CARDS: DnInfoCard[] = [
     value: "0%",
     note: "of your group has been approved yet",
     explain:
-      "Nobody in your group has received final approval yet. This is normal — you're all early in the process. Check back weekly for updates.",
+      "Nobody in your group has received final approval yet. This is normal   you're all early in the process. Check back weekly for updates.",
   },
   {
     id: "weekly-ppr",
@@ -109,7 +109,7 @@ export const DN_INFO_CARDS: DnInfoCard[] = [
     valueTone: "teal",
     note: "people approved across all groups this week",
     explain:
-      "Great news — approvals are picking up! 38% more than last week. This suggests IRCC is processing files faster.",
+      "Great news   approvals are picking up! 38% more than last week. This suggests IRCC is processing files faster.",
   },
 ];
 
@@ -135,9 +135,9 @@ export type DnJourneyProgress = {
 export const DN_JOURNEY_PROGRESS: DnJourneyProgress = {
   title: "Where you are on your journey",
   progressPct: 34.8,
-  startLabel: "Start — Mar 4, 2026 (Day 0)",
-  endLabel: "Median finish — Sep 30, 2026 (Day 210)",
-  centerLabel: "You are here — Day 73 of 210 — 34.8% through your journey",
+  startLabel: "Start   Mar 4, 2026 (Day 0)",
+  endLabel: "Median finish   Sep 30, 2026 (Day 210)",
+  centerLabel: "You are here   Day 73 of 210   34.8% through your journey",
   stats: [
     {
       label: "Waited",
@@ -205,7 +205,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
   {
     key: "aor",
     state: "done",
-    name: "AOR — Acknowledgement of Receipt",
+    name: "AOR   Acknowledgement of Receipt",
     desc: "Your application entered the IRCC processing queue.",
     badge: { kind: "verified", label: "Verified" },
     date: { date: "Feb 20, 2026", day: "Day 0" },
@@ -255,7 +255,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
   {
     key: "p1",
     state: "wait",
-    name: "P1 — PR Portal (first invitation)",
+    name: "P1   PR Portal (first invitation)",
     desc:
       "IRCC invites you to confirm you are in Canada and complete the first Permanent Residence Portal tasks.",
     badge: {
@@ -268,7 +268,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
   {
     key: "p2",
     state: "wait",
-    name: "P2 — PR Portal (photo & address)",
+    name: "P2   PR Portal (photo & address)",
     desc:
       "Submit your portrait photo and Canadian mailing address for your PR card in the portal.",
     badge: {
@@ -283,7 +283,7 @@ export const DN_TIMELINE: DnTimelineRow[] = [
     state: "final",
     name: "eCOPR issued",
     desc:
-      "Electronic Confirmation of Permanent Residence — formal PR grant; proof of status until your PR card arrives.",
+      "Electronic Confirmation of Permanent Residence   formal PR grant; proof of status until your PR card arrives.",
     badge: {
       kind: "estimate",
       label: "Est. Aug–Oct 2026 · P25–P75 · cohort completion",
@@ -337,13 +337,13 @@ export const DN_COHORT_BARS: DnCohortBar[] = [
     fill: "a",
   },
   {
-    name: "P1 — PR Portal (first)",
+    name: "P1   PR Portal (first)",
     countLabel: "312 / 1,240 (25%)",
     pct: 25,
     fill: "a",
   },
   {
-    name: "P2 — PR Portal (photo & address)",
+    name: "P2   PR Portal (photo & address)",
     countLabel: "198 / 1,240 (16%)",
     pct: 16,
     fill: "a",
@@ -431,7 +431,7 @@ export const DN_SHARE: DnShare = {
 export const DN_CONSULTING_CTA = {
   heading: "Need more than tracking?",
   sub:
-    "GetNorthPath consultants manage your full PR application — ITA strategy through PPR submission. $299 CAD, AI-powered forms, expert review.",
+    "GetNorthPath consultants manage your full PR application   ITA strategy through PPR submission. $299 CAD, AI-powered forms, expert review.",
   ctaLabel: "Book Free Consultation",
   href: "https://www.getnorthpath.com/contact?utm_source=dashboard",
 };
@@ -510,7 +510,7 @@ export const DN_SIDEBAR: SidebarSections = {
    * `Share Timeline`). The order matches the production sidebar so users
    * upgrading from the old design see the same grouping.
    *
-   * `Processing Stats` keeps living at `/dashboard/stats` for now — the new
+   * `Processing Stats` keeps living at `/dashboard/stats` for now   the new
    * page-level Share section is reached via the `#share-sec` anchor.
    */
   share: [

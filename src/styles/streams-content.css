@@ -1,5 +1,5 @@
 /**
- * Stream landing pages (`/streams/*`) — injected HTML lives inside `.stream-page`.
+ * Stream landing pages (`/streams/*`)   injected HTML lives inside `.stream-page`.
  * Overrides `.marketing-site a { color: inherit }` and ghost `.btn-red` from marketing-core.
  */
 
@@ -25,7 +25,7 @@
   text-decoration: none;
 }
 
-/* Primary CTAs — must beat `.marketing-site .btn-red` ghost styles */
+/* Primary CTAs   must beat `.marketing-site .btn-red` ghost styles */
 .marketing-site .stream-page a.btn-red {
   background: var(--red) !important;
   border: 2px solid var(--red) !important;
@@ -124,7 +124,7 @@
   color: #6b6256;
 }
 
-/* Button layout — full-width stacked CTAs at all breakpoints */
+/* Button layout   full-width stacked CTAs at all breakpoints */
 .stream-page .sp-actions,
 .stream-page .cta-btns {
   display: flex;
@@ -196,7 +196,7 @@
   line-height: 1;
 }
 
-/* Navy cohort/compare band — white icons on tinted squares (not milestone cards) */
+/* Navy cohort/compare band   white icons on tinted squares (not milestone cards) */
 .stream-page .sp-cohort .cp-icon i,
 .stream-page .sp-compare .cp-icon i {
   color: #fff !important;

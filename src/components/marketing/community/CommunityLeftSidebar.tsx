@@ -58,11 +58,11 @@ function buildCohortMiniFromProfile(p: UserProfile): CohortMini {
   return {
     label: "My Profile",
     rows: [
-      { key: "Stream", value: p.stream || "—", emphasis: "green" },
-      { key: "AOR Month", value: formatAorMonth(p.aorDate) || "—" },
+      { key: "Stream", value: p.stream || " ", emphasis: "green" },
+      { key: "AOR Month", value: formatAorMonth(p.aorDate) || " " },
       {
         key: "Day",
-        value: p.aorDate ? String(daysSinceAor(p.aorDate)) : "—",
+        value: p.aorDate ? String(daysSinceAor(p.aorDate)) : " ",
         emphasis: "green",
       },
       { key: "Submissions", value: String(submissions) },
@@ -96,7 +96,7 @@ function ProfileOnboardingCard({ hasSessionEmail }: { hasSessionEmail: boolean }
       </p>
       <p className="profile-onboarding-text">
         {hasSessionEmail
-          ? "Complete the tracker setup to see your stream, AOR day, and milestones here — and to post or reply on the feed."
+          ? "Complete the tracker setup to see your stream, AOR day, and milestones here   and to post or reply on the feed."
           : "Set up a free AORTrack profile (about a minute) to see your cohort stats in this sidebar and contribute to the community."}
       </p>
       <Link href={TRACK_HREF} className="profile-onboarding-btn">
@@ -228,7 +228,7 @@ export function CommunityLeftSidebar({
               key={link.id}
               onClick={() =>
                 toast(
-                  "Coming soon — cohort-only filter needs a backend pass.",
+                  "Coming soon   cohort-only filter needs a backend pass.",
                   "default",
                 )
               }

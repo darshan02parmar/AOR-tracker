@@ -5,7 +5,7 @@ import { DashboardConsultingCTA } from "./DashboardConsultingCTA";
 import { DashboardShareSection } from "./DashboardShareSection";
 
 /**
- * `/dashboard/share` — focused share view in the v2 design.
+ * `/dashboard/share`   focused share view in the v2 design.
  *
  * The page is intentionally lean: a single ShareSection (Copy / WhatsApp /
  * GitHub) fed by the real `shareUrl` from `DashboardContext`, plus the

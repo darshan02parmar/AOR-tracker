@@ -95,7 +95,7 @@ export function DashboardV2Client() {
         <div className="dlay">
           <DashboardSidebar sections={sections} />
           <main ref={mainRef} className="dmain">
-            {/* Scroll target for the "Overview" sidebar item — must sit
+            {/* Scroll target for the "Overview" sidebar item   must sit
                 inside `.dmain` (the actual scroll container). See the live
                 shell (`DashboardShellV2.tsx`) for the same trick. */}
             <div id="top" aria-hidden="true" />

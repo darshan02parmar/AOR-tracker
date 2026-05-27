@@ -18,12 +18,12 @@ import { COMMUNITY_FEED_PAGE_SIZE } from "@/lib/community-feed";
 import { buildPageMetadata } from "@/lib/marketing-metadata";
 
 export const metadata = buildPageMetadata({
-  title: "Community Feed — AORTrack",
+  title: "Community Feed   AORTrack",
   description:
-    "Live feed of crowd-sourced Canadian PR processing milestones — replies, cohort insights, and community moderation flows.",
+    "Live feed of crowd-sourced Canadian PR processing milestones   replies, cohort insights, and community moderation flows.",
   path: "/community",
   ogImage: "home",
-  openGraphTitle: "Community Feed — AORTrack",
+  openGraphTitle: "Community Feed   AORTrack",
   openGraphDescription:
     "Timelines, replies, and weekly eCOPR pulse from the AORTrack community.",
 });

@@ -15,7 +15,7 @@ export function LandingFeaturesSection() {
         <p className="section-eye reveal">7 Powerful Features</p>
         <h2 className="section-h2 reveal">Everything you need to navigate your PR journey.</h2>
         <p className="section-sub reveal">
-          From live community data to smart alerts — all free, all open source, no signup required.
+          From live community data to smart alerts   all free, all open source, no signup required.
         </p>
 
         <div className="feat-grid">
@@ -30,7 +30,7 @@ export function LandingFeaturesSection() {
               <div className="fc-title">Live Community Feed</div>
               <div className="fc-desc">
                 Real-time stream of PPR receipts, milestone updates, and processing events from
-                thousands of applicants — updated as the community logs new data.
+                thousands of applicants   updated as the community logs new data.
               </div>
               <div className="fc-facts">
                 <div className="fc-fact">Community-reported PPR receipts in real time</div>
@@ -50,7 +50,7 @@ export function LandingFeaturesSection() {
             <div className="fc-body">
               <div className="fc-title">Personal Dashboard</div>
               <div className="fc-desc">
-                Your own command centre — days since AOR, your cohort rank, PPR probability trend,
+                Your own command centre   days since AOR, your cohort rank, PPR probability trend,
                 and a live breakdown of where your cohort stands today.
               </div>
               <div className="fc-facts">
@@ -71,7 +71,7 @@ export function LandingFeaturesSection() {
             <div className="fc-body">
               <div className="fc-title">PPR Window Estimator</div>
               <div className="fc-desc">
-                Stop guessing. Know your earliest, most likely, and latest PPR date — calculated from
+                Stop guessing. Know your earliest, most likely, and latest PPR date   calculated from
                 real cohort velocity, not IRCC&apos;s generic 6-month estimate.
               </div>
               <div className="fc-facts">
@@ -93,12 +93,12 @@ export function LandingFeaturesSection() {
               <div className="fc-title">Submit Your AOR</div>
               <div className="fc-desc">
                 Enter your AOR date, pick your immigration stream, and get instant cohort placement
-                — in under 60 seconds, zero friction, no account needed.
+                  in under 60 seconds, zero friction, no account needed.
               </div>
               <div className="fc-facts">
                 <div className="fc-fact">CEC, FSW, FST, PNP, and more streams</div>
                 <div className="fc-fact">Instant cohort rank calculation on submit</div>
-                <div className="fc-fact">Anonymous by design — no PII collected</div>
+                <div className="fc-fact">Anonymous by design   no PII collected</div>
               </div>
             </div>
           </div>
@@ -113,7 +113,7 @@ export function LandingFeaturesSection() {
             <div className="fc-body">
               <div className="fc-title">Cohort Analytics</div>
               <div className="fc-desc">
-                Full statistical breakdown of your cohort — processing day histogram, percentile rank
+                Full statistical breakdown of your cohort   processing day histogram, percentile rank
                 bar, and stream-vs-stream comparison to put your wait time in context.
               </div>
               <div className="fc-facts">
@@ -140,7 +140,7 @@ export function LandingFeaturesSection() {
               <div className="fc-facts">
                 <div className="fc-fact">Cohort milestone alerts (25% / 50% / 75% PPR&apos;d)</div>
                 <div className="fc-fact">PPR window update notifications</div>
-                <div className="fc-fact">In-app · Email · Discord — your choice</div>
+                <div className="fc-fact">In-app · Email · Discord   your choice</div>
               </div>
             </div>
           </div>

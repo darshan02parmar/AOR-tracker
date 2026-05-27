@@ -30,7 +30,7 @@ export function DashboardShareSection({
       await navigator.clipboard.writeText(share.shareUrl);
       showToast("Link copied to clipboard");
     } catch {
-      showToast("Could not copy — please copy manually");
+      showToast("Could not copy   please copy manually");
     }
   };
 
@@ -52,7 +52,7 @@ export function DashboardShareSection({
         <div>
           <div className="sec-title">Share My Journey</div>
           <div className="sec-sub">
-            Read-only link — no personal data exposed
+            Read-only link   no personal data exposed
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@ const MILESTONE_KEYS: MilestoneKey[] = [
   "ecopr",
 ];
 
-/** §6.1 — applicants in cohort with earlier AOR still waiting on eCOPR. */
+/** §6.1   applicants in cohort with earlier AOR still waiting on eCOPR. */
 export async function getQueuePositionAction(
   cohortKey: string,
   aorDateIso: string,
@@ -128,7 +128,7 @@ export type CohortSummaryRow = {
 };
 
 /**
- * Peer cohorts from `cohort_stats`: same stream, inland/outland, province — any AOR month/year.
+ * Peer cohorts from `cohort_stats`: same stream, inland/outland, province   any AOR month/year.
  * Includes keys that match `profileCohortKey`'s peer pattern (caller may dedupe with the active view).
  */
 export async function listRelatedCohortSummariesAction(

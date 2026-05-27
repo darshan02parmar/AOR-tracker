@@ -23,15 +23,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) {
     return buildNoIndexMetadata({
       ...baseMeta,
-      title: "Shared timeline — AORTrack",
+      title: "Shared timeline   AORTrack",
       description: "View a shared Canadian PR processing timeline on AORTrack.",
     });
   }
   return buildNoIndexMetadata({
     ...baseMeta,
-    title: `${data.displayName}'s PR timeline — AORTrack`,
+    title: `${data.displayName}'s PR timeline   AORTrack`,
     description:
-      "Crowd-sourced PR milestone timeline on AORTrack — read-only shared view.",
+      "Crowd-sourced PR milestone timeline on AORTrack   read-only shared view.",
   });
 }
 
@@ -49,7 +49,7 @@ export default async function PublicShareTimelinePage({ params }: Props) {
               href="/"
               className="dnb-brand"
               size="sm"
-              aria-label="AORTrack — home"
+              aria-label="AORTrack   home"
             />
             <div className="dnb-sep" aria-hidden />
             <div className="dnb-page">Shared view · {data.applicantId}</div>
@@ -76,7 +76,7 @@ export default async function PublicShareTimelinePage({ params }: Props) {
           <p className="share-disclaimer">
             This is a read-only snapshot. Numbers use cohort models and may differ
             from IRCC processing times. Editing milestones requires signing in on
-            your own dashboard — this link does not expose your email.
+            your own dashboard   this link does not expose your email.
           </p>
           <div className="share-cta-row">
             <Link href="/track" className="share-cta share-cta--primary">

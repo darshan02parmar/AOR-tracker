@@ -5,7 +5,7 @@ import { useCommunityUi } from "./CommunityUiContext";
 import type { ApprovedPost } from "./data";
 
 type Props = {
-  /** Full parent post — needed so `requestReply` can pass it to ReplyModal. */
+  /** Full parent post   needed so `requestReply` can pass it to ReplyModal. */
   post: ApprovedPost;
   helpfulCount: number;
   helpfulActive?: boolean;
@@ -33,7 +33,7 @@ export function FeedCardEngagement({
         type="button"
         className={`eng-btn${helpfulActive ? " active" : ""}`}
         aria-pressed={helpfulActive ?? false}
-        aria-label={`Mark helpful — ${helpfulCount} so far`}
+        aria-label={`Mark helpful   ${helpfulCount} so far`}
         onClick={() => requestHelpful(post.id)}
       >
         <FaRegThumbsUp aria-hidden />
@@ -43,7 +43,7 @@ export function FeedCardEngagement({
       <button
         type="button"
         className="eng-btn"
-        aria-label={`Reply — ${replyCount} so far`}
+        aria-label={`Reply   ${replyCount} so far`}
         onClick={() => requestReply(post)}
       >
         <FaRegCommentDots aria-hidden />

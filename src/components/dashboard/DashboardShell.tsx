@@ -404,7 +404,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     <DashboardProvider value={ctxValue}>
       <div id="screen-dashboard" className="screen active flex min-h-screen flex-col">
         <div className="topbar">
-          <WebsiteLogo href="/" className="logo" aria-label="AORTrack — home" />
+          <WebsiteLogo href="/" className="logo" aria-label="AORTrack   home" />
           <nav className="nav">
             <Link
               href={dashboardHref.timeline}

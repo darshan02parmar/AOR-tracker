@@ -115,7 +115,7 @@ function LandingHeroMovingCards() {
       <div className="mkt-ha-stage">
         <div className={`mkt-ha-scene mkt-ha-s1 ${scene === 1 ? "vis" : ""}`}>
           <div className="mkt-ha-s1-head">
-            <span className="mkt-ha-s1-title">Express Entry — Live Tracker</span>
+            <span className="mkt-ha-s1-title">Express Entry   Live Tracker</span>
             <span className="mkt-ha-s1-live">
               <span className="mkt-ha-live-dot" />
               Updated 3 min ago
@@ -151,21 +151,21 @@ function LandingHeroMovingCards() {
             <div className="mkt-ha-row">
               <div className="mkt-ha-dot green" />
               <div className="mkt-ha-text">
-                <strong>Ahmed R.</strong> received PPR — Day 198 · CEC
+                <strong>Ahmed R.</strong> received PPR   Day 198 · CEC
               </div>
               <span className="mkt-ha-badge">2 min ago</span>
             </div>
             <div className="mkt-ha-row">
               <div className="mkt-ha-dot blue" />
               <div className="mkt-ha-text">
-                <strong>Priya S.</strong> submitted AOR — FSW
+                <strong>Priya S.</strong> submitted AOR   FSW
               </div>
               <span className="mkt-ha-badge">11 min ago</span>
             </div>
             <div className="mkt-ha-row">
               <div className="mkt-ha-dot amber" />
               <div className="mkt-ha-text">
-                <strong>Wei C.</strong> medicals request — Day 143
+                <strong>Wei C.</strong> medicals request   Day 143
               </div>
               <span className="mkt-ha-badge">24 min ago</span>
             </div>
@@ -240,7 +240,7 @@ function LandingHeroMovingCards() {
             </div>
             <div>
               <div className="mkt-ha-s3-title">Track My AOR</div>
-              <div className="mkt-ha-s3-sub">Enter your details — see your position instantly</div>
+              <div className="mkt-ha-s3-sub">Enter your details   see your position instantly</div>
             </div>
           </div>
           <div className="mkt-ha-s3-body">
@@ -285,7 +285,7 @@ function LandingHeroMovingCards() {
 
         <div className={`mkt-ha-scene mkt-ha-s4 ${scene === 4 ? "vis" : ""}`}>
           <div className="mkt-ha-s4-head">
-            <span>Your PPR Window — CEC · Jan 2024</span>
+            <span>Your PPR Window   CEC · Jan 2024</span>
             <span>247 days in</span>
           </div>
           <div className="mkt-ha-ppr">
@@ -309,8 +309,8 @@ function LandingHeroMovingCards() {
             {[
               ["done", "ITA Received", "Invitation to Apply · Express Entry pool", "Dec 14, 2023"],
               ["done", "AOR Received", "Application received by IRCC", "Jan 08, 2024"],
-              ["now", "Medicals / Biometrics", "Background checks in progress", "In progress — Day 247"],
-              ["wait", "PPR — Passport Request", "Final step before PR approval", "Pending"],
+              ["now", "Medicals / Biometrics", "Background checks in progress", "In progress   Day 247"],
+              ["wait", "PPR   Passport Request", "Final step before PR approval", "Pending"],
             ].map(([state, title, desc, date]) => (
               <div key={title} className="mkt-ha-tl-row">
                 <div className={`mkt-ha-tl-dot ${state}`}>
@@ -379,7 +379,7 @@ export function LandingHeroSection({ profileCount }: LandingHeroSectionProps) {
             your <em>PR stands.</em>
           </h1>
           <p className="hero-sub">
-            Real processing timelines from {countStr}{" "} Express Entry applicants — not IRCC&apos;s
+            Real processing timelines from {countStr}{" "} Express Entry applicants   not IRCC&apos;s
             generic estimate. Community-powered, open-source, and free forever.
           </p>
 
@@ -401,7 +401,7 @@ export function LandingHeroSection({ profileCount }: LandingHeroSectionProps) {
 
           <div className="hero-actions">
             <Link href="/track" className="btn-hero btn-red">
-              Track My AOR — Free <IconArrowRight />
+              Track My AOR   Free <IconArrowRight />
             </Link>
             <Link href="/#features" className="btn-hero btn-outline">
               See All Features <IconArrowDown size={14} />

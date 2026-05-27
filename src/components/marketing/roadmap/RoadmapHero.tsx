@@ -6,11 +6,11 @@ type Props = {
 };
 
 /**
- * The dark hero band — eyebrow pill, headline w/ italic emphasis, sub-copy,
+ * The dark hero band   eyebrow pill, headline w/ italic emphasis, sub-copy,
  * and a row of inline status pills.
  *
  * The "GitHub stars" pill is special: it appends a star icon after the count
- * (the sample HTML did the same with the unicode "⭐" — we use FaStar).
+ * (the sample HTML did the same with the unicode "⭐"   we use FaStar).
  */
 export function RoadmapHero({ hero }: Props) {
   return (

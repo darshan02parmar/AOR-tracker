@@ -14,7 +14,7 @@ type Props = {
 };
 
 /**
- * Appeal modal. Mirrors the appeal flow from the HTML sample — pre-fills the
+ * Appeal modal. Mirrors the appeal flow from the HTML sample   pre-fills the
  * "Removed post" context block from the post that triggered it (passed via
  * the `AppealContext`), and accepts a free-form explanation up to 1000
  * chars.
@@ -69,7 +69,7 @@ export function AppealModal({
     window.setTimeout(() => {
       setSubmitting(false);
       onSuccess(
-        "Appeal submitted — a moderator will review within 48 hours",
+        "Appeal submitted   a moderator will review within 48 hours",
       );
       onClose();
     }, 1200);

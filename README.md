@@ -1,10 +1,10 @@
 # 🍁 AORTrack
 
-![AORTrack — banner](public/Mountain.png)
+![AORTrack   banner](public/Mountain.png)
 
-> **Real PR timelines from the community — not only IRCC’s generic estimate.**
+> **Real PR timelines from the community   not only IRCC’s generic estimate.**
 
-**Free, open-source Canadian PR processing tracker** — built for applicants, by applicants (and maintained with care by [GetNorthPath](https://www.getnorthpath.com)). AORTrack turns crowd-sourced milestones into timelines you can compare by **AOR date, stream, and province**, so you see where you sit relative to people on a similar path.
+**Free, open-source Canadian PR processing tracker**   built for applicants, by applicants (and maintained with care by [GetNorthPath](https://www.getnorthpath.com)). AORTrack turns crowd-sourced milestones into timelines you can compare by **AOR date, stream, and province**, so you see where you sit relative to people on a similar path.
 
 [![Live app](https://img.shields.io/badge/Live-track.getnorthpath.com-blue?style=flat-square)](https://track.getnorthpath.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Get--North--Path%2FAOR--tracker-181717?style=flat-square&logo=github)](https://github.com/Get-North-Path/AOR-tracker)
@@ -21,9 +21,9 @@
 
 AORTrack is a **community-powered** companion for **Canadian permanent residency** processing: you (and others) share milestone dates, and the app aggregates patterns so everyone gets **clearer expectations** than a one-size-fits-all IRCC bar.
 
-We do **not** replace IRCC, lawyers, or consultants — we **surface what the community is actually experiencing**, including delays, stream differences, and outliers worth knowing about.
+We do **not** replace IRCC, lawyers, or consultants   we **surface what the community is actually experiencing**, including delays, stream differences, and outliers worth knowing about.
 
-![AORTrack — from AOR onward](public/animation-text.png)
+![AORTrack   from AOR onward](public/animation-text.png)
 
 ---
 
@@ -34,9 +34,9 @@ We do **not** replace IRCC, lawyers, or consultants — we **surface what the co
 | 📅 **AOR-based cohorts** | Compare timelines with people who share your **AOR window**, stream, and province |
 | 📈 **Processing stats** | Aggregate views of how milestones cluster over time across the community |
 | 🧭 **Milestone tracking** | Follow the journey from AOR through stages the community reports (e.g. biometrics, medicals, PPR) |
-| 🔗 **Shareable timelines** | Generate a link others can view — useful for friends, forums, or your own records |
+| 🔗 **Shareable timelines** | Generate a link others can view   useful for friends, forums, or your own records |
 | 🧑‍🤝‍🧑 **Community hub** | Connect with others on similar timelines; live updates via **Socket.io** |
-| 🗺️ **Public roadmap** | Vote and follow what ships next — development happens in the open |
+| 🗺️ **Public roadmap** | Vote and follow what ships next   development happens in the open |
 | 📜 **Changelog** | Release history in [Keep a Changelog](https://keepachangelog.com/) style |
 | 🛡️ **Privacy-minded** | **No ads**, no paywall for core tracking; open source so you can audit behavior |
 
@@ -58,11 +58,11 @@ We do **not** replace IRCC, lawyers, or consultants — we **surface what the co
 
 Built to stay fast and transparent at the edge of a messy, real-world dataset:
 
-- **[Next.js](https://nextjs.org) 16** — App Router, server components where it fits
-- **[React](https://react.dev) 19** + **[Tailwind CSS](https://tailwindcss.com) 4** — UI
-- **[MongoDB](https://www.mongodb.com/)** — Application data and aggregates
-- **[Socket.io](https://socket.io/)** — Realtime community updates (custom `server.mjs` in dev/prod)
-- **TypeScript** — End-to-end typing
+- **[Next.js](https://nextjs.org) 16**   App Router, server components where it fits
+- **[React](https://react.dev) 19** + **[Tailwind CSS](https://tailwindcss.com) 4**   UI
+- **[MongoDB](https://www.mongodb.com/)**   Application data and aggregates
+- **[Socket.io](https://socket.io/)**   Realtime community updates (custom `server.mjs` in dev/prod)
+- **TypeScript**   End-to-end typing
 
 ---
 
@@ -73,7 +73,7 @@ Built to stay fast and transparent at the edge of a messy, real-world dataset:
 - **Developers** who want to **fork, extend, or self-host** a transparent tracker  
 
 > *“Not affiliated with IRCC. Data is crowd-sourced from community members and not official government data.”*  
-> — See also the in-app disclaimer on [track.getnorthpath.com](https://track.getnorthpath.com)
+>   See also the in-app disclaimer on [track.getnorthpath.com](https://track.getnorthpath.com)
 
 ---
 
@@ -122,9 +122,9 @@ Environment (minimum):
 | --- | --- |
 | `MONGODB_URI` | MongoDB connection string |
 | `MONGODB_DB` | Optional database name (default: `aor-tracker-dev`) |
-| `NEXT_PUBLIC_SITE_URL` | Optional — canonical origin for sitemap / metadata (e.g. `https://track.getnorthpath.com`; defaults to production URL or `VERCEL_URL`) |
+| `NEXT_PUBLIC_SITE_URL` | Optional   canonical origin for sitemap / metadata (e.g. `https://track.getnorthpath.com`; defaults to production URL or `VERCEL_URL`) |
 | `CRON_SECRET` | Protects cron routes in production |
-| `DISCORD_WEBHOOK_URL` | Optional — profile/milestone activity plus **ops** alert when a new `cohort_stats` placeholder row is created (run cohort sync to fill medians) |
+| `DISCORD_WEBHOOK_URL` | Optional   profile/milestone activity plus **ops** alert when a new `cohort_stats` placeholder row is created (run cohort sync to fill medians) |
 
 ```bash
 npm run dev          # Next.js + Socket.io (server.mjs)
@@ -143,7 +143,7 @@ We welcome **issues, PRs, and design feedback** on GitHub. For larger changes, o
 
 ## 📄 License
 
-**MIT License** — see [`LICENSE`](LICENSE) in this repository when present.
+**MIT License**   see [`LICENSE`](LICENSE) in this repository when present.
 
 © GetNorthPath Inc. · AORTrack is free and open source. Not affiliated with IRCC. Community data only; processing times are **estimates** from crowd-sourced reports, not official government figures.
 

@@ -47,7 +47,7 @@ const AVATAR_CLASS: Record<RoadmapAvatarTone, string> = {
 };
 
 /**
- * Single kanban card. The card itself is a `role=button` div — clicking
+ * Single kanban card. The card itself is a `role=button` div   clicking
  * anywhere outside the embedded vote/changelog controls opens the
  * GitHub issue (or `linkOverride`, e.g. /changelog for shipped items).
  *

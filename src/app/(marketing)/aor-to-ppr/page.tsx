@@ -31,7 +31,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
         "@type": "HowToStep",
         position: 2,
         name: "Submit application and receive AOR",
-        text: "Submit your eAPR through the IRCC portal. IRCC issues an Acknowledgement of Receipt (AOR) when the file is considered complete — this date starts most internal processing clocks.",
+        text: "Submit your eAPR through the IRCC portal. IRCC issues an Acknowledgement of Receipt (AOR) when the file is considered complete   this date starts most internal processing clocks.",
       },
       {
         "@type": "HowToStep",
@@ -74,7 +74,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
         name: "How long does Express Entry take from AOR to PPR in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "It varies by stream and cohort. On AORTrack community data for 2026, median federal-stage timelines are often near ~184 days for CEC, ~267 days for FSW, ~312 days for PNP, ~284 days for FST, and ~228 days for Atlantic Immigration — measured from AOR to eCOPR/PPR-equivalent milestones. IRCC publishes service standards separately; use community data as a complement, not a guarantee.",
+          text: "It varies by stream and cohort. On AORTrack community data for 2026, median federal-stage timelines are often near ~184 days for CEC, ~267 days for FSW, ~312 days for PNP, ~284 days for FST, and ~228 days for Atlantic Immigration   measured from AOR to eCOPR/PPR-equivalent milestones. IRCC publishes service standards separately; use community data as a complement, not a guarantee.",
         },
       },
       {
@@ -109,7 +109,7 @@ function structuredDataJsonLd(): Record<string, unknown> {
       faq,
       {
         "@type": "WebPage",
-        name: "AOR to PPR timeline — Canada PR guide",
+        name: "AOR to PPR timeline   Canada PR guide",
         url: pageUrl,
         dateModified: MARKETING_CONTENT_DATE_MODIFIED,
         isPartOf: { "@id": getWebsiteId(base) },
@@ -124,7 +124,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title:
       "AOR to PPR Timeline Canada PR: From Submission to Passport Request | AORTrack",
     description:
-      "AOR to PPR timeline for Canada PR in 2026: ITA → AOR → biometrics → medicals → PPR → CoPR. Community medians for CEC, FSW, PNP, FST, and Atlantic — not IRCC official.",
+      "AOR to PPR timeline for Canada PR in 2026: ITA → AOR → biometrics → medicals → PPR → CoPR. Community medians for CEC, FSW, PNP, FST, and Atlantic   not IRCC official.",
     path: "/aor-to-ppr",
     ogImage: "guide",
     ogType: "article",

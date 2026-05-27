@@ -27,7 +27,7 @@ import { applicantIdFromEmail } from "@/lib/share-timeline-vm";
 import type { MilestoneKey } from "@/lib/types";
 
 /**
- * Single-page `/dashboard` view in the v2 design — composes every section
+ * Single-page `/dashboard` view in the v2 design   composes every section
  * from `dashboard-new` and drives them off live `DashboardContext` data.
  *
  * The "Dashboard" sidebar items scroll to anchors on this page:
@@ -82,7 +82,7 @@ export function DashboardTimelineTabV2() {
       />
 
       <DashboardCohortSection
-        title={`Your Cohort — ${humanizeCohortKey(ctx.activeCohortKey)}`}
+        title={`Your Cohort   ${humanizeCohortKey(ctx.activeCohortKey)}`}
         subtitle={`${ctx.cohortTotal} verified applicants${ctx.cohortDataSparse ? " · Data refreshed daily" : ""}`}
       >
         <DashboardCohortBars bars={cohortBars} />

@@ -39,7 +39,7 @@ export type DashboardContextValue = {
   days: number;
   /** v2.0 cohort median (PPR window, histogram, stream compare). */
   median: number;
-  /** Timeline length for journey % / progress bar — seeded pace total when available. */
+  /** Timeline length for journey % / progress bar   seeded pace total when available. */
   journeyDays: number;
   journeyFromSeededPace: boolean;
   pct: number;
@@ -62,9 +62,9 @@ export type DashboardContextValue = {
   resetCohortToProfile: () => void;
   syncCohortStats: () => Promise<void>;
   syncCohortBusy: boolean;
-  /** Fewer than 2 profiles in the active cohort — treat model as low confidence. */
+  /** Fewer than 2 profiles in the active cohort   treat model as low confidence. */
   cohortDataSparse: boolean;
-  /** §6.1 — peers with earlier AOR still without eCOPR. */
+  /** §6.1   peers with earlier AOR still without eCOPR. */
   queueAhead: number;
   /** Biometrics completed ≥60 days after AOR (v2.0 late flag). */
   lateBiometrics: boolean;

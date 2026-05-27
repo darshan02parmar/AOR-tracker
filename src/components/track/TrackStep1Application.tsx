@@ -35,7 +35,7 @@ type Props = {
 };
 
 /**
- * Step 1 — Application details.
+ * Step 1   Application details.
  * Fields: AOR date · stream cards · app-type toggle · (province if PNP).
  *
  * Validation is owned by the orchestrator (`onContinue` is only called when
@@ -62,7 +62,7 @@ export function TrackStep1Application({
         <div className="tk-step-num">Step 1 of 3</div>
         <div className="tk-step-title">Your application details</div>
         <div className="tk-step-desc">
-          This sets up your cohort — the group of applicants we compare you to.
+          This sets up your cohort   the group of applicants we compare you to.
           Takes 60 seconds.
         </div>
       </div>
@@ -160,7 +160,7 @@ export function TrackStep1Application({
         </div>
       </div>
 
-      {/* PROVINCE — PNP only */}
+      {/* PROVINCE   PNP only */}
       <div className={`tk-field tk-province-field${stream === "PNP" ? " show" : ""}`}>
         <label className="tk-field-label" htmlFor="tk-province">
           Province / Territory{" "}
@@ -185,7 +185,7 @@ export function TrackStep1Application({
       </div>
 
       <button type="button" className="tk-btn" onClick={onContinue}>
-        Continue — Add Milestones
+        Continue   Add Milestones
         <IconArrowRight aria-hidden />
       </button>
     </div>

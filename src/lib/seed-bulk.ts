@@ -7,7 +7,7 @@ import { runCohortStatsSyncJob } from "@/lib/cohort-sync-job";
 import { emptyMilestones, normalizeEmail } from "@/lib/profile";
 import type { MilestoneKey, UserProfile } from "@/lib/types";
 
-/** Prefix for bulk-seeded demo accounts — safe to wipe and re-run. */
+/** Prefix for bulk-seeded demo accounts   safe to wipe and re-run. */
 export const BULK_SEED_EMAIL_PREFIX = "aortracker.demo.";
 
 const FIRST = [

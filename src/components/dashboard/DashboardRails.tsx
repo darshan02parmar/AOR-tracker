@@ -53,7 +53,7 @@ export function DashboardRails({
         </div>
         <div className="ebox">
           <div className="elbl">Estimated PPR window</div>
-          <div className="eval">{ppr?.windowLabel ?? "—"}</div>
+          <div className="eval">{ppr?.windowLabel ?? " "}</div>
           <div className="esub">
             Based on {cohort.n_verified} similar profiles · Updated{" "}
             {fmtDate(cohort.last_updated.slice(0, 10))}
@@ -85,11 +85,11 @@ export function DashboardRails({
               <div className="siname">{s.label}</div>
               <div className="simeta">
                 {s.nVerified} applicants · median{" "}
-                {s.medianDays > 0 ? `~${s.medianDays}d` : "—"}
+                {s.medianDays > 0 ? `~${s.medianDays}d` : " "}
               </div>
             </div>
             <span className="sidays shrink-0">
-              {s.medianDays > 0 ? `~${s.medianDays}d` : "—"}
+              {s.medianDays > 0 ? `~${s.medianDays}d` : " "}
             </span>
           </button>
         ))}

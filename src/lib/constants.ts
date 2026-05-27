@@ -32,14 +32,14 @@ export const MILESTONE_DEFS: {
   },
   {
     key: "p1",
-    label: "P1 — PR Portal (first invitation)",
+    label: "P1   PR Portal (first invitation)",
     est: "~Aug–Sep 2025",
     desc:
       "IRCC invites you to the Permanent Residence Portal to confirm you are in Canada and submit the first set of details (see canada.ca PR confirmation portal).",
   },
   {
     key: "p2",
-    label: "P2 — PR Portal (photo & address)",
+    label: "P2   PR Portal (photo & address)",
     est: "~Sep 2025",
     desc:
       "Second portal step: submit your portrait photo and Canadian mailing address for your PR card after your file is approved in principle in the portal.",
@@ -49,7 +49,7 @@ export const MILESTONE_DEFS: {
     label: "eCOPR issued",
     est: "~Sep–Oct 2025",
     desc:
-      "Electronic Confirmation of Permanent Residence uploaded to your portal — formal PR grant; valid proof of status while you wait for the PR card.",
+      "Electronic Confirmation of Permanent Residence uploaded to your portal   formal PR grant; valid proof of status while you wait for the PR card.",
   },
 ];
 
@@ -74,7 +74,7 @@ export const WES_ROW_TEMPLATE = [
     t: "Regular WES",
     s: "dl" as const,
     d: 62,
-    n: "IRCC cannot verify — upload scanned copy",
+    n: "IRCC cannot verify   upload scanned copy",
   },
   {
     t: "IRCC Course-by-Course",

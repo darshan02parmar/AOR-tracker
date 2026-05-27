@@ -54,7 +54,7 @@ export function DashboardAppBar({
           className="dnb-brand"
           layout="nav"
           size="sm"
-          aria-label="AORTrack — home"
+          aria-label="AORTrack   home"
         />
         <div className="dnb-sep" aria-hidden />
         <div className="dnb-page">Dashboard · {applicantId}</div>

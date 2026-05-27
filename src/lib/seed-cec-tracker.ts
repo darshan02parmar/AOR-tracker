@@ -25,7 +25,7 @@ const MILESTONE_COLUMNS: { headerKeys: string[]; key: MilestoneKey }[] = [
   { headerKeys: ["medical results received"], key: "medical" },
   {
     headerKeys: [
-      "p1 — pr portal (first invitation)",
+      "p1   pr portal (first invitation)",
       "p1 pr portal (first invitation)",
       "p1",
     ],
@@ -33,7 +33,7 @@ const MILESTONE_COLUMNS: { headerKeys: string[]; key: MilestoneKey }[] = [
   },
   {
     headerKeys: [
-      "p2 — pr portal (photo & address)",
+      "p2   pr portal (photo & address)",
       "p2 pr portal (photo & address)",
       "p2",
     ],
@@ -48,7 +48,7 @@ export type CecSeedOptions = {
   runSync?: boolean;
   /** One summary embed after import (`?discord=summary`). Off by default. */
   discordSummary?: boolean;
-  /** Per-row profile_saved webhooks — ~600 messages (`?discord=each`). Off by default. */
+  /** Per-row profile_saved webhooks   ~600 messages (`?discord=each`). Off by default. */
   discordEach?: boolean;
 };
 
@@ -91,7 +91,7 @@ function resolveExcelPath(filePath?: string): string {
   );
 }
 
-/** `XLSX.readFile` breaks under Next/Turbopack — read bytes then parse. */
+/** `XLSX.readFile` breaks under Next/Turbopack   read bytes then parse. */
 function readWorkbook(excelPath: string): XLSX.WorkBook {
   const resolved = path.resolve(excelPath);
   let buf: Buffer;

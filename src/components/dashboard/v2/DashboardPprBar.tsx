@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { DN_JOURNEY_PROGRESS, type DnJourneyProgress } from "./data";
 
 /**
- * Journey progress card — start/median axis, bar, status line, four metric tiles.
+ * Journey progress card   start/median axis, bar, status line, four metric tiles.
  *
  * Sample reference: `.progress-card` in `samples/aortrack_timeline.html`.
  */

@@ -27,7 +27,7 @@ type Props = {
  * highlight the in-view version's link with `is-current`.
  */
 export function ChangelogClient({ data }: Props) {
-  const unreleasedTag = data.unreleased.badge.split("—").pop()?.trim() ?? "";
+  const unreleasedTag = data.unreleased.badge.split(" ").pop()?.trim() ?? "";
 
   return (
     <div className="mkt-changelog-page">

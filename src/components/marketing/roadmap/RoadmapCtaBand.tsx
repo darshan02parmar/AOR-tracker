@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- * Dark navy CTA band that sits above the kanban — "Don't see what you need?"
+ * Dark navy CTA band that sits above the kanban   "Don't see what you need?"
  * with two CTAs (Request Feature, View GitHub Issues).
  */
 export function RoadmapCtaBand({ feedbackHref, issuesHref }: Props) {
@@ -16,7 +16,7 @@ export function RoadmapCtaBand({ feedbackHref, issuesHref }: Props) {
       <div className="rm-ctab-text">
         <h3>Don&apos;t see what you need?</h3>
         <p>
-          Submit a feature request, bug, or data correction — no GitHub account
+          Submit a feature request, bug, or data correction   no GitHub account
           required. We handle the issue creation automatically.
         </p>
       </div>

@@ -5,7 +5,7 @@
  * The marketing UI uses a much richer shape than the DB (discriminated union
  * with `approved | ownPending | ownRemoved`, plus structured `cohort`,
  * `timeline`, `replies`, etc.). This file is the single seam where the two
- * shapes are reconciled — keep all the mapping logic here so the components
+ * shapes are reconciled   keep all the mapping logic here so the components
  * downstream just consume one well-typed type.
  *
  * Security note: posts created by users are stored with `bodyIsHtml: false`.
@@ -51,8 +51,8 @@ const MS_TO_CHIP_COLOR: Record<string, MilestoneChipColor> = {
 /** Short chip labels on feed cards (canonical display; overrides legacy `msl`). */
 const MS_CHIP_LABEL: Record<string, string> = {
   ecopr: "eCOPR received",
-  p1: "P1 — PR Portal (first)",
-  p2: "P2 — PR Portal (photo & address)",
+  p1: "P1   PR Portal (first)",
+  p2: "P2   PR Portal (photo & address)",
   bil: "BIL",
   bg: "BGC Started",
   med: "Medical Done",
@@ -81,7 +81,7 @@ function streamFromMeta(meta: string): string | undefined {
 }
 
 /** Build the structured `cohort` rows from the loose `meta` string.
- *  Best-effort — anything we can't classify becomes a generic "Detail" row. */
+ *  Best-effort   anything we can't classify becomes a generic "Detail" row. */
 function cohortFromMeta(meta: string): CohortItem[] {
   const items: CohortItem[] = [];
   const segments = meta
@@ -113,7 +113,7 @@ function cohortFromMeta(meta: string): CohortItem[] {
   return items;
 }
 
-/** Mini-timeline from post milestone tag — filled through the tagged step. */
+/** Mini-timeline from post milestone tag   filled through the tagged step. */
 function timelineFromPostMs(ms: string): TimelineDot[] {
   const steps = communityTimelineFromMs(ms);
   return steps.map((t, idx) => {

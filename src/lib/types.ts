@@ -3,9 +3,9 @@ export type MilestoneKey =
   | "biometrics"
   | "background"
   | "medical"
-  /** Permanent Residence Portal — first invitation / initial portal tasks (inland). */
+  /** Permanent Residence Portal   first invitation / initial portal tasks (inland). */
   | "p1"
-  /** PR Portal — photo & Canadian mailing address for PR card (after approval in portal). */
+  /** PR Portal   photo & Canadian mailing address for PR card (after approval in portal). */
   | "p2"
   /** Electronic Confirmation of Permanent Residence issued in the portal. */
   | "ecopr";
@@ -24,7 +24,7 @@ export type UserProfile = {
   type: string;
   province: string;
   milestones: Record<MilestoneKey, MilestoneEntry>;
-  /** myimmitracker Case # — unique for CEC Excel import. */
+  /** myimmitracker Case #   unique for CEC Excel import. */
   caseNo?: string;
   username?: string;
   /** Team label: Excel import vs live /track submissions. */

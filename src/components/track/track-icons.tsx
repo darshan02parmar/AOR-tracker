@@ -29,7 +29,7 @@ import type { StreamIconKey, TrustItem } from "./data";
  * `samples/aortrack-track-updated.html`.
  *
  * Each named export wraps a `react-icons` component so consumer JSX stays
- * import-light. Sizing/colouring is driven by CSS — the icons themselves
+ * import-light. Sizing/colouring is driven by CSS   the icons themselves
  * use `fill: currentColor` via the rules in `track.css`.
  */
 

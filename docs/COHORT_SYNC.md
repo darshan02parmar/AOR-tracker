@@ -17,7 +17,7 @@ This will:
 1. Upsert ~600 profiles by **Case #** (`caseNo`, unique).
 2. Set **AOR Received** → `aorDate` + `milestones.aor` (cohort month/year).
 3. Map milestone columns (biometrics, background, medical, P1, P2, eCOPR).
-4. Mark `seededData: true` (team tracking label only — does not exclude stats or Discord).
+4. Mark `seededData: true` (team tracking label only   does not exclude stats or Discord).
 5. Synthetic email: `{username}{caseNo}@gmail.com` (e.g. `umairahmad16case-126792@gmail.com`).
 6. Reconcile `profiles.cohortKey` → `CEC:{month}:{year}:inland`.
 7. Run v2.0 cohort sync (`cohort_stats` + `cohort_calibration`).
@@ -29,7 +29,7 @@ This will:
 | `?cec=1&wipe=1` | `deleteMany({ seededData: true })` before import |
 | `?cec=1&sync=0` | Import only, no cohort rebuild |
 | `?cec=1&discord=summary` | One summary Discord embed after import |
-| `?cec=1&discord=each` | Per-row Discord webhooks (~600 messages — avoid) |
+| `?cec=1&discord=each` | Per-row Discord webhooks (~600 messages   avoid) |
 
 **Discord is off by default** during CEC seed to avoid rate limits.
 
@@ -72,9 +72,9 @@ Seeded profiles (`seededData: true`) are **included** in aggregates.
 
 In MongoDB:
 
-- `profiles` — `seededData: true`, `caseNo`, `aorDate`, `cohortKey` (e.g. `CEC:5:2026:inland`).
-- `cohort_calibration` — latest row has `cutoff_date`, `new_median_days`, `n_eligible`.
-- `cohort_stats` — `algorithm_version: "v2.0"`, `p10_days` … `p90_days`.
+- `profiles`   `seededData: true`, `caseNo`, `aorDate`, `cohortKey` (e.g. `CEC:5:2026:inland`).
+- `cohort_calibration`   latest row has `cutoff_date`, `new_median_days`, `n_eligible`.
+- `cohort_stats`   `algorithm_version: "v2.0"`, `p10_days` … `p90_days`.
 
 On the dashboard (sign in with a seeded synthetic email):
 
@@ -98,5 +98,5 @@ Then re-run sync.
 
 ## Notes
 
-- `seed-bulk.ts` (`?bulk=1`) is synthetic demo data — separate from CEC Excel import.
+- `seed-bulk.ts` (`?bulk=1`) is synthetic demo data   separate from CEC Excel import.
 - `pulseWeekly` is empty until real weekly eCOPR aggregation is implemented.

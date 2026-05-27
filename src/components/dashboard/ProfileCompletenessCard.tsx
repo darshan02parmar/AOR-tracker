@@ -129,7 +129,7 @@ export function ProfileCompletenessCard({
       </div>
       <p className="pc-intro">
         {completeness.requiredRemaining > 0
-          ? "Fill in the fields below, then save application details. Optional milestones use their own Save — or add them from the timeline."
+          ? "Fill in the fields below, then save application details. Optional milestones use their own Save   or add them from the timeline."
           : "Add dates for steps you have already completed."}
       </p>
 

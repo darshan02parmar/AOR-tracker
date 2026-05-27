@@ -1,5 +1,5 @@
 <style>
-/* Cohort feature page — self-contained (marketing layout: nav + footer) */
+/* Cohort feature page   self-contained (marketing layout: nav + footer) */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --cream:#FFFCF5;--cream2:#F5F0E6;--cream3:#EDE8DC;
@@ -97,10 +97,10 @@
     <div class="ch-inner">
       <div>
         <p class="ch-k">Cohort analytics · Express Entry</p>
-        <h1 class="ch-h1">Express Entry cohort analytics — <em>find your rank</em></h1>
+        <h1 class="ch-h1">Express Entry cohort analytics   <em>find your rank</em></h1>
         <p class="ch-lead">AORTrack turns anonymous milestone logs into <strong>cohorts</strong> you can compare against: same AOR month, same stream, same inland/outland profile where possible. This page explains <em>how</em> we calculate percentile rank and why that matters more than a generic IRCC service standard.</p>
         <div class="ch-actions">
-          <a href="/track" class="g-btn g-btn-primary">Find my cohort rank — free <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="/track" class="g-btn g-btn-primary">Find my cohort rank   free <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           <a href="#methodology" class="g-btn g-btn-secondary">Read methodology <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
         </div>
         <div class="ch-meta">
@@ -114,13 +114,13 @@
         <div class="ch-card-h">Illustrative cohort snapshot</div>
         <div class="ch-card-b">
           <p class="ch-card-t">You vs Jan 2026 · CEC · Inland</p>
-          <p class="ch-card-d">Static example for education only — your real dashboard updates from live data.</p>
+          <p class="ch-card-d">Static example for education only   your real dashboard updates from live data.</p>
           <p class="rank-lbl">Percentile rank (faster = lower %)</p>
           <div class="rank-demo">
             <div class="rank-bar"><div class="rank-fill"></div><span class="rank-dot" aria-hidden="true"></span></div>
             <span class="rank-lbl">~28th</span>
           </div>
-          <p class="ch-card-d" style="margin-bottom:0">Meaning: about <strong>72%</strong> of peers in this illustrative cohort reached PPR/eCOPR after you at the same day count — you moved earlier than most in the snapshot.</p>
+          <p class="ch-card-d" style="margin-bottom:0">Meaning: about <strong>72%</strong> of peers in this illustrative cohort reached PPR/eCOPR after you at the same day count   you moved earlier than most in the snapshot.</p>
           <div class="ch-stat-row">
             <div class="ch-st"><div class="ch-sv">184d</div><div class="ch-sl">Median</div></div>
             <div class="ch-st"><div class="ch-sv">133</div><div class="ch-sl">P25</div></div>
@@ -133,9 +133,9 @@
 
   <div class="sn">
     <div class="sn-in">
-      <p class="sn-l">Express entry percentile rank — quick definition</p>
+      <p class="sn-l">Express entry percentile rank   quick definition</p>
       <p class="sn-q">What is an Express Entry percentile rank in AORTrack?</p>
-      <p class="sn-a"><strong>Your percentile rank</strong> is your position in the ordered list of “days from AOR to milestone X” (or days elapsed today) among everyone in the <em>same cohort bucket</em>. If you are at the 28th percentile for speed toward PPR, you reached that milestone faster than roughly 72% of your cohort — <strong>not</strong> faster than 72% of all Express Entry applicants globally. Cohort scope is everything.</p>
+      <p class="sn-a"><strong>Your percentile rank</strong> is your position in the ordered list of “days from AOR to milestone X” (or days elapsed today) among everyone in the <em>same cohort bucket</em>. If you are at the 28th percentile for speed toward PPR, you reached that milestone faster than roughly 72% of your cohort   <strong>not</strong> faster than 72% of all Express Entry applicants globally. Cohort scope is everything.</p>
     </div>
   </div>
 
@@ -155,22 +155,22 @@
 
     <section class="sec" id="why-cohort">
       <h2 class="h2">Why “cohort analytics” beats a single national average</h2>
-      <p class="p">IRCC publishes high-level service standards and backlog commentary, but applicants rarely experience “the average Canadian PR case.” You experience <strong>your stream</strong>, <strong>your office routing</strong>, <strong>your document story</strong>, and <strong>your AOR month</strong> — which all shift the realistic window. A <strong>cohort</strong> fixes the comparison set so you are not panicking because someone on Reddit with a different stream posted a number that does not apply to you.</p>
+      <p class="p">IRCC publishes high-level service standards and backlog commentary, but applicants rarely experience “the average Canadian PR case.” You experience <strong>your stream</strong>, <strong>your office routing</strong>, <strong>your document story</strong>, and <strong>your AOR month</strong>   which all shift the realistic window. A <strong>cohort</strong> fixes the comparison set so you are not panicking because someone on Reddit with a different stream posted a number that does not apply to you.</p>
       <p class="p">AORTrack’s cohort analytics answer a different question than IRCC: <em>“Among people who look like my file on paper, what elapsed time are we seeing in the community right now?”</em> That is the <strong>express entry cohort tracker</strong> problem space: same pool mechanics as Express Entry, but grounded in peer timelines instead of a single published figure.</p>
     </section>
 
     <section class="sec" id="methodology">
-      <h2 class="h2">Methodology — how we build cohorts</h2>
+      <h2 class="h2">Methodology   how we build cohorts</h2>
       <p class="p">Our pipeline is intentionally conservative. We would rather under-explain than over-fit noisy data.</p>
 
       <div class="box">
         <div class="bx">
           <h4>1. Cohort keys (who gets grouped together)</h4>
-          <p>Profiles are grouped using a <strong>cohort key</strong> derived from: <strong>AOR month</strong> (year-month), <strong>Express Entry stream label</strong> (e.g. CEC General, FSW General, PNP, FST, Atlantic), <strong>inland vs outland</strong>, and <strong>province of destination</strong> where users supply it. Small cohorts may be merged or suppressed in UI to avoid misleading precision — the dashboard prefers “insufficient data” over a fake percentile.</p>
+          <p>Profiles are grouped using a <strong>cohort key</strong> derived from: <strong>AOR month</strong> (year-month), <strong>Express Entry stream label</strong> (e.g. CEC General, FSW General, PNP, FST, Atlantic), <strong>inland vs outland</strong>, and <strong>province of destination</strong> where users supply it. Small cohorts may be merged or suppressed in UI to avoid misleading precision   the dashboard prefers “insufficient data” over a fake percentile.</p>
         </div>
         <div class="bx">
           <h4>2. Milestone normalization</h4>
-          <p>Users log canonical milestones (AOR, biometrics, medicals, background check signals, portal steps, eCOPR). Each milestone has a <strong>day offset from AOR</strong> when dates are present. Missing milestones are treated as unknown, not zero — we never infer a medical completion date from silence.</p>
+          <p>Users log canonical milestones (AOR, biometrics, medicals, background check signals, portal steps, eCOPR). Each milestone has a <strong>day offset from AOR</strong> when dates are present. Missing milestones are treated as unknown, not zero   we never infer a medical completion date from silence.</p>
         </div>
         <div class="bx">
           <h4>3. Aggregation statistics</h4>
@@ -178,13 +178,13 @@
         </div>
         <div class="bx">
           <h4>4. Privacy &amp; retention</h4>
-          <p>AORTrack is built for <strong>minimum necessary data</strong>: we do not need your full life story to plot a cohort curve. Email is used for account continuity; milestone dates are the scientific payload. You should never paste GCMS or UCI into public Discord threads — use structured tracker fields so the community dataset stays high-signal.</p>
+          <p>AORTrack is built for <strong>minimum necessary data</strong>: we do not need your full life story to plot a cohort curve. Email is used for account continuity; milestone dates are the scientific payload. You should never paste GCMS or UCI into public Discord threads   use structured tracker fields so the community dataset stays high-signal.</p>
         </div>
       </div>
     </section>
 
     <section class="sec" id="tracker-keywords">
-      <h2 class="h2">Express Entry cohort tracker — what you actually get</h2>
+      <h2 class="h2">Express Entry cohort tracker   what you actually get</h2>
       <p class="p">When people search for an <strong>express entry cohort tracker</strong>, they usually want three deliverables at once: (1) a <strong>rank</strong> vs peers, (2) a <strong>curve</strong> showing how fast the cohort is moving, and (3) a <strong>forecast feeling</strong> even though no one can promise a date. AORTrack delivers (1) and (2) transparently; for (3) we show historical distributions so you can reason about tail risk instead of trusting a single magic number.</p>
       <div class="dual">
         <div class="bx">
@@ -193,20 +193,20 @@
         </div>
         <div class="bx">
           <h4>Distribution view</h4>
-          <p>Shows how many people finished near day 160 vs day 240, etc. Heavy tails on PNP and some FSW cohorts are visible immediately — a single median would hide that.</p>
+          <p>Shows how many people finished near day 160 vs day 240, etc. Heavy tails on PNP and some FSW cohorts are visible immediately   a single median would hide that.</p>
         </div>
       </div>
     </section>
 
     <section class="sec" id="percentile-deep">
-      <h2 class="h2">Express entry percentile rank — computation in plain English</h2>
-      <p class="p">Suppose 200 applicants in your cohort have recorded “days from AOR to eCOPR.” Sort those 200 numbers ascending. Your rank is where your own elapsed days would insert in that list if you had already finished — for in-progress files, we compare your <strong>current days since AOR</strong> against the distribution of <strong>completed</strong> spans to estimate whether you are ahead or behind the pace that historically finished the cohort.</p>
-      <p class="p"><strong>Ties:</strong> identical day counts share a rank band. <strong>Censoring:</strong> people who withdraw or stop updating are a known source of bias; we document that under limitations. <strong>Stream changes:</strong> if a profile corrects stream mid-life, the cohort assignment updates — we do not double-count the same person across two cohort curves.</p>
+      <h2 class="h2">Express entry percentile rank   computation in plain English</h2>
+      <p class="p">Suppose 200 applicants in your cohort have recorded “days from AOR to eCOPR.” Sort those 200 numbers ascending. Your rank is where your own elapsed days would insert in that list if you had already finished   for in-progress files, we compare your <strong>current days since AOR</strong> against the distribution of <strong>completed</strong> spans to estimate whether you are ahead or behind the pace that historically finished the cohort.</p>
+      <p class="p"><strong>Ties:</strong> identical day counts share a rank band. <strong>Censoring:</strong> people who withdraw or stop updating are a known source of bias; we document that under limitations. <strong>Stream changes:</strong> if a profile corrects stream mid-life, the cohort assignment updates   we do not double-count the same person across two cohort curves.</p>
     </section>
 
     <section class="sec" id="histograms">
-      <h2 class="h2">Histograms, P25, median, and P75 — reading the shape</h2>
-      <p class="p">The <strong>median</strong> is the middle finish time: half the cohort (with known outcomes) finished faster, half slower. <strong>P25</strong> and <strong>P75</strong> bracket the middle 50% — a wide gap means unpredictable processing for that bucket (common for PNP-heavy cohorts). The <strong>histogram</strong> shows whether the distribution is single-peaked (many people near one mode) or flat (no obvious “typical” speed).</p>
+      <h2 class="h2">Histograms, P25, median, and P75   reading the shape</h2>
+      <p class="p">The <strong>median</strong> is the middle finish time: half the cohort (with known outcomes) finished faster, half slower. <strong>P25</strong> and <strong>P75</strong> bracket the middle 50%   a wide gap means unpredictable processing for that bucket (common for PNP-heavy cohorts). The <strong>histogram</strong> shows whether the distribution is single-peaked (many people near one mode) or flat (no obvious “typical” speed).</p>
       <table class="tbl" aria-label="Example static cohort summary">
         <thead><tr><th>Statistic</th><th>Interpretation</th><th>Example (CEC, illustrative)</th></tr></thead>
         <tbody>
@@ -220,8 +220,8 @@
     </section>
 
     <section class="sec" id="limitations">
-      <h2 class="h2">Limitations — trustworthy science means honest caveats</h2>
-      <p class="p"><strong>Self-selection bias:</strong> people who find AORTrack skew technical, English-comfortable, and forum-active. That can differ from the global Express Entry population. <strong>Reporting delay:</strong> users update milestones late; the “current” curve lags reality by days to weeks. <strong>Small-n cohorts:</strong> when only a handful of profiles exist, ranks swing wildly — we suppress or widen confidence in UI. <strong>Provincial programs:</strong> PNPs add pre- and post-federal complexity; cohort keys cannot capture every nominee pathway nuance.</p>
+      <h2 class="h2">Limitations   trustworthy science means honest caveats</h2>
+      <p class="p"><strong>Self-selection bias:</strong> people who find AORTrack skew technical, English-comfortable, and forum-active. That can differ from the global Express Entry population. <strong>Reporting delay:</strong> users update milestones late; the “current” curve lags reality by days to weeks. <strong>Small-n cohorts:</strong> when only a handful of profiles exist, ranks swing wildly   we suppress or widen confidence in UI. <strong>Provincial programs:</strong> PNPs add pre- and post-federal complexity; cohort keys cannot capture every nominee pathway nuance.</p>
       <p class="p">Despite those limits, cohort analytics remain <strong>more actionable than anecdote</strong> because the methodology is shared, the code is open, and the aggregates update as more honest contributors join.</p>
     </section>
 
@@ -233,7 +233,7 @@
       </div>
       <div class="faq">
         <p class="faq-q">Can competitors copy this concept?</p>
-        <p class="faq-a">Anyone can describe cohorts — the differentiator is <strong>consistent methodology + open data pipeline + community trust</strong>. Our source code and issue tracker are public so improvements are debated in the open.</p>
+        <p class="faq-a">Anyone can describe cohorts   the differentiator is <strong>consistent methodology + open data pipeline + community trust</strong>. Our source code and issue tracker are public so improvements are debated in the open.</p>
       </div>
       <div class="faq">
         <p class="faq-q">Do I need an account?</p>
@@ -248,7 +248,7 @@
 
   <div class="g-cta">
     <div class="g-cta-in">
-      <h2>See your cohort — not someone else’s average.</h2>
+      <h2>See your cohort   not someone else’s average.</h2>
       <div class="g-cta-actions">
         <a href="/track" class="g-btn g-btn-cta">Open AORTrack <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         <a href="#methodology" class="g-btn g-btn-secondary">Methodology <i class="fa-solid fa-book" aria-hidden="true"></i></a>
@@ -256,5 +256,5 @@
     </div>
   </div>
 
-  <p class="dis"><strong>Disclaimer:</strong> AORTrack is not affiliated with IRCC. Cohort analytics are educational and community-sourced. They do not replace legal advice or official instructions. Methodology may evolve — check the <a href="/wiki">wiki</a> and GitHub repository for the latest implementation notes.</p>
+  <p class="dis"><strong>Disclaimer:</strong> AORTrack is not affiliated with IRCC. Cohort analytics are educational and community-sourced. They do not replace legal advice or official instructions. Methodology may evolve   check the <a href="/wiki">wiki</a> and GitHub repository for the latest implementation notes.</p>
 </div>

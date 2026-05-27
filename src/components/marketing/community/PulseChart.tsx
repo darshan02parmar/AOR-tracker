@@ -8,7 +8,7 @@ type Props = {
 /**
  * Tiny weekly PPR bar chart shown in the right panel.
  *
- * Bar heights are computed at render-time from the max weekly value — no
+ * Bar heights are computed at render-time from the max weekly value   no
  * animation, no JS. The "this week" bar is tinted red, the prior peak green.
  *
  * TODO(real-data): replace `data.pulse` with a server-side aggregation of
@@ -62,7 +62,7 @@ export function PulseChart({ pulse }: Props) {
       </div>
 
       <div className="pulse-note">
-        This week: <strong>{pulse.thisWeekValue} PPRs</strong> —{" "}
+        This week: <strong>{pulse.thisWeekValue} PPRs</strong>  {" "}
         <FaArrowUp className="pulse-delta-icon" aria-hidden /> {pulse.deltaPct}%
         vs last week ({pulse.lastWeekValue})
       </div>

@@ -95,7 +95,7 @@ export function PublicShareDashboardPeek({ data }: { data: PublicSharePayload })
           <div>
             <div className="sec-title">Milestone timeline</div>
             <div className="sec-sub">
-              Read-only view — dates reflect what this applicant saved on AORTrack.
+              Read-only view   dates reflect what this applicant saved on AORTrack.
               This link does not allow edits.
             </div>
           </div>

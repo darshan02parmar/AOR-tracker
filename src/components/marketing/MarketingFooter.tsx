@@ -20,7 +20,7 @@ import {
 
 const GH = "https://github.com/Get-North-Path/AOR-tracker";
 const DISCORD = "https://discord.gg/aortrack";
-/** Official profiles — update if GetNorthPath changes handles. */
+/** Official profiles   update if GetNorthPath changes handles. */
 const SOCIAL = {
   linkedin: "https://www.linkedin.com/company/getnorthpath",
   x: "https://x.com/GetNorthPath",
@@ -50,7 +50,7 @@ export function MarketingFooter() {
             layout="inline"
             href="/"
             className="fg-brand"
-            aria-label="AORTrack — home"
+            aria-label="AORTrack   home"
           />
           <p className="fg-desc">
             Free, open-source Canadian PR processing time tracker. Community-powered data from real
@@ -329,7 +329,7 @@ export function MarketingFooter() {
           </div>
           <div className="fb-disclaimer">
             Not affiliated with IRCC. Community data only. Processing times are estimates based on
-            crowd-sourced reports — not official government data.
+            crowd-sourced reports   not official government data.
           </div>
         </div>
         <div className="fb-links">

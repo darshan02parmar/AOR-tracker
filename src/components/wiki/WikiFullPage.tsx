@@ -14,7 +14,7 @@ export function WikiFullPage() {
           </h1>
           <p className="wiki-hero-sub">
             How server actions, MongoDB, and the browser session connect across
-            Community, Track, and Dashboard — plus the v2.0 cohort pipeline.
+            Community, Track, and Dashboard   plus the v2.0 cohort pipeline.
           </p>
         </div>
       </header>
@@ -39,7 +39,7 @@ export function WikiFullPage() {
             If you are wiring new UI or API routes, assume: the browser may hold{" "}
             <code>sessionStorage[&quot;aortrack_session_email&quot;]</code>{" "}
             (normalized email). Server actions trust the <em>string</em> the client
-            passes for mutations — there is no signed session cookie for end-users
+            passes for mutations   there is no signed session cookie for end-users
             today.
           </p>
 
@@ -117,14 +117,14 @@ clearSessionEmail()`}</pre>
             </p>
             <p>
               <strong>Read profile:</strong> <code>getProfileAction(email)</code> in{" "}
-              <code>src/app/actions/profile.ts</code> — validates format,{" "}
+              <code>src/app/actions/profile.ts</code>   validates format,{" "}
               <code>{`findOne({ emailNorm })`}</code>, returns typed{" "}
               <code>UserProfile</code> or <code>not_found</code>.
             </p>
             <p>
               <strong>Upsert / save:</strong> <code>saveProfileAction</code>,{" "}
               <code>createDraftProfileAction</code>, milestone updates in the same
-              module — all operate on <code>emailNorm</code> and cohort fields derived
+              module   all operate on <code>emailNorm</code> and cohort fields derived
               from the profile.
             </p>
           </section>
@@ -140,7 +140,7 @@ clearSessionEmail()`}</pre>
             <p>
               The <strong>email argument is supplied by the client</strong> (from the
               same sessionStorage value). The server checks that a profile exists for
-              that email before inserting posts — but it does not prove the HTTP
+              that email before inserting posts   but it does not prove the HTTP
               caller owns the inbox. See the{" "}
               <a href="#community-backend">Community backend</a> section for the full
               feed pipeline.
@@ -219,7 +219,7 @@ clearSessionEmail()`}</pre>
             <h2>Other auth you might see</h2>
             <p>
               Cron / dev API routes (e.g. under <code>src/app/api/</code>) may use a
-              shared secret header such as <code>Authorization: Bearer …</code> —
+              shared secret header such as <code>Authorization: Bearer …</code>  
               that pattern is for <strong>infrastructure</strong>, not browser users.
             </p>
           </section>
@@ -230,7 +230,7 @@ clearSessionEmail()`}</pre>
           <h2 className="wiki-block-title">Community backend</h2>
           <p className="wiki-lead">
             Public marketing feed at <code>/community</code> plus the signed-in
-            dashboard panel — both backed by the same MongoDB collection and server
+            dashboard panel   both backed by the same MongoDB collection and server
             actions in <code>src/app/actions/community.ts</code>. Reads are mostly
             anonymous (approved posts only). Writes pass a normalized email from the
             client; see <a href="#session-identity">Session &amp; identity</a> for the
@@ -331,7 +331,7 @@ clearSessionEmail()`}</pre>
             </h2>
             <ul>
               <li>
-                <strong>getCommunityFeedAction(viewerEmail?, opts)</strong> — page size
+                <strong>getCommunityFeedAction(viewerEmail?, opts)</strong>   page size
                 is clamped 1–100 (default <code>COMMUNITY_FEED_PAGE_SIZE</code>). When{" "}
                 <code>viewerEmail</code> is a valid email, <code>serializePost</code>{" "}
                 can mark whether that viewer already voted helpful.
@@ -340,7 +340,7 @@ clearSessionEmail()`}</pre>
                 <strong>
                   getCommunitySubmitMilestoneTimelineOptionsAction(email)
                 </strong>{" "}
-                — returns milestone rows from the same{" "}
+                  returns milestone rows from the same{" "}
                 <code>mergeMilestoneDefsForCohort</code> pipeline as the dashboard
                 timeline (filtered to tags that can appear on posts).
               </li>
@@ -348,7 +348,7 @@ clearSessionEmail()`}</pre>
                 <strong>
                   createCommunityPostAction(email, {"{"} body, ms, replyToId? {"}"})
                 </strong>{" "}
-                — validates email and body length, loads profile via{" "}
+                  validates email and body length, loads profile via{" "}
                 <code>getProfileAction</code> (posting requires a stored profile). Tags:{" "}
                 <code>ecopr</code>, <code>p1</code>, <code>p2</code>, <code>bil</code>,{" "}
                 <code>bg</code>, <code>med</code>. Builds <code>meta</code> from stream /
@@ -359,7 +359,7 @@ clearSessionEmail()`}</pre>
                 Calls <code>broadcastCommunityFeedRefresh()</code>.
               </li>
               <li>
-                <strong>markCommunityHelpfulAction(email, postId)</strong> —{" "}
+                <strong>markCommunityHelpfulAction(email, postId)</strong>  {" "}
                 <code>$addToSet</code> on <code>helpfulVoters</code> keyed by normalized
                 email; idempotent for repeat votes. Broadcasts refresh on success.
               </li>
@@ -420,7 +420,7 @@ clearSessionEmail()`}</pre>
               <code>CommunityFeedPanel</code> uses the same three actions for fetch /
               post / helpful. It additionally persists &ldquo;saved&rdquo; post ids in{" "}
               <code>localStorage</code> under <code>aortrack.community.savedIds</code>{" "}
-              — that is purely client UI state, not the shared MongoDB model.
+                that is purely client UI state, not the shared MongoDB model.
             </p>
           </section>
 
@@ -450,19 +450,19 @@ clearSessionEmail()`}</pre>
             </h2>
             <ol>
               <li>
-                <strong>gate</strong> — <code>TrackGate</code> collects email and calls{" "}
+                <strong>gate</strong>   <code>TrackGate</code> collects email and calls{" "}
                 <code>getProfileAction(trimmed)</code>. If found: show return UI and
                 call <code>writeSessionEmail</code> so <code>/dashboard</code> can load
                 without re-prompting. If not found: user enters onboarding (email carried
                 to step 3).
               </li>
               <li>
-                <strong>onboarding</strong> — Steps 1–3 collect AOR date, stream, type,
-                optional PNP province, milestone checkboxes + dates (no BIL — biometrics
+                <strong>onboarding</strong>   Steps 1–3 collect AOR date, stream, type,
+                optional PNP province, milestone checkboxes + dates (no BIL   biometrics
                 only), then review + consent + email. All client-side until submit.
               </li>
               <li>
-                <strong>success</strong> — After a successful save, CTA navigates to{" "}
+                <strong>success</strong>   After a successful save, CTA navigates to{" "}
                 <code>/dashboard</code>.
               </li>
             </ol>
@@ -576,11 +576,11 @@ clearSessionEmail()`}</pre>
             <p>For the signed-in email, the shell typically runs:</p>
             <ul>
               <li>
-                <code>getProfileAction(email)</code> — source of truth for{" "}
+                <code>getProfileAction(email)</code>   source of truth for{" "}
                 <code>UserProfile</code> in React state.
               </li>
               <li>
-                <code>hydrateCohortView(viewKey, peerRootKey)</code> — parallel{" "}
+                <code>hydrateCohortView(viewKey, peerRootKey)</code>   parallel{" "}
                 <code>Promise.all</code> of <code>getCohortStatsByKeyAction(viewKey)</code>
                 , <code>getLiveCohortAggregateAction(viewKey)</code>, and{" "}
                 <code>listRelatedCohortSummariesAction(peerRootKey, 8)</code>. The default{" "}
@@ -588,7 +588,7 @@ clearSessionEmail()`}</pre>
                 <code>cohortKeyFromProfile</code>.
               </li>
               <li>
-                <code>ensureShareTokenForEmailAction(email)</code> — lazy-creates a
+                <code>ensureShareTokenForEmailAction(email)</code>   lazy-creates a
                 36-char hex <code>shareToken</code> on the profile document if missing;
                 exposes <code>shareUrl</code> as{" "}
                 <code>{`\${origin}/s/\${token}`}</code> on the client.
@@ -619,7 +619,7 @@ clearSessionEmail()`}</pre>
             <h2>Cohort stats: v2.0 aggregates vs live fill counts</h2>
             <p>
               <code>cohort_stats</code> rows are rebuilt by the cohort sync job (
-              <code>runCohortStatsSyncJob</code> in <code>cohort-sync-job.ts</code>) —
+              <code>runCohortStatsSyncJob</code> in <code>cohort-sync-job.ts</code>)  
               recency-weighted medians, P10–P90, survival imputation for still-waiting
               files, and histogram buckets. The dashboard reads these for{" "}
               <strong>typical wait</strong>, <strong>journey %</strong> (days since AOR ÷
@@ -661,19 +661,19 @@ clearSessionEmail()`}</pre>
             <h2>Mutations from the shell</h2>
             <ul>
               <li>
-                <strong>Milestone picker</strong> —{" "}
+                <strong>Milestone picker</strong>  {" "}
                 <code>updateMilestoneAction(email, key, isoDate)</code>. On success the
                 shell updates local profile state and re-runs{" "}
                 <code>hydrateCohortView</code> for the active cohort view (profile cohort
                 or overridden cohort key).
               </li>
               <li>
-                <strong>Sync cohort stats</strong> —{" "}
+                <strong>Sync cohort stats</strong>  {" "}
                 <code>syncCohortStatsFromProfilesAction(email)</code> (maintenance /
                 backfill helper) then refreshes the current cohort view.
               </li>
               <li>
-                <strong>Switch profile</strong> — clears session via{" "}
+                <strong>Switch profile</strong>   clears session via{" "}
                 <code>clearSessionEmail()</code> and sends the user home.
               </li>
             </ul>
@@ -701,7 +701,7 @@ clearSessionEmail()`}</pre>
                       <code>DashboardTimelineTabV2</code>
                     </td>
                     <td>
-                      Consumes <code>DashboardContext</code> only — milestones, ring,
+                      Consumes <code>DashboardContext</code> only   milestones, ring,
                       PPR estimate, etc. all preloaded by the shell.
                     </td>
                   </tr>
@@ -848,7 +848,7 @@ Fallback without AOR: {streamSlug}:0:{year}:{kind}:{provinceSlug}`}</pre>
                       <code>src/lib/cohort-calibration.ts</code>
                     </td>
                     <td>
-                      <code>cohort_calibration</code> — persisted median for next cutoff
+                      <code>cohort_calibration</code>   persisted median for next cutoff
                     </td>
                   </tr>
                   <tr>
@@ -877,7 +877,7 @@ Fallback without AOR: {streamSlug}:0:{year}:{kind}:{provinceSlug}`}</pre>
                 <strong>
                   <code>profiles</code>
                 </strong>{" "}
-                — <code>aorDate</code>, <code>milestones</code>, <code>cohortKey</code>.
+                  <code>aorDate</code>, <code>milestones</code>, <code>cohortKey</code>.
                 Optional: <code>caseNo</code>, <code>username</code>,{" "}
                 <code>currentStatus</code>, <code>shareToken</code>.
               </li>
@@ -885,14 +885,14 @@ Fallback without AOR: {streamSlug}:0:{year}:{kind}:{provinceSlug}`}</pre>
                 <strong>
                   <code>cohort_stats</code>
                 </strong>{" "}
-                — medians, P10–P90, <code>n_eligible</code>, <code>n_imputed</code>,{" "}
+                  medians, P10–P90, <code>n_eligible</code>, <code>n_imputed</code>,{" "}
                 histogram <code>dist</code>.
               </li>
               <li>
                 <strong>
                   <code>cohort_calibration</code>
                 </strong>{" "}
-                — sync audit: <code>cutoff_date</code>, <code>new_median_days</code>.
+                  sync audit: <code>cutoff_date</code>, <code>new_median_days</code>.
               </li>
             </ul>
           </section>
@@ -931,11 +931,11 @@ curl -X POST "http://localhost:3000/api/dev/sync-cohorts"   # rebuild cohort_sta
             <h2>Scheduled / manual sync</h2>
             <ul>
               <li>
-                <code>POST /api/cron/sync-cohorts</code> — Bearer{" "}
+                <code>POST /api/cron/sync-cohorts</code>   Bearer{" "}
                 <code>CRON_SECRET</code>
               </li>
               <li>
-                <code>POST /api/dev/sync-cohorts</code> — dev only
+                <code>POST /api/dev/sync-cohorts</code>   dev only
               </li>
             </ul>
             <p>

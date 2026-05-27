@@ -15,7 +15,7 @@ import {
  */
 export function TrackSuccess() {
   const sub =
-    "Your profile is live in MongoDB now. Bookmark your dashboard — you can return from any device using the same email.";
+    "Your profile is live in MongoDB now. Bookmark your dashboard   you can return from any device using the same email.";
 
   return (
     <div className="tk-success" role="status" aria-live="polite">
@@ -66,7 +66,7 @@ export function TrackSuccess() {
           <div className="tk-na-text">
             <div className="tk-na-title">Give feedback on AORTrack</div>
             <div className="tk-na-desc">
-              Help us improve — no GitHub account needed
+              Help us improve   no GitHub account needed
             </div>
           </div>
           <span className="tk-na-arrow" aria-hidden="true">

@@ -1,9 +1,9 @@
 /*
- * Developer wiki — `.mkt-wiki-page`
+ * Developer wiki   `.mkt-wiki-page`
  * Layout: sticky sidebar + scrollable content (changelog-inspired, subtler).
  */
 
-/* overflow-x on .marketing-site breaks position:sticky — clip is safe for wiki */
+/* overflow-x on .marketing-site breaks position:sticky   clip is safe for wiki */
 .marketing-site:has(.mkt-wiki-page) {
   overflow-x: clip;
 }

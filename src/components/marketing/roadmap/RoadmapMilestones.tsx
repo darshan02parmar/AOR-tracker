@@ -33,7 +33,7 @@ export function RoadmapMilestones({ milestones }: Props) {
               key={m.version}
             >
               <div className="rm-ms-lbl">
-                {m.version} — {m.date} · {m.status}
+                {m.version}   {m.date} · {m.status}
               </div>
               <div className="rm-ms-title">{m.title}</div>
               <div className="rm-ms-desc">{m.description}</div>

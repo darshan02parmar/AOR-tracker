@@ -3,7 +3,7 @@ import { DashboardShareTabV2 } from "@/components/dashboard/v2/DashboardShareTab
 import { NOINDEX_ROBOTS } from "@/lib/sitemap-paths";
 
 export const metadata: Metadata = {
-  title: "Share — AORTrack",
+  title: "Share   AORTrack",
   robots: NOINDEX_ROBOTS,
 };
 

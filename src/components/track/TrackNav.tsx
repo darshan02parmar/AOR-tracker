@@ -18,7 +18,7 @@ import { IconChevronLeft } from "./track-icons";
 export function TrackNav() {
   return (
     <nav className="tk-nav" aria-label="Track page navigation">
-      <WebsiteLogo href="/" className="tk-nav-brand" aria-label="AORTrack — home" />
+      <WebsiteLogo href="/" className="tk-nav-brand" aria-label="AORTrack   home" />
 
       <Link href="/" className="tk-nav-back">
         <IconChevronLeft aria-hidden />

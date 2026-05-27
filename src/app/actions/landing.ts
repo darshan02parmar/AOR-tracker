@@ -76,7 +76,7 @@ export async function getLandingHomeAction(): Promise<{
     const text =
       textRaw.length > 110 ? `${textRaw.slice(0, 107)}…` : textRaw || String(doc.msl ?? "");
     const meta = String(doc.meta ?? "");
-    const stream = meta.split("·")[0]?.trim() || "—";
+    const stream = meta.split("·")[0]?.trim() || " ";
     const createdAt =
       doc.createdAt instanceof Date ? doc.createdAt : new Date(String(doc.createdAt));
 

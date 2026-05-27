@@ -7,7 +7,7 @@ import { DashboardHistogram } from "./DashboardHistogram";
 import { DashboardStreamCompare } from "./DashboardStreamCompare";
 
 /**
- * "Your Cohort" section (`cohort-sec`) — wraps the four sub-cards:
+ * "Your Cohort" section (`cohort-sec`)   wraps the four sub-cards:
  *   1. Cohort milestone bars
  *   2. Histogram of days-to-PPR
  *   3. Dot-map of 500 sampled applicants
@@ -21,7 +21,7 @@ import { DashboardStreamCompare } from "./DashboardStreamCompare";
  * same visual but is wired to real cohort data).
  */
 export function DashboardCohortSection({
-  title = "Your Cohort — Feb 2026 · CEC",
+  title = "Your Cohort   Feb 2026 · CEC",
   subtitle = "1,240 verified applicants · All provinces",
   children,
 }: {

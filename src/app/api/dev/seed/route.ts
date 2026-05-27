@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
       ...result,
       message:
         result.postsInserted === 0
-          ? "Nothing inserted — community_posts already had data."
+          ? "Nothing inserted   community_posts already had data."
           : "Demo community posts inserted.",
     });
   } catch (e) {

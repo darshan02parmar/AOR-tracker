@@ -89,7 +89,7 @@ function draftProfileForEstimate(
 }
 
 /**
- * Step 3 — Review (summary card + milestone summary) followed by the
+ * Step 3   Review (summary card + milestone summary) followed by the
  * "save with email" vs "anon cookie" choice, consent box, and submit
  * button. The orchestrator owns all state.
  */
@@ -144,11 +144,11 @@ export function TrackStep3Review(props: Props) {
   const approvalDisplay =
     cohortStatsLoading || milestonePaceLoading
       ? "…"
-      : approvalLabel ?? "—";
+      : approvalLabel ?? " ";
 
   const aorLabel = aorDate
     ? DATE_FMT.format(new Date(`${aorDate}T12:00:00`))
-    : "—";
+    : " ";
 
   return (
     <div className="tk-panel active" role="tabpanel" aria-labelledby="tk-step-3">
@@ -182,7 +182,7 @@ export function TrackStep3Review(props: Props) {
           </div>
           <div className="tk-summary-stat">
             <div className="tk-summary-stat-val green">
-              {typicalDaysDisplay ?? "—"}
+              {typicalDaysDisplay ?? " "}
             </div>
             <div className="tk-summary-stat-label">
               {journeyFromSeeded ? "Typical journey" : "Cohort median"}

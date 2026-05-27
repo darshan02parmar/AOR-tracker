@@ -16,7 +16,7 @@ export function LandingOssSection() {
             <em style={{ fontStyle: "italic", color: "#c4b5fd" }}>Owned by everyone.</em>
           </h2>
           <p className="section-sub" style={{ color: "rgba(255,255,255,.7)", marginBottom: "2rem" }}>
-            AORTrack is fully open source — every line of code is on GitHub, every decision is made in
+            AORTrack is fully open source   every line of code is on GitHub, every decision is made in
             public, and every feature is driven by the community. No black boxes. No corporate agenda.
           </p>
           <div className="oss-feats">
@@ -36,7 +36,7 @@ export function LandingOssSection() {
                 <FaHeart size={18} aria-hidden />
               </div>
               <div>
-                <div className="oss-ft">Free Forever — No Ads, No Selling Data</div>
+                <div className="oss-ft">Free Forever   No Ads, No Selling Data</div>
                 <div className="oss-fb">
                   AORTrack products are ad-free. We will never sell your data or put features behind a
                   paywall.

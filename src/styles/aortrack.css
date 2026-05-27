@@ -825,7 +825,7 @@ button.sitem{font:inherit;color:inherit;width:100%;text-align:left}
   margin: 0 auto;
 }
 
-/* Dashboard loader — ring + pulse (used next to loading copy) */
+/* Dashboard loader   ring + pulse (used next to loading copy) */
 @keyframes sk-spin {
   to {
     transform: rotate(360deg);

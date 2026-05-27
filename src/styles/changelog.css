@@ -1,5 +1,5 @@
 /*
- * Changelog page styles — scoped to .mkt-changelog-page so they don't leak
+ * Changelog page styles   scoped to .mkt-changelog-page so they don't leak
  * to other marketing routes. Loaded by src/app/(marketing)/changelog/page.tsx.
  *
  * Design tokens (--cream, --navy, --green, --red, etc.) come from

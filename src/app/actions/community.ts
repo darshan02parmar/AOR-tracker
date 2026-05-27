@@ -32,8 +32,8 @@ const MS_TO_MILESTONE_KEY: Record<CommunityMs, MilestoneKey> = {
 
 const MS_LABEL: Record<CommunityMs, string> = {
   ecopr: "eCOPR received",
-  p1: "P1 — PR Portal (first)",
-  p2: "P2 — PR Portal (photo & address)",
+  p1: "P1   PR Portal (first)",
+  p2: "P2   PR Portal (photo & address)",
   bil: "BIL",
   bg: "BGC Started",
   med: "Medical Done",
@@ -88,7 +88,7 @@ export type CommunityMsCounts = {
  * next to the filter chips and the sidebar's milestone links.
  *
  * Cheap: one indexed aggregation, one round-trip. Safe to call on every
- * page render (no auth required — read-only public data).
+ * page render (no auth required   read-only public data).
  */
 export async function getCommunityMsCountsAction(): Promise<CommunityMsCounts> {
   const db = await getDb();
@@ -123,7 +123,7 @@ export async function getCommunityMsCountsAction(): Promise<CommunityMsCounts> {
   return counts;
 }
 
-/** Keys that map to `CommunityMs` tags — same subset the feed accepts. */
+/** Keys that map to `CommunityMs` tags   same subset the feed accepts. */
 const SUBMIT_TIMELINE_KEYS = new Set<MilestoneKey>([
   "biometrics",
   "background",

@@ -20,7 +20,7 @@ type Props = {
   open: boolean;
   /** Viewer email; only opened when non-null (else SignInPromptModal opens). */
   email: string | null;
-  /** Live profile from dashboard — used to prefill dates and gate submit. */
+  /** Live profile from dashboard   used to prefill dates and gate submit. */
   profile: UserProfile | null;
   onClose: () => void;
   onSuccess: (msg: string) => void;
@@ -275,7 +275,7 @@ export function SubmitMilestoneModal({
             <p className="m-hint">
               Types and descriptions are loaded from the same dashboard timeline
               as your cohort. The date below always comes from your saved profile
-              — it cannot be edited here.
+                it cannot be edited here.
             </p>
           </div>
 
@@ -343,7 +343,7 @@ export function SubmitMilestoneModal({
             <textarea
               id={`${labelId}-note`}
               className="m-textarea"
-              placeholder="Share context about your timeline — WES timing, province, anything useful for others in your cohort…"
+              placeholder="Share context about your timeline   WES timing, province, anything useful for others in your cohort…"
               maxLength={500}
               value={note}
               disabled={!hasDashboardDate && Boolean(milestoneKey)}

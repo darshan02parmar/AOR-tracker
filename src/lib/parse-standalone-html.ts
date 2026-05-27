@@ -11,7 +11,7 @@ export function scopeStandaloneRootSelectors(css: string): string {
     .replace(/body\{/g, "body.aortrack-standalone-page{");
 }
 
-/** Marketing HTML fragments (streams, guides) — `<style>` + body markup + optional `<script>`. */
+/** Marketing HTML fragments (streams, guides)   `<style>` + body markup + optional `<script>`. */
 export function parseMarketingHtmlFragment(fragment: string): ParsedStandaloneHtml {
   const styleBlocks: string[] = [];
   const reStyle = /<style[^>]*>([\s\S]*?)<\/style>/gi;

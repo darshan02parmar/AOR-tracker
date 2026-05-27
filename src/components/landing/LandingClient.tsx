@@ -72,13 +72,13 @@ export function LandingClient() {
   const onDemo = async () => {
     const profile = await ensureDemoProfileAction();
     goDashboard(profile.email);
-    toast.show("Demo profile loaded — saved to MongoDB for demo@aortrack.ca");
+    toast.show("Demo profile loaded   saved to MongoDB for demo@aortrack.ca");
   };
 
   return (
     <div className="screen active flex min-h-screen flex-col">
       <div className="topbar">
-        <WebsiteLogo href="/" className="logo" aria-label="AORTrack — home" />
+        <WebsiteLogo href="/" className="logo" aria-label="AORTrack   home" />
         <span className="hidden items-center gap-1 text-[12px] text-(--t3) md:inline-flex">
           <span className="dlive" />
           {profileCount != null
@@ -107,7 +107,7 @@ export function LandingClient() {
         <p className="hs">
           AORTrack uses crowd-sourced data from{" "}
           {profileCount != null ? profileCount.toLocaleString() : "…"}{" "}
-          applicants to show real processing timelines — not IRCC&apos;s generic
+          applicants to show real processing timelines   not IRCC&apos;s generic
           6–8 month estimate.
         </p>
         <div className="hcta">
@@ -121,13 +121,13 @@ export function LandingClient() {
         <div className="hstats">
           <div>
             <div className="hsv">
-              {profileCount != null ? fmtCompactK(profileCount) : "—"}
+              {profileCount != null ? fmtCompactK(profileCount) : " "}
             </div>
             <div className="hsl">Active timelines</div>
           </div>
           <div>
             <div className="hsv">
-              {medianSample != null ? `${Math.round(medianSample)}d` : "—"}
+              {medianSample != null ? `${Math.round(medianSample)}d` : " "}
             </div>
             <div className="hsl">Avg. CEC</div>
           </div>
@@ -168,7 +168,7 @@ export function LandingClient() {
           </div>
           <div className="ft">See your real position</div>
           <div className="fd">
-            Know exactly how far you are in your cohort&apos;s queue — not a
+            Know exactly how far you are in your cohort&apos;s queue   not a
             generic government estimate.
           </div>
         </div>

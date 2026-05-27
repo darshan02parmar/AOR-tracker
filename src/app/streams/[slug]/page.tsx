@@ -99,9 +99,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const base = getSiteUrl();
   const url = `${base}/streams/${slug}`;
   const label = streamLabelFromSitemapSlug(slug);
-  if (!label) return { title: "Stream — AORTrack" };
+  if (!label) return { title: "Stream   AORTrack" };
   return {
-    title: `${label} — PR timelines | AORTrack`,
+    title: `${label}   PR timelines | AORTrack`,
     description: `Crowd-sourced Canadian PR processing timelines for ${label}.`,
     alternates: { canonical: url },
   };
@@ -158,7 +158,7 @@ export default async function StreamLandingPage({ params }: Props) {
     <div className="stream-page" style={{ padding: "4rem clamp(1rem, 4vw, 3rem)" }}>
       <h1 style={{ fontFamily: "var(--fh)", fontSize: "2rem", fontWeight: 700, marginBottom: "1rem" }}>{label}</h1>
       <p style={{ color: "#5c5348", marginBottom: "2rem", maxWidth: "36rem" }}>
-        Explore real applicant milestones and cohort stats for this stream on AORTrack — free, no account required.
+        Explore real applicant milestones and cohort stats for this stream on AORTrack   free, no account required.
       </p>
       <a
         href="/track"

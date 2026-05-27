@@ -1,5 +1,5 @@
 /**
- * Changelog data — static seed.
+ * Changelog data   static seed.
  *
  * TODO(github-integration): Today this file is the single source of truth for
  *   what is rendered on /changelog. In the future we want releases to come
@@ -19,7 +19,7 @@
  *     - delete `seedChangelog` below,
  *     - replace `getChangelog()` with the async loader,
  *     - bump the page (page.tsx) to `export const revalidate = 3600` (or ISR).
- *   The component layer should not need to change — it already consumes the
+ *   The component layer should not need to change   it already consumes the
  *   typed shape declared here.
  */
 
@@ -112,12 +112,12 @@ const seedChangelog: ChangelogData = {
   },
 
   unreleased: {
-    badge: "Unreleased — v0.5",
+    badge: "Unreleased   v0.5",
     title: "In Progress",
     items: [
       "Stream SSR pages with JSON-LD Dataset schema (#49)",
       "Discord webhook notifications replacing Slack (#45)",
-      "OINP stream — first provincial nominee stream launch (#47)",
+      "OINP stream   first provincial nominee stream launch (#47)",
       "90-day anonymous session + POST /api/v1/profile/add-email (#53)",
       "Cohort dot map visualisation (#50)",
       "sitemap.xml auto-generated with noindex below 50 data points",
@@ -142,22 +142,22 @@ const seedChangelog: ChangelogData = {
           type: "fixed",
           items: [
             {
-              html: 'D2 (consultant solicitation) false-positive rate reduced from 12% to 3.4% — implicit solicitation detection threshold raised from 0.55 → 0.68. <em>Genuine applicants writing "my consultant said…" no longer flagged</em>',
+              html: 'D2 (consultant solicitation) false-positive rate reduced from 12% to 3.4%   implicit solicitation detection threshold raised from 0.55 → 0.68. <em>Genuine applicants writing "my consultant said…" no longer flagged</em>',
               dot: "r",
               issue: { number: 68, url: `${REPO}/issues/68` },
             },
             {
-              html: "JSON repair prompt retry now fires correctly on malformed moderation API response — previously returned unhandled promise rejection causing submissions to silently drop",
+              html: "JSON repair prompt retry now fires correctly on malformed moderation API response   previously returned unhandled promise rejection causing submissions to silently drop",
               dot: "r",
               issue: { number: 65, url: `${REPO}/issues/65` },
             },
             {
-              html: "Appeals upheld rate metric on <code>/admin/metrics</code> now computes correctly — was reading from wrong collection after v0.4.0 schema rename",
+              html: "Appeals upheld rate metric on <code>/admin/metrics</code> now computes correctly   was reading from wrong collection after v0.4.0 schema rename",
               dot: "r",
               issue: { number: 67, url: `${REPO}/issues/67` },
             },
             {
-              html: "SSE connection now reconnects with exponential backoff (1s → 4s → 16s) — was retrying immediately causing server overload during IRCC draw day spikes",
+              html: "SSE connection now reconnects with exponential backoff (1s → 4s → 16s)   was retrying immediately causing server overload during IRCC draw day spikes",
               dot: "r",
               issue: { number: 69, url: `${REPO}/issues/69` },
             },
@@ -188,28 +188,28 @@ const seedChangelog: ChangelogData = {
           type: "added",
           items: [
             {
-              html: "Automated moderation pipeline — all 7 detection categories (D1 date fraud, D2 solicitation, D3 multi-account, D4 off-topic, D5 misinformation, D6 harassment, D7 PII) evaluated per submission. Light → full review escalation at confidence 0.55–0.75 or &gt;2 prior violations",
+              html: "Automated moderation pipeline   all 7 detection categories (D1 date fraud, D2 solicitation, D3 multi-account, D4 off-topic, D5 misinformation, D6 harassment, D7 PII) evaluated per submission. Light → full review escalation at confidence 0.55–0.75 or &gt;2 prior violations",
               dot: "g",
               issue: { number: 31, url: `${REPO}/issues/31` },
             },
             {
-              html: "BullMQ queue with token bucket rate limiting — accepts 1,000 submissions/minute, retries with exponential backoff (1s, 4s, 16s, 60s), no silent drops",
+              html: "BullMQ queue with token bucket rate limiting   accepts 1,000 submissions/minute, retries with exponential backoff (1s, 4s, 16s, 60s), no silent drops",
               dot: "g",
             },
             {
-              html: "5-tier action-service: APPROVE, SOFT_FLAG, SHADOW_FLAG, REMOVE, BAN — all written to append-only <code>moderation_audit_log</code>",
+              html: "5-tier action-service: APPROVE, SOFT_FLAG, SHADOW_FLAG, REMOVE, BAN   all written to append-only <code>moderation_audit_log</code>",
               dot: "g",
             },
             {
-              html: "Admin review queue at <code>/admin/queue</code> — split-panel UI with flagged evidence spans highlighted amber, cohort mini-chart, account history, keyboard shortcuts A/R/E/P/N",
+              html: "Admin review queue at <code>/admin/queue</code>   split-panel UI with flagged evidence spans highlighted amber, cohort mini-chart, account history, keyboard shortcuts A/R/E/P/N",
               dot: "g",
             },
             {
-              html: "Appeal flow — 7-day window for REMOVE, 14-day for BAN. Human-only review (no automated re-review). Upheld appeals restore post to feed",
+              html: "Appeal flow   7-day window for REMOVE, 14-day for BAN. Human-only review (no automated re-review). Upheld appeals restore post to feed",
               dot: "g",
             },
             {
-              html: "Moderation metrics dashboard at <code>/admin/metrics</code> — precision, recall estimate, appeals upheld rate, queue depth, Flash vs Pro split, P95 latency",
+              html: "Moderation metrics dashboard at <code>/admin/metrics</code>   precision, recall estimate, appeals upheld rate, queue depth, Flash vs Pro split, P95 latency",
               dot: "g",
             },
             {
@@ -217,7 +217,7 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Moderation service unavailable fallback: all submissions shadow-flagged with <code>moderation_unavailable</code> status and routed to human review — no data loss",
+              html: "Moderation service unavailable fallback: all submissions shadow-flagged with <code>moderation_unavailable</code> status and routed to human review   no data loss",
               dot: "g",
             },
           ],
@@ -226,7 +226,7 @@ const seedChangelog: ChangelogData = {
           type: "security",
           items: [
             {
-              html: "Admin endpoints: RS256 JWT (15-min expiry) + TOTP MFA + IP allowlist at API gateway — triple defence-in-depth",
+              html: "Admin endpoints: RS256 JWT (15-min expiry) + TOTP MFA + IP allowlist at API gateway   triple defence-in-depth",
               dot: "a",
             },
             {
@@ -234,7 +234,7 @@ const seedChangelog: ChangelogData = {
               dot: "a",
             },
             {
-              html: "Moderation verdict JSON schema validation before action-service logic runs — unexpected <code>action</code> field values rejected and shadow-flagged",
+              html: "Moderation verdict JSON schema validation before action-service logic runs   unexpected <code>action</code> field values rejected and shadow-flagged",
               dot: "a",
             },
           ],
@@ -247,7 +247,7 @@ const seedChangelog: ChangelogData = {
               dot: "b",
             },
             {
-              html: "<code>POST /api/v1/submissions</code> returns HTTP 202 in &lt;500ms — processing is fully async. Dashboard updates optimistically",
+              html: "<code>POST /api/v1/submissions</code> returns HTTP 202 in &lt;500ms   processing is fully async. Dashboard updates optimistically",
               dot: "b",
             },
           ],
@@ -265,8 +265,8 @@ const seedChangelog: ChangelogData = {
       whatsNext: {
         title: "What came next",
         items: [
-          "v0.4.1 hotfix — D2 false-positive fix and JSON parse error handling",
-          "v0.5 in progress — SEO infrastructure and OINP stream",
+          "v0.4.1 hotfix   D2 false-positive fix and JSON parse error handling",
+          "v0.5 in progress   SEO infrastructure and OINP stream",
         ],
       },
     },
@@ -285,12 +285,12 @@ const seedChangelog: ChangelogData = {
           type: "added",
           items: [
             {
-              html: "Community feed at <code>/community</code> — paginated approved-only posts with SSE new-post notification bar (5-second delivery target)",
+              html: "Community feed at <code>/community</code>   paginated approved-only posts with SSE new-post notification bar (5-second delivery target)",
               dot: "g",
               issue: { number: 22, url: `${REPO}/issues/22` },
             },
             {
-              html: "Filter chips: All, PPR, BIL, BGC, Medical — active filter persisted to localStorage and restored on return",
+              html: "Filter chips: All, PPR, BIL, BGC, Medical   active filter persisted to localStorage and restored on return",
               dot: "g",
             },
             {
@@ -303,12 +303,12 @@ const seedChangelog: ChangelogData = {
               issue: { number: 28, url: `${REPO}/issues/28` },
             },
             {
-              html: "Share feature — unique slug <code>/t/{adjective}-{noun}-{stream}-{aordate}</code>. Read-only. Copy / WhatsApp / PNG card (1200×630 server-generated)",
+              html: "Share feature   unique slug <code>/t/{adjective}-{noun}-{stream}-{aordate}</code>. Read-only. Copy / WhatsApp / PNG card (1200×630 server-generated)",
               dot: "g",
               issue: { number: 25, url: `${REPO}/issues/25` },
             },
             {
-              html: "PPR celebration prompt auto-shown on PPR milestone log — pre-filled tweet and LinkedIn post with share URL",
+              html: "PPR celebration prompt auto-shown on PPR milestone log   pre-filled tweet and LinkedIn post with share URL",
               dot: "g",
             },
             {
@@ -316,11 +316,11 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Cohort dot map — 500-sampled grid, colour-coded by stage. User dot: white outline ring. Hover tooltip shows anonymised applicant ID and stage",
+              html: "Cohort dot map   500-sampled grid, colour-coded by stage. User dot: white outline ring. Hover tooltip shows anonymised applicant ID and stage",
               dot: "g",
             },
             {
-              html: "Community Insights panel — alert cards with 72-hour auto-expiry, auto-generated ≤140 char summaries, moderated before display",
+              html: "Community Insights panel   alert cards with 72-hour auto-expiry, auto-generated ≤140 char summaries, moderated before display",
               dot: "g",
             },
           ],
@@ -329,7 +329,7 @@ const seedChangelog: ChangelogData = {
           type: "fixed",
           items: [
             {
-              html: "Dashboard cohort stats now refresh in background without blocking initial render — was causing 1.2s layout shift on return visits",
+              html: "Dashboard cohort stats now refresh in background without blocking initial render   was causing 1.2s layout shift on return visits",
               dot: "r",
               issue: { number: 29, url: `${REPO}/issues/29` },
             },
@@ -361,7 +361,7 @@ const seedChangelog: ChangelogData = {
           type: "added",
           items: [
             {
-              html: 'SVG progress ring — animates from 0% on dashboard load. WCAG 2.1 AA text equivalent for screen readers: "65% of median elapsed (120 of 184 days)"',
+              html: 'SVG progress ring   animates from 0% on dashboard load. WCAG 2.1 AA text equivalent for screen readers: "65% of median elapsed (120 of 184 days)"',
               dot: "g",
               issue: { number: 19, url: `${REPO}/issues/19` },
             },
@@ -374,12 +374,12 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Magic link resume via <code>POST /api/v1/auth/resume</code> — single-use HMAC-signed JWT, 24h TTL, Redis invalidation. Works from any device for email-registered users",
+              html: "Magic link resume via <code>POST /api/v1/auth/resume</code>   single-use HMAC-signed JWT, 24h TTL, Redis invalidation. Works from any device for email-registered users",
               dot: "g",
               issue: { number: 17, url: `${REPO}/issues/17` },
             },
             {
-              html: "Processing stats page at <code>/stats</code> — stream leaderboard with p25–p75 confidence bars, WES verification table, data source labels on all statistics",
+              html: "Processing stats page at <code>/stats</code>   stream leaderboard with p25–p75 confidence bars, WES verification table, data source labels on all statistics",
               dot: "g",
             },
           ],
@@ -388,16 +388,16 @@ const seedChangelog: ChangelogData = {
           type: "security",
           items: [
             {
-              html: "Email stored as SHA-256 hash only. Separate AES-256-GCM <code>notifications_blob</code> for transactional email — raw email never persisted anywhere",
+              html: "Email stored as SHA-256 hash only. Separate AES-256-GCM <code>notifications_blob</code> for transactional email   raw email never persisted anywhere",
               dot: "a",
               issue: { number: 14, url: `${REPO}/issues/14` },
             },
             {
-              html: "One-click PIPEDA data deletion from dashboard — cascades to all collections. Nightly hard-delete of soft-deleted records after 24h",
+              html: "One-click PIPEDA data deletion from dashboard   cascades to all collections. Nightly hard-delete of soft-deleted records after 24h",
               dot: "a",
             },
             {
-              html: "IP stored as <code>SHA-256(ip + daily_rotating_salt)</code> — raw IPs never logged to any persistent store",
+              html: "IP stored as <code>SHA-256(ip + daily_rotating_salt)</code>   raw IPs never logged to any persistent store",
               dot: "a",
             },
           ],
@@ -406,7 +406,7 @@ const seedChangelog: ChangelogData = {
           type: "fixed",
           items: [
             {
-              html: "PPR submissions without biometrics date now excluded from community statistics with a clear dashboard warning — was silently included causing inflated estimates",
+              html: "PPR submissions without biometrics date now excluded from community statistics with a clear dashboard warning   was silently included causing inflated estimates",
               dot: "r",
               issue: { number: 18, url: `${REPO}/issues/18` },
             },
@@ -442,7 +442,7 @@ const seedChangelog: ChangelogData = {
               issue: { number: 12, url: `${REPO}/issues/12` },
             },
             {
-              html: "Live counter now cached at 5-minute TTL server-side — was hitting MongoDB directly on every request causing 120ms latency spike at peak load",
+              html: "Live counter now cached at 5-minute TTL server-side   was hitting MongoDB directly on every request causing 120ms latency spike at peak load",
               dot: "r",
               issue: { number: 13, url: `${REPO}/issues/13` },
             },
@@ -458,14 +458,14 @@ const seedChangelog: ChangelogData = {
       date: "Mar 14, 2026",
       title: "Initial Public Release 🍁",
       description:
-        "The first public version — core tracker, MongoDB schema, cohort key design, and basic dashboard.",
+        "The first public version   core tracker, MongoDB schema, cohort key design, and basic dashboard.",
       releaseUrl: `${REPO}/releases/tag/v0.1.0`,
       sections: [
         {
           type: "added",
           items: [
             {
-              html: "AOR date submission at <code>/track</code> — stream dropdown, inland/outland type, optional email, form validation, 202 response",
+              html: "AOR date submission at <code>/track</code>   stream dropdown, inland/outland type, optional email, form validation, 202 response",
               dot: "g",
             },
             {
@@ -473,7 +473,7 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Personal dashboard — days counter, stream median, cohort rank, 6-milestone timeline with hover-to-edit inline date pickers and optimistic UI",
+              html: "Personal dashboard   days counter, stream median, cohort rank, 6-milestone timeline with hover-to-edit inline date pickers and optimistic UI",
               dot: "g",
             },
             {
@@ -493,7 +493,7 @@ const seedChangelog: ChangelogData = {
               dot: "g",
             },
             {
-              html: "Landing page — SSR hero with live counter (5-min TTL), How It Works, stream cards, trust signals, consulting cross-sell",
+              html: "Landing page   SSR hero with live counter (5-min TTL), How It Works, stream cards, trust signals, consulting cross-sell",
               dot: "g",
             },
           ],
@@ -502,7 +502,7 @@ const seedChangelog: ChangelogData = {
       contribRow: {
         label: "Founded by:",
         contributors: [{ initials: "gn", color: "var(--green)" }],
-        names: "@getnorthpath — GetNorthPath Inc.",
+        names: "@getnorthpath   GetNorthPath Inc.",
       },
     },
   ],

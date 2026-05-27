@@ -18,7 +18,7 @@ export const SITEMAP_STATIC_PATHS = [
   "/vs-ircc",
 ] as const;
 
-/** App routes not in the sitemap — blocked for AI crawlers. */
+/** App routes not in the sitemap   blocked for AI crawlers. */
 export const NON_SITEMAP_DISALLOW_PATHS = [
   "/track",
   "/dashboard/",

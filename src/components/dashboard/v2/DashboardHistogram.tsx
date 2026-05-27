@@ -8,15 +8,15 @@ import { IconInfo } from "./dashboard-icons";
  * Vertical mini-histogram: days from AOR to eCOPR per cohort bucket.
  *
  * **Data contract**
- * - `bars[].value` — applicant count in that day range (from `cohort.dist`, live
+ * - `bars[].value`   applicant count in that day range (from `cohort.dist`, live
  *   aggregate when >=2 profiles in cohort).
- * - `bars[].type` — `n` cohort (navy), `h` your P25-P75 window (red),
+ * - `bars[].type`   `n` cohort (navy), `h` your P25-P75 window (red),
  *   `y` your bucket when you have an eCOPR date (green).
  * - Default `DN_HIST` is for the static `dashboard-new` preview only.
  *
  * **Rendering**
  * Bar height is set in pixels (not %) so columns stay visible inside the
- * flex layout — percentage heights collapse when the parent has no explicit height.
+ * flex layout   percentage heights collapse when the parent has no explicit height.
  */
 const PLOT_HEIGHT_PX = 76;
 
@@ -90,7 +90,7 @@ export function DashboardHistogram({
       <div className="hist-area">
         {isEmpty ? (
           <div className="hist-empty" role="status">
-            No eCOPR completion days in this cohort yet — bars appear once
+            No eCOPR completion days in this cohort yet   bars appear once
             applicants with eCOPR dates are logged in your bucket.
           </div>
         ) : (

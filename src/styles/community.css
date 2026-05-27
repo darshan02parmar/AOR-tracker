@@ -1,5 +1,5 @@
 /*
- * Community feed styles — scoped to .mkt-community-page so they don't leak
+ * Community feed styles   scoped to .mkt-community-page so they don't leak
  * to other marketing routes. Loaded by src/app/community/page.tsx.
  *
  * Design tokens (--cream, --navy, --green, --red, etc.) come from
@@ -7,7 +7,7 @@
  * in (so the shared MarketingFooter stays styled). We do not redeclare them.
  *
  * Unlike the changelog route, the community page is NOT inside the
- * (marketing) route group — it ships its own top nav (CommunityNav, rendered
+ * (marketing) route group   it ships its own top nav (CommunityNav, rendered
  * from the `cm-nav` / `cm-nbtn` classes below). The footer is still the
  * shared MarketingFooter, which is why .marketing-site stays in the page
  * wrapper.
@@ -120,7 +120,7 @@
   background: var(--border);
   margin: 6px 14px 14px;
 }
-/* (Previous .lsb-emoji rule removed — emojis replaced by react-icons.) */
+/* (Previous .lsb-emoji rule removed   emojis replaced by react-icons.) */
 
 /* My cohort mini-card */
 .mkt-community-page .cohort-mini {
@@ -163,7 +163,7 @@
   color: #86efac;
 }
 
-/* Sidebar — not onboarded */
+/* Sidebar   not onboarded */
 .mkt-community-page .profile-onboarding {
   margin: 4px 4px;
   background: var(--cm-surface);
@@ -971,7 +971,7 @@
   user-select: none;
 }
 
-/* ─── Right panel — insights ─── */
+/* ─── Right panel   insights ─── */
 
 .mkt-community-page .right-panel {
   background: var(--cream2);

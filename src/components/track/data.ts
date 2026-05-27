@@ -8,7 +8,7 @@ import { STREAM_OPTIONS, PROVINCES } from "@/lib/constants";
  * `MilestoneKey`, …). This file only carries:
  *
  *   1. UI-facing stream cards (icon, name, sub-label, "avg / tracked")
- *      — keyed by the same labels used in `STREAM_OPTIONS` so we don't
+ *        keyed by the same labels used in `STREAM_OPTIONS` so we don't
  *      diverge from the persistence layer.
  *   2. The milestone checklist labels rendered in step 2. We re-key the
  *      ones that come from the sample HTML (`ms-bil`, `ms-biometrics`, …)
@@ -16,7 +16,7 @@ import { STREAM_OPTIONS, PROVINCES } from "@/lib/constants";
  *      build a `UserProfile.milestones` map directly.
  *
  * NOTE on AOR: the sample HTML uses "AOR Date" as a top-level form field
- * (step 1) AND lists every other milestone in step 2. We mirror that —
+ * (step 1) AND lists every other milestone in step 2. We mirror that  
  * step 2 only lists post-AOR milestones; `aor` is set from the step-1
  * date when we save.
  */
@@ -32,7 +32,7 @@ export type StreamCard = {
   sub: string;
   /** "184d avg · 1,240 tracked"-style line; static for now. */
   meta: string;
-  /** Icon key — looked up in `track-icons.tsx`. */
+  /** Icon key   looked up in `track-icons.tsx`. */
   icon: StreamIconKey;
 };
 
@@ -122,14 +122,14 @@ export const TRACK_MILESTONES: TrackMilestoneDef[] = [
   },
   {
     key: "p1",
-    label: "P1 — PR Portal (first invitation)",
+    label: "P1   PR Portal (first invitation)",
     emptyState: "Not yet received",
     note:
       "Date IRCC invited you to the Permanent Residence Portal for the first confirmation step (inland).",
   },
   {
     key: "p2",
-    label: "P2 — PR Portal (photo & address)",
+    label: "P2   PR Portal (photo & address)",
     emptyState: "Not yet received",
     note:
       "Date you completed the portal step to submit your photo and Canadian mailing address for your PR card.",
@@ -210,7 +210,7 @@ export type LeftStat = {
   value: string;
   unit?: string;
   label: string;
-  /** "+2d this week" or "-4d this week" — green text under the value. */
+  /** "+2d this week" or "-4d this week"   green text under the value. */
   delta?: string;
 };
 
@@ -233,7 +233,7 @@ export type TrustItem = {
 export const TRUST_ITEMS: TrustItem[] = [
   {
     iconKey: "lock",
-    text: "Your email is used only to resume your profile — we never sell or share it",
+    text: "Your email is used only to resume your profile   we never sell or share it",
   },
   {
     iconKey: "verified",
@@ -241,11 +241,11 @@ export const TRUST_ITEMS: TrustItem[] = [
   },
   {
     iconKey: "trash",
-    text: "Delete your data at any time from your dashboard — PIPEDA compliant",
+    text: "Delete your data at any time from your dashboard   PIPEDA compliant",
   },
   {
     iconKey: "star",
-    text: "Open source under MIT licence —",
+    text: "Open source under MIT licence  ",
     link: {
       href: "https://github.com/Get-North-Path/AOR-tracker",
       label: "review the code on GitHub",
