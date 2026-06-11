@@ -60,7 +60,11 @@ export function RoadmapKanban({ data }: Props) {
             <div className={`rm-col-bar ${col.barClass}`} />
 
             {cards.length === 0 ? (
-              <div className="rm-empty">No items match this filter.</div>
+              <div className="rm-empty">
+                {filter === "all"
+                  ? "No issues on the board yet."
+                  : "No items match this filter."}
+              </div>
             ) : (
               cards.map((card) => (
                 <RoadmapCard
