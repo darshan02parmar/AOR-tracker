@@ -332,15 +332,6 @@ function mapAssignee(login: string): RoadmapCard["assignee"] {
   return { initials, handle: `@${login}`, tone };
 }
 
-function formatShipDate(iso: string): string {
-  const d = new Date(iso);
-  return `Shipped ${d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  })}`;
-}
-
 function formatMilestoneDate(iso: string | null): string {
   if (!iso) return "TBD";
   const d = new Date(iso);
@@ -373,10 +364,6 @@ function relativeSyncLabel(syncedAt: Date): string {
   if (mins < 60) return `${mins} min ago`;
   const hours = Math.floor(mins / 60);
   return `${hours}h ago`;
-}
-
-function issueMentionedInText(text: string, issueNumber: number): boolean {
-  return new RegExp(`#${issueNumber}\\b`).test(text);
 }
 
 // ─── Fetchers ───────────────────────────────────────────────────────────────
@@ -484,55 +471,6 @@ async function fetchReleases(): Promise<RestRelease[]> {
     `/repos/${org}/${repo}/releases?per_page=20`,
   );
   return releases ?? [];
-}
-
-function mapReleaseToDoneCard(release: RestRelease): RoadmapCard {
-  const tag = release.tag_name;
-  return {
-    issue: release.id,
-    title: release.name || tag,
-    description: formatDescription(release.body, 200, true),
-    status: "done",
-    priority: "low",
-    categories: ["feat"],
-    votes: 0,
-    shippedAt: release.published_at
-      ? formatShipDate(release.published_at)
-      : "Shipped",
-    shippedVersion: tag,
-    linkOverride: `/changelog#${tag}`,
-  };
-}
-
-function mergeReleaseCards(
-  projectCards: RoadmapCard[],
-  releases: RestRelease[],
-): RoadmapCard[] {
-  const doneIssueNumbers = new Set(
-    projectCards.filter((c) => c.status === "done").map((c) => c.issue),
-  );
-
-  const releaseCards: RoadmapCard[] = [];
-  for (const release of releases) {
-    if (release.draft || release.prerelease || !release.published_at) continue;
-
-    const body = release.body ?? "";
-    const alreadyCovered = [...doneIssueNumbers].some(
-      (num) => issueMentionedInText(body, num) || issueMentionedInText(release.name ?? "", num),
-    );
-    if (alreadyCovered) continue;
-
-    const tagMentioned = projectCards.some(
-      (c) =>
-        c.shippedVersion === release.tag_name ||
-        c.title.toLowerCase().includes(release.tag_name.toLowerCase()),
-    );
-    if (tagMentioned) continue;
-
-    releaseCards.push(mapReleaseToDoneCard(release));
-  }
-
-  return [...projectCards, ...releaseCards];
 }
 
 async function fetchMilestones(): Promise<RestMilestone[]> {
@@ -647,7 +585,7 @@ export async function loadLiveRoadmapSlice(): Promise<LiveRoadmapSlice | null> {
     return null;
   }
 
-  const cards = mergeReleaseCards(projectCards, releases);
+  const cards = projectCards;
   const stats = buildStatsFromCards(cards);
 
   const milestoneList =
