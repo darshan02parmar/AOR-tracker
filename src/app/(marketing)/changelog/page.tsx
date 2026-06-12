@@ -14,22 +14,17 @@ export const metadata = buildPageMetadata({
     "All notable changes per Keep a Changelog. Versions follow Semantic Versioning.",
 });
 
+/** Revalidate hourly so new GitHub releases appear without a full rebuild. */
+export const revalidate = 3600;
+
 /**
  * /changelog
  *
  * Shared MarketingNav + MarketingFooter come from
  * src/app/(marketing)/layout.tsx, which wraps every page in this route group
  * with `.marketing-site`, the nav, and the footer.
- *
- * TODO(github-integration): the data is static today (see
- * `src/components/marketing/changelog/data.ts`). When we wire this up to the
- * GitHub Releases API:
- *   - make `getChangelog()` async,
- *   - turn this component into `export default async function ChangelogPage()`,
- *   - add `export const revalidate = 3600;` for hourly ISR so the page stays
- *     cheap to serve while still picking up new releases.
  */
-export default function ChangelogPage() {
-  const data = getChangelog();
+export default async function ChangelogPage() {
+  const data = await getChangelog();
   return <ChangelogClient data={data} />;
 }

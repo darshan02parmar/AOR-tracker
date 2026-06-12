@@ -33,16 +33,20 @@ export function RoadmapNav({
 
       <div className="rm-nav-right">
         <Link href={changelogHref} className="rm-nbtn">
-          Changelog
+          <span className="rm-nbtn-long">Changelog</span>
+          <span className="rm-nbtn-short" aria-hidden>
+            Log
+          </span>
         </Link>
         <a
           href={repoHref}
           target="_blank"
           rel="noopener noreferrer"
           className="rm-nbtn"
+          aria-label="GitHub repository"
         >
           <IconGitHub aria-hidden />
-          GitHub
+          <span className="rm-nbtn-long">GitHub</span>
         </a>
         <a
           href={feedbackHref}
@@ -51,8 +55,11 @@ export function RoadmapNav({
           className="rm-nbtn red"
         >
           <IconPlus aria-hidden />
-          Request Feature
-        </a>
+          <span className="rm-nbtn-long">Request Feature</span>
+          <span className="rm-nbtn-short" aria-hidden>
+            Request
+          </span>
+        </Link>
       </div>
     </nav>
   );

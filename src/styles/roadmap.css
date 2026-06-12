@@ -10,6 +10,10 @@
  *     components; the CSS below sizes them via the wrapping span/button
  */
 
+.mkt-roadmap-page {
+  overflow-x: clip;
+}
+
 /* ─── ROADMAP NAV (own top nav, like community) ───────────────────────── */
 
 .mkt-roadmap-page .rm-nav {
@@ -19,15 +23,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   position: sticky;
   top: 0;
   z-index: 100;
   border-bottom: 1.5px solid rgba(255, 255, 255, 0.07);
+  min-width: 0;
+  overflow: hidden;
 }
 .mkt-roadmap-page .rm-nav-left {
   display: flex;
   align-items: center;
   min-width: 0;
+  flex-shrink: 1;
 }
 .mkt-roadmap-page .rm-nav-sep {
   width: 1px;
@@ -45,6 +53,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+.mkt-roadmap-page .rm-nbtn-short {
+  display: none;
 }
 .mkt-roadmap-page .rm-nbtn {
   font-size: 0.77rem;
@@ -240,7 +253,14 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
+  gap: 10px;
+}
+.mkt-roadmap-page .rm-fbar-chips {
+  display: flex;
+  align-items: center;
   gap: 8px;
+  flex: 1;
+  min-width: 0;
   flex-wrap: wrap;
 }
 .mkt-roadmap-page .rm-chip {
@@ -274,9 +294,6 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
-.mkt-roadmap-page .rm-fbar-spacer {
-  flex: 1;
-}
 .mkt-roadmap-page .rm-gh-link {
   font-size: 0.74rem;
   font-weight: 600;
@@ -284,6 +301,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .mkt-roadmap-page .rm-gh-link svg {
   width: 12px;
@@ -294,9 +313,11 @@
 /* ─── MAIN ─────────────────────────────────────────────────────────────── */
 
 .mkt-roadmap-page .rm-main {
+  width: 100%;
   max-width: var(--max);
   margin: 0 auto;
   padding: clamp(24px, 4vw, 40px) clamp(16px, 4vw, 48px);
+  overflow-x: clip;
 }
 
 /* ─── CTA BAND ─────────────────────────────────────────────────────────── */
@@ -310,6 +331,7 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
+  width: 100%;
   margin-bottom: 28px;
 }
 .mkt-roadmap-page .rm-ctab-text h3 {
@@ -353,34 +375,82 @@
   background: var(--red2);
 }
 .mkt-roadmap-page .rm-btn-g {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 .mkt-roadmap-page .rm-btn-g:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.45);
 }
 .mkt-roadmap-page .rm-btn svg {
   width: 12px;
   height: 12px;
   fill: currentColor;
+  flex-shrink: 0;
+}
+.mkt-roadmap-page .rm-btn-short {
+  display: none;
 }
 
 /* ─── KANBAN ───────────────────────────────────────────────────────────── */
+
+.mkt-roadmap-page .rm-kanban-hint {
+  display: none;
+}
 
 .mkt-roadmap-page .rm-kanban {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 22px;
-  align-items: start;
+  align-items: stretch;
+  border-bottom: 2px solid var(--amber);
   margin-bottom: 56px;
+}
+.mkt-roadmap-page .rm-col {
+  display: flex;
+  flex-direction: column;
+  height: 540px;
+  min-height: 0;
+}
+.mkt-roadmap-page .rm-col-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  margin-right: -2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+.mkt-roadmap-page .rm-col-body::-webkit-scrollbar {
+  width: 5px;
+}
+.mkt-roadmap-page .rm-col-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.mkt-roadmap-page .rm-col-body::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 999px;
+}
+.mkt-roadmap-page .rm-col-body::-webkit-scrollbar-thumb:hover {
+  background: var(--muted2);
 }
 .mkt-roadmap-page .rm-col-head {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
+}
+.mkt-roadmap-page .rm-col-head-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 .mkt-roadmap-page .rm-col-icon {
   display: inline-flex;
@@ -399,6 +469,7 @@
   font-size: 1rem;
   font-weight: 800;
   color: var(--navy);
+  min-width: 0;
 }
 .mkt-roadmap-page .rm-col-badge {
   font-size: 0.63rem;
@@ -868,8 +939,12 @@
 /* ─── RESPONSIVE ───────────────────────────────────────────────────────── */
 
 @media (max-width: 900px) {
-  .mkt-roadmap-page .rm-kanban {
-    grid-template-columns: 1fr;
+  .mkt-roadmap-page .rm-hero {
+    padding-top: clamp(36px, 8vw, 56px);
+  }
+  .mkt-roadmap-page .rm-hero-pills {
+    gap: 12px;
+    padding-bottom: 2rem;
   }
   .mkt-roadmap-page .rm-stats-inner {
     grid-template-columns: 1fr 1fr;
@@ -883,14 +958,236 @@
   .mkt-roadmap-page .rm-sb-cell:nth-child(4) {
     border-top: 1px solid var(--border);
   }
+  .mkt-roadmap-page .rm-fbar {
+    top: 56px;
+    padding-inline: clamp(12px, 3vw, 20px);
+  }
+  .mkt-roadmap-page .rm-fbar-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .mkt-roadmap-page .rm-fbar-chips {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    padding-right: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+    mask-image: linear-gradient(to right, #000 92%, transparent 100%);
+  }
+  .mkt-roadmap-page .rm-fbar-chips::-webkit-scrollbar {
+    height: 4px;
+  }
+  .mkt-roadmap-page .rm-fbar-chips::-webkit-scrollbar-thumb {
+    background: var(--border2);
+    border-radius: 999px;
+  }
+  .mkt-roadmap-page .rm-chip {
+    flex-shrink: 0;
+    padding: 5px 11px;
+    font-size: 0.72rem;
+  }
+  .mkt-roadmap-page .rm-gh-link {
+    align-self: flex-start;
+    font-size: 0.72rem;
+  }
+  .mkt-roadmap-page .rm-main {
+    padding-inline: clamp(12px, 3vw, 20px);
+    padding-block: clamp(18px, 4vw, 28px);
+  }
   .mkt-roadmap-page .rm-cta-band {
     flex-direction: column;
-    align-items: flex-start;
+    width: 100%;
+    /* align-items: stretch; */
+    padding: 16px 16px;
+    margin-bottom: 18px;
+    border-radius: 11px;
+  }
+  .mkt-roadmap-page .rm-ctab-text p {
+    max-width: none;
+    font-size: 0.78rem;
+  }
+  .mkt-roadmap-page .rm-ctab-btns {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mkt-roadmap-page .rm-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+  }
+  .mkt-roadmap-page .rm-btn-long {
+    display: none;
+  }
+  .mkt-roadmap-page .rm-btn-short {
+    display: inline;
+  }
+  /* Swipeable kanban columns instead of a tall vertical stack */
+  .mkt-roadmap-page .rm-kanban {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: clamp(12px, 3vw, 20px);
+    margin-inline: calc(-1 * clamp(12px, 3vw, 20px));
+    padding-inline: clamp(12px, 3vw, 20px);
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+    mask-image: linear-gradient(to right, #000 90%, transparent 100%);
+  }
+  .mkt-roadmap-page .rm-kanban::-webkit-scrollbar {
+    height: 5px;
+  }
+  .mkt-roadmap-page .rm-kanban::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .mkt-roadmap-page .rm-kanban::-webkit-scrollbar-thumb {
+    background: var(--border2);
+    border-radius: 999px;
+  }
+  .mkt-roadmap-page .rm-col {
+    flex: 0 0 calc(100% - 28px);
+    max-width: 340px;
+    scroll-snap-align: start;
+    height: min(56vh, 420px);
+  }
+  .mkt-roadmap-page .rm-col-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .mkt-roadmap-page .rm-col-head-row {
+    width: 100%;
+  }
+  .mkt-roadmap-page .rm-col-h2 {
+    white-space: normal;
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+  .mkt-roadmap-page .rm-col-badge {
+    align-self: flex-start;
+    margin-left: 26px;
+  }
+  .mkt-roadmap-page .rm-kanban-hint {
+    display: block;
+    margin: -10px 0 20px;
+    font-size: 0.68rem;
+    color: var(--muted2);
+    text-align: center;
+    font-family: var(--fm);
+  }
+  .mkt-roadmap-page .rm-ms-section {
+    margin-bottom: 40px;
+  }
+  .mkt-roadmap-page .rm-ms-head h2 {
+    font-size: 1.35rem;
   }
 }
-@media (max-width: 600px) {
+
+@media (max-width: 640px) {
+  .mkt-roadmap-page .rm-nav {
+    height: 56px;
+    padding-inline: 12px;
+    gap: 6px;
+  }
+  .mkt-roadmap-page .rm-nav-left {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+  .mkt-roadmap-page .rm-nav-left .nbrand-wordmark {
+    display: none;
+  }
+  .mkt-roadmap-page .rm-nav-right {
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mkt-roadmap-page .rm-nav-right::-webkit-scrollbar {
+    display: none;
+  }
   .mkt-roadmap-page .rm-nav-page,
   .mkt-roadmap-page .rm-nav-sep {
     display: none;
+  }
+  .mkt-roadmap-page .rm-nbtn-long {
+    display: none;
+  }
+  .mkt-roadmap-page .rm-nbtn-short {
+    display: inline;
+  }
+  .mkt-roadmap-page .rm-nbtn {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+    flex-shrink: 0;
+  }
+  .mkt-roadmap-page .rm-hero h1 {
+    font-size: clamp(1.65rem, 7vw, 2.1rem);
+  }
+  .mkt-roadmap-page .rm-hero-sub {
+    font-size: 0.92rem;
+    margin-bottom: 1.4rem;
+  }
+  .mkt-roadmap-page .rm-hp {
+    font-size: 0.72rem;
+  }
+  .mkt-roadmap-page .rm-sb-n {
+    font-size: 1.4rem;
+  }
+  .mkt-roadmap-page .rm-sb-l {
+    font-size: 0.62rem;
+  }
+  .mkt-roadmap-page .rm-gh-link-text {
+    display: none;
+  }
+  .mkt-roadmap-page .rm-gh-link::after {
+    content: "Issues";
+    font-weight: 600;
+  }
+  .mkt-roadmap-page .rm-rc:hover {
+    transform: none;
+  }
+  .mkt-roadmap-page .rm-rc-title {
+    font-size: 0.84rem;
+  }
+  .mkt-roadmap-page .rm-rc-foot {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .mkt-roadmap-page .rm-toast {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .mkt-roadmap-page .rm-col {
+    flex-basis: 88vw;
+    height: min(48vh, 360px);
+  }
+  .mkt-roadmap-page .rm-stats-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .mkt-roadmap-page .rm-sb-cell {
+    padding: 10px 6px;
   }
 }

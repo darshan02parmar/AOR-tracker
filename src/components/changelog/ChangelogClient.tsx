@@ -21,10 +21,8 @@ type Props = {
  *   │                              <VersionBlock>│ × N
  *   └────────────────────────────────────────────┘
  *
- * TODO(github-integration): no JS state today (everything renders from
- * static seed data). When versions come from the GitHub API a small client
- * component should be added here to (a) scroll-spy the sidebar and (b)
- * highlight the in-view version's link with `is-current`.
+ * TODO: add a small client component for scroll-spy sidebar highlighting
+ * (`is-current` on the in-view version link).
  */
 export function ChangelogClient({ data }: Props) {
   const unreleasedTag = data.unreleased.badge.split(" ").pop()?.trim() ?? "";

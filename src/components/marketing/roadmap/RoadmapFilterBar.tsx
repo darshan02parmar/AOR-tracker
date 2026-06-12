@@ -20,29 +20,29 @@ export function RoadmapFilterBar({ filters, issuesHref }: Props) {
   return (
     <div className="rm-fbar">
       <div className="rm-fbar-inner">
-        {filters.map((chip) => {
-          const active = chip.id === filter;
-          return (
-            <button
-              type="button"
-              key={chip.id}
-              className={`rm-chip${active ? " on" : ""}`}
-              aria-pressed={active}
-              onClick={() => setFilter(chip.id)}
-            >
-              {chip.dot ? (
-                <span
-                  className="rm-chip-dot"
-                  style={{ background: chip.dot }}
-                  aria-hidden="true"
-                />
-              ) : null}
-              {chip.label}
-            </button>
-          );
-        })}
-
-        <div className="rm-fbar-spacer" />
+        <div className="rm-fbar-chips" role="group" aria-label="Filter by category">
+          {filters.map((chip) => {
+            const active = chip.id === filter;
+            return (
+              <button
+                type="button"
+                key={chip.id}
+                className={`rm-chip${active ? " on" : ""}`}
+                aria-pressed={active}
+                onClick={() => setFilter(chip.id)}
+              >
+                {chip.dot ? (
+                  <span
+                    className="rm-chip-dot"
+                    style={{ background: chip.dot }}
+                    aria-hidden="true"
+                  />
+                ) : null}
+                {chip.label}
+              </button>
+            );
+          })}
+        </div>
 
         <a
           href={issuesHref}
@@ -51,7 +51,7 @@ export function RoadmapFilterBar({ filters, issuesHref }: Props) {
           className="rm-gh-link"
         >
           <IconGitHub aria-hidden />
-          All issues on GitHub
+          <span className="rm-gh-link-text">All issues on GitHub</span>
           <IconArrowRight aria-hidden />
         </a>
       </div>

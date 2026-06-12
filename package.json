@@ -9,7 +9,11 @@
     "start": "NODE_ENV=production node server.mjs",
     "start:next": "next start",
     "lint": "eslint",
-    "test": "npx tsx --test src/lib/milestone-gap-estimates.test.ts src/lib/ppr-estimate.test.ts"
+    "test": "npx tsx --test src/lib/milestone-gap-estimates.test.ts src/lib/ppr-estimate.test.ts",
+    "release:draft": "node scripts/draft-release-from-tag.mjs",
+    "release:draft:dry-run": "node scripts/draft-release-from-tag.mjs --dry-run",
+    "releases:backfill": "node scripts/backfill-github-releases.mjs",
+    "releases:backfill:execute": "node scripts/backfill-github-releases.mjs --execute"
   },
   "dependencies": {
     "@microsoft/clarity": "^1.0.2",

@@ -135,6 +135,27 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
+## 📦 Releasing
+
+Version tags trigger a **draft** GitHub Release via CI (Keep a Changelog notes from merged PRs since the previous tag).
+
+```bash
+git tag v0.1.8
+git push origin v0.1.8
+```
+
+1. GitHub Actions creates a draft release for that tag.
+2. Open **GitHub → Releases**, review or edit the notes.
+3. Click **Publish release** — `/changelog` and `/roadmap` pick it up on the next cache refresh.
+
+Preview notes locally:
+
+```bash
+TAG=v0.1.8 node scripts/draft-release-from-tag.mjs --dry-run
+```
+
+---
+
 ## 🤝 Contributing
 
 We welcome **issues, PRs, and design feedback** on GitHub.
