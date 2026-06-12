@@ -137,7 +137,12 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## 🤝 Contributing
 
-We welcome **issues, PRs, and design feedback** on GitHub. For larger changes, open an issue first so we can align on scope. Join **[Discord](https://discord.gg/aortrack)** for informal discussion and release chatter.
+We welcome **issues, PRs, and design feedback** on GitHub.
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to open issues, branch naming, commit format, and PR rules
+- **[Open an issue yourself](https://github.com/Get-North-Path/AOR-tracker/issues/new/choose)** before opening a PR (required)
+- **[SECURITY.md](SECURITY.md)** — report vulnerabilities to info@getnorthpath.com (not public issues)
+- **[Discord](https://discord.gg/aortrack)** — informal discussion and release chatter
 
 ---
 
